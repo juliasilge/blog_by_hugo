@@ -1,4 +1,11 @@
-# TODO: Disqus?
+# TODO: MathJax, Disqus?
+
+#library(tidyverse)
+#library(stringr)
+#comments <- read_csv("~/Downloads/datascienceish-2017-05-30T18-15-29.749318-links.csv", col_names = "url1") %>%
+#    filter(str_detect(url1, "\\/$")) %>%
+#    mutate(url2 = str_to_lower(url1))
+#write_csv(comments, "~/Desktop/url_mapping.csv")
 
 baseurl = "https://juliasilge.com/"
 languageCode = "en-us"
@@ -14,8 +21,6 @@ disqusshortname = "datascienceish"
 googleAnalytics = "UA-68765210-1"
 pluralizelisttitles = false
 ignoreFiles = ["\\.Rmd$", "_files$", "_cache$"]
-MathJaxCDN = "https://cdn.bootcss.com"
-MathJaxVersion = "2.7.1"
 
 
 [permalinks]
@@ -34,8 +39,6 @@ highlightjsVersion = "9.11.0"
 highlightjsCDN = "https://cdn.bootcss.com"
 highlightjsLang = ["r", "yaml"]
 highlightjsTheme = "github"
-MathJaxCDN = "https://cdn.bootcss.com"
-MathJaxVersion = "2.7.1"
 progressively = true
 latestpostcount = 5
 github = "juliasilge"
