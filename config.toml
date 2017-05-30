@@ -1,18 +1,4 @@
-# TODO: CNAME, Disqus?
-# disqusshortname     = "datascienceish" 
-# googleAnalytics     = "UA-68765210-1"
-# ignoreFiles         = ["\\.Rmd$", "_files$", "_cache$"]
-# blog                = "/blog/:year/:month/:day/:slug/"
-# avatar              = "_images/profile_painterly.jpg"
-
-# options for highlight.js (version, additional languages, and theme)
-# highlightjsVersion = "9.11.0"
-# highlightjsCDN = "//cdn.bootcss.com"
-# highlightjsLang = ["r", "yaml"]
-# highlightjsTheme = "github"
-# MathJaxCDN = "//cdn.bootcss.com"
-# MathJaxVersion = "2.7.1"
-
+# TODO: Disqus?
 
 baseurl = "/"
 languageCode = "en-us"
