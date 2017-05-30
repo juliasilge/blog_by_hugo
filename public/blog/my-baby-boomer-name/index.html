@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Example blog">
+
+
+    <meta property="twitter:site" content="@juliasilge">
+
+<meta property="twitter:title" content="My Baby Boomer Name Might Have Been &#34;Debbie&#34;">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:image" content="/img/banner.png">
+
+<meta property="twitter:description" content="">
+
+<title>
+
+
+     Julia Silge - My Baby Boomer Name Might Have Been &#34;Debbie&#34; 
+
+</title>
+<link rel="canonical" href="/blog/my-baby-boomer-name/">
+
+
+<style media="screen">
+  @font-face {
+  font-family: 'Nexa Bold';
+  src: url('/fonts/Nexa Bold.otf');
+}
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+a,
+a:visited,
+a:focus,
+a:active {
+  text-decoration: none;
+}
+html {
+  height: 100%;
+  font-size: 16px;
+}
+body {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  -ms-justify-content: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 100%;
+  font-weight: 400;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  color: #111111;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility !important;
+}
+.icon {
+  text-rendering: geometricPrecision !important;
+}
+section {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  width: 100%;
+}
+.container {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  width: 100%;
+}
+section.header .container {
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+}
+section.header .content {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.header .container .logo {
+  max-width: 100px;
+  margin-left: -2em;
+}
+section.header .name {
+  padding-top: 20px;
+  font-size: 28px;
+  font-family: 'Nexa Bold', 'Helvetica Neue', 'Arial', sans-serif;
+  letter-spacing: -0.005rem;
+  text-transform: uppercase;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  color: #333333;
+  color: #555555;
+}
+section.header nav {
+  margin-bottom: 16px;
+}
+section.header nav ul {
+  list-style: none;
+  text-align: center;
+  display: -webkit-inline-flex;
+  display: -moz-inline-flex;
+  display: -ms-inline-flexbox;
+  display: -ms-inline-flex;
+  display: inline-flex;
+}
+section.header nav ul a {
+  margin-left: 6px;
+  margin-right: 6px;
+}
+section.header nav ul a:first-child {
+  margin-left: 0;
+}
+section.header nav ul a:last-child {
+  margin-right: 0;
+}
+section.header nav ul li {
+  color: #555555;
+  font-weight: 400;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  -webkit-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+section.header nav ul li:hover {
+  color: #111111;
+}
+section.footer .container {
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+  flex-direction: column-reverse;
+  width: 100%;
+  text-align: center;
+}
+section.footer .container a {
+  font-size: 14px;
+  margin-left: 6px;
+  margin-right: 6px;
+  opacity: 0.6;
+  -webkit-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+section.footer .container a:first-child {
+  margin-left: 0;
+}
+section.footer .container a:last-child {
+  margin-right: 0;
+}
+section.footer .container a:hover {
+  opacity: 0.8;
+}
+section.footer .container a .icon {
+  width: 16px;
+  height: 16px;
+}
+section.footer .container .copyright {
+  flex-grow: 0.5;
+  text-align: start;
+}
+section.footer .container .icons {
+  flex-grow: 0.5;
+  text-align: end;
+}
+section.main .container {
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  -ms-justify-content: flex-start;
+  justify-content: flex-start;
+}
+section.main .content {
+  color: #111111;
+  font-size: 16px;
+}
+section.main .content .title-container {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  justify-content: space-between;
+}
+section.main .content .posts {
+  margin-bottom: 4em;
+}
+section.main .content .page-heading {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  letter-spacing: -0.005rem;
+  text-transform: uppercase;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  color: #333333;
+  margin-bottom: 16px;
+}
+section.main .content .front-matter .page-heading {
+  margin-bottom: 0;
+}
+section.main .content .front-matter .meta {
+  font-size: 14px;
+  color: #666666;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  margin-bottom: 32px;
+}
+section.main .content .front-matter .date,
+section.main .content .front-matter .author,
+section.main .content .front-matter .tags,
+section.main .content .front-matter .word-count,
+section.main .content .front-matter .reading-time .middot {
+  display: none;
+}
+section.main .content .front-matter .middot {
+  font-size: 6px;
+  margin: 0 6px;
+  display: inline;
+  vertical-align: middle;
+}
+section.main .content .front-matter .middot:before {
+  content: "•";
+}
+section.main .content .front-matter .tags ul {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.main .content .front-matter .tags ul li {
+  -webkit-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+section.main .content .front-matter .tags ul li:hover {
+  opacity: 0.7;
+}
+section.main .content .front-matter .tags ul li a {
+  color: #666666;
+}
+section.main .container.f04 {
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+}
+section.main .container.f04 .content {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.main .container.f04 .content .num {
+  margin: 30px 0px 30px 0;
+  font-weight: 400;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  font-size: 50px;
+}
+section.main .container.f04 .content .detail {
+  margin-bottom: 40px;
+}
+section.main .container .content .groupby {
+  margin-top: 1em;
+  padding-left: 0.5em;
+}
+section.main .container .content .post-item {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  display: list-item;
+  list-style: disc inside;
+}
+section.main .container .content .post-item .meta {
+  font-size: 14px;
+  color: #666666;
+  display: none;
+  min-width: 100px;
+}
+section.main .container .content .see-more {
+  font-style: italic;
+  float: right;
+  font-size: 0.9em;
+  margin-top: 2em;
+  color: #313537;
+}
+section.main .container .content .see-more:hover {
+  color: #666;
+}
+section {
+  padding: 0 16px;
+}
+section.header {
+  padding-top: 10px;
+}
+section.header-home {
+  padding-top: 36px;
+}
+section.main {
+  padding-top: 32px;
+}
+section.main .container .content .post-item .meta {
+    display: block;
+}
+section.main .container .content .post-item {
+    display: flex;
+    list-style: none;
+}
+a {
+  color: #428bca;
+  -webkit-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+a:hover {
+  color: #2a6496;
+}
+img {
+  max-width: 100%;
+}
+section.main .content {
+    width: 100%;
+}
+section.main .content .markdown {
+  font-size: 1.1em;
+  line-height: 1.75em;
+  color: #313537;
+  font-family: serif;
+  font-weight: 300;
+}
+section.main .content .markdown h1,
+section.main .content .markdown h2,
+section.main .content .markdown h3,
+section.main .content .markdown h4,
+section.main .content .markdown h5,
+section.main .content .markdown h6 {
+  font-size: 22px;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  letter-spacing: -0.005rem;
+  font-weight: 700;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  color: #333333;
+  text-transform: none;
+  margin-top: 1.75rem;
+}
+section.main .content .markdown h1 {
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
+}
+section.main .content .markdown h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+section.main .content .markdown h3 {
+  font-size: 1em;
+  margin-bottom: 1rem;
+}
+section.main .content .markdown h4,
+section.main .content .markdown h5,
+section.main .content .markdown h6 {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  letter-spacing: none;
+}
+section.main .content .markdown code,
+section.main .content .markdown pre {
+  font-family: 'Menlo', monospace;
+  font-size: 0.98rem;
+  background-color: #f7f7f7;
+}
+section.main .content .markdown code {
+  /* enclosed by single backtick (`) */
+  padding: .15em .5em;
+  border-radius: 2px;
+}
+section.main .content .markdown pre {
+  /* Hugo specific: consider using the 'highlight' shortcode */
+  display: block;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  line-height: 1.5em;
+  white-space: pre;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+@media (min-width: 769px) {
+  section.main .content .markdown pre {
+    width: 110%;
+    margin-left: -4%;
+  }
+}
+section.main .content .markdown pre code {
+  /* enclosed by 4 backticks (````) */
+  padding: 0;
+  font-size: 0.9rem;
+}
+section.main .content .markdown a code {
+  color: #428bca !important;
+}
+section.main .content .markdown a code:hover {
+  text-decoration: underline;
+}
+section.main .content .markdown p {
+  text-align: justify;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+section.main .content .markdown ul,
+section.main .content .markdown ol,
+section.main .content .markdown dl {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+section.main .content .markdown dt {
+  font-weight: bold;
+}
+section.main .content .markdown dd {
+  margin-bottom: .5rem;
+}
+section.main .content .markdown ul {
+  list-style-type: disc;
+  list-style-position: outside;
+  margin-bottom: 1.25rem;
+}
+section.main .content .markdown ol {
+  list-style-type: decimal;
+  margin-bottom: 1.25rem;
+}
+section.main .content .markdown li {
+  margin-left: 2em;
+}
+section.main .content .markdown em {
+  font-style: italic;
+}
+section.main .content .markdown strong {
+  font-weight: 700;
+}
+section.main .content .markdown hr {
+  position: relative;
+  margin: 1.75rem 0;
+  border: 0;
+  border-top: 1px solid #808080;
+  border-top: 1px solid #999999;
+}
+section.main .content .markdown abbr {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #666666;
+  text-transform: uppercase;
+}
+section.main .content .markdown abbr[title] {
+  cursor: help;
+  border-bottom: 1px dotted #808080;
+}
+section.main .content .markdown blockquote {
+  padding: .5rem 1rem;
+  margin: .8rem 0;
+  color: #7a7a7a;
+  border-left: .25rem solid #e5e5e5;
+}
+section.main .content .markdown blockquote p:last-child {
+  margin-bottom: 0;
+}
+section.main .content .markdown figure {
+  width: 100%;
+  background: #fff;
+  margin-bottom: 1em;
+}
+section.main .content .markdown figure img {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  display: block;
+  position: static;
+  margin: auto;
+}
+section.main .content .markdown table {
+  margin-bottom: 1rem;
+  width: 100%;
+  border: 1px solid #e5e5e5;
+  border-collapse: collapse;
+}
+section.main .content .markdown td,
+section.main .content .markdown th {
+  padding: .25rem .5rem;
+  border: 1px solid #e5e5e5;
+}
+section.main .content .markdown tbody tr:nth-child(odd) td,
+section.main .content .markdown tbody tr:nth-child(odd) th {
+  background-color: #f7f7f7;
+}
+section.main .content .markdown .footnotes ol {
+  list-style-type: decimal;
+  margin-left: 16px;
+}
+section.main .content .markdown .footnotes li {
+  list-style-type: unset;
+}
+section.main .content .markdown .footnote-ref {
+  font-size: 0.7em;
+}
+section.main .content .navigation {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.main .content .navigation div {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  margin-top: 1em;
+}
+section.main .content .navigation .icon {
+  width: 16px;
+  height: 16px;
+}
+section.main .content .navigation a {
+  width: 250px;
+  margin-left: 1em;
+  text-align: center;
+  font-style: italic;
+  color: #313537;
+}
+
+/* Fonts */
+
+.wf-raleway-n4-active body, 
+.wf-raleway-n4-active section.header nav ul li,
+.wf-raleway-n7-active section.main .content .page-heading,
+.wf-raleway-n2-active section.main .container.f04 .content .num,
+.wf-raleway-n7-active section.main .content .markdown h1,
+.wf-raleway-n7-active section.main .content .markdown h2,
+.wf-raleway-n7-active section.main .content .markdown h3,
+.wf-raleway-n7-active section.main .content .markdown h4,
+.wf-raleway-n7-active section.main .content .markdown h5,
+.wf-raleway-n7-active section.main .content .markdown h6 {
+  font-family: 'Raleway';
+}
+
+.wf-merriweather-n3-active section.main .content .markdown {
+  font-family: 'Merriweather';
+}
+
+.wf-ubuntu-mono-n4-active section.main .content .markdown code,
+.wf-ubuntu-mono-n4-active section.main .content .markdown pre {
+  font-family: 'Ubuntu Mono';
+}
+</style>
+<style media="(min-width: 600px)">
+  body {
+-webkit-justify-content: center;
+-moz-justify-content: center;
+-ms-justify-content: center;
+justify-content: center;
+}
+.non-narrow.zero-top-spacing {
+padding-top: 0 !important;
+}
+section {
+padding: 0 16px;
+margin-left: 100px;
+margin-right: 100px;
+max-width: 750px;
+}
+section.header {
+background-color: transparent;
+}
+section.header .container {
+-webkit-justify-content: flex-start;
+-moz-justify-content: flex-start;
+-ms-justify-content: flex-start;
+justify-content: flex-start;
+}
+section.header .container .logo {
+margin: 0;
+}
+section.header-home .container .logo {
+max-width: 180px;
+margin-left: 20px;
+}
+section.header-home .name-home {
+padding-top: 30px;
+font-size: 40px;
+}
+section.header-home nav ul li {
+font-size: 18px;
+}
+section.header .content {
+-webkit-align-items: flex-start;
+-moz-align-items: flex-start;
+-ms-align-items: flex-start;
+align-items: flex-start;
+}
+section.header .name {
+color: #333333;
+}
+section.header nav {
+font-size: 14px;
+margin-bottom: 0;
+}
+section.header nav ul {
+text-align: left;
+}
+section.header nav ul li {
+color: #666666;
+}
+section.header nav ul li:hover {
+color: #333333;
+}
+section.footer {
+background-color: transparent;
+}
+section.footer .container {
+flex-direction: row;
+}
+section.footer .container a {
+margin-left: 3px;
+margin-right: 3px;
+color: #666666;
+}
+section.footer .container a:hover {
+color: #333333;
+}
+section.footer .container a .icon {
+font-size: 18px;
+}
+section.footer .container a .icon.larger {
+font-size: 20px;
+}
+section.main .content .front-matter .date,
+section.main .content .front-matter .author,
+section.main .content .front-matter .tags,
+section.main .content .front-matter .word-count,
+section.main .content .front-matter .reading-time .middot {
+display: initial;
+}
+section.main .container.f04 {
+-webkit-justify-content: flex-start;
+-moz-justify-content: flex-start;
+-ms-justify-content: flex-start;
+justify-content: flex-start;
+}
+section.main .container.f04 .content {
+-webkit-align-items: flex-start;
+-moz-align-items: flex-start;
+-ms-align-items: flex-start;
+align-items: flex-start;
+}
+section.main .container.f04 .content .num {
+margin: 0 0 10px 0;
+font-size: 32px;
+}
+section.main .container.f04 .content .detail {
+margin-bottom: 30px;
+}
+.container {
+padding: 0 30px;
+}
+section.header {
+padding-top: 60px;
+padding-bottom: 60px;
+}
+section.footer {
+padding-top: 30px;
+padding-bottom: 60px;
+}
+section.main {
+padding-top: 0;
+}
+section.main .container .content .post-item {
+display: flex;
+list-style: none;
+padding-left: 1.5em;
+}
+section.main .container .content .post-item .meta {
+display: block;
+}
+section.main.post {
+padding-top: 60px;
+padding-bottom: 60px;
+}
+section.main .content .markdown blockquote {
+padding-right: 5rem;
+padding-left: 1.25rem;
+}
+section.main .content .navigation {
+-webkit-flex-direction: row;
+-moz-flex-direction: row;
+-ms-flex-direction: row;
+flex-direction: row;
+}
+section.main .content .navigation div {
+margin-top: 0em;
+}
+</style>
+<style media="(min-width: 769px)">
+  section.main .content .markdown figure {
+width: 110%;
+margin-left: -4%;
+}
+section.main .content .markdown img {
+max-width: 110%;
+width: 110%;
+margin-left: -4%;
+}
+</style>
+
+<noscript>
+  <link href="https://fonts.googleapis.com/css?family=Raleway:400,600,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Merriweather:300,300i,700,700i" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700" rel="stylesheet">
+</noscript>
+
+
+  <style type="text/css" media="screen">
+    .hljs{display:block;background:white;padding:0.5em;color:#333333;overflow-x:auto}.hljs-comment,.hljs-meta{color:#969896}.hljs-string,.hljs-variable,.hljs-template-variable,.hljs-strong,.hljs-emphasis,.hljs-quote{color:#df5000}.hljs-keyword,.hljs-selector-tag,.hljs-type{color:#a71d5d}.hljs-literal,.hljs-symbol,.hljs-bullet,.hljs-attribute{color:#0086b3}.hljs-section,.hljs-name{color:#63a35c}.hljs-tag{color:#333333}.hljs-title,.hljs-attr,.hljs-selector-id,.hljs-selector-class,.hljs-selector-attr,.hljs-selector-pseudo{color:#795da3}.hljs-addition{color:#55a532;background-color:#eaffea}.hljs-deletion{color:#bd2c00;background-color:#ffecec}.hljs-link{text-decoration:underline}
+  </style>
+
+
+
+  <style type="text/css" media="screen">
+    .progressive{overflow:hidden;position:relative;background:#efefef}.progressive__img{width:100%;height:100%;position:absolute;-webkit-transform:translateZ(0);transform:translateZ(0)}.progressive--not-loaded{filter:blur(30px);-webkit-filter:blur(30px)}.progressive--is-loaded{filter:blur(20px);-webkit-filter:blur(20px);-webkit-animation:sharpen .5s both;animation:sharpen .5s both}@-webkit-keyframes sharpen{from{filter:blur(20px);-webkit-filter:blur(20px)}to{filter:blur(0);-webkit-filter:blur(0)}}@keyframes sharpen{from{filter:blur(20px);-webkit-filter:blur(20px)}to{filter:blur(0);-webkit-filter:blur(0)}}
+  </style>
+
+
+
+
+
+
+
+<link rel="shortcut icon"
+
+    href="/_images/favicon.ico"
+
+>
+
+
+
+
+</head>
+
+
+<body>
+
+
+<section class="header">
+
+    <div class="container">
+        <a href="/"><img class="logo" src="/_images/avatar_green.png" alt="logo" /></a>
+        <div class="content">
+            <a href="/"><div class="name"><h1>Julia Silge</h1></div></a>
+            <nav>
+                <ul>
+                    
+                        <a href="/blog/"><li>Blog</li></a>
+                    
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                    
+                        
+                            <a href="/about/"><li>about</li></a>
+                        
+                    
+                        
+                            <a href="/resume/"><li>resume</li></a>
+                        
+                    
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+
+<section class="main post non-narrow zero-top-spacing">
+    <div class="container">
+        <div class="content">
+            <div class="front-matter">
+                <div class="title-container">
+                    <div class="page-heading">
+
+    My Baby Boomer Name Might Have Been &#34;Debbie&#34;
+
+</div>
+
+                </div>
+                <div class="meta">
+                    <div class="date" title="Mon Feb 29 2016 00:00:00 UTC">Feb 29, 2016</div>
+                    
+                        
+                    
+                    <div class="reading-time"><div class="middot"></div>8 minute read</div>
+                    <div class="tags">
+                        <ul>
+                          
+                            <div class="middot"></div>
+                            <li><a href="/tags/rstats">rstats</a> </li>
+                          
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="markdown">
+                
+    
+    
+
+<p>I have always loved learning and thinking about names, how they are chosen and used, and how people feel about their names and the names around them. We had a traditional baby name book at our house when I was growing up (you know, lists of names with meanings), and I remember poring over it to find unusual or appealing names for my pretend play or the stories I wrote. As an adult, I read Laura Wattenberg&rsquo;s <a href="http://www.amazon.com/Baby-Name-Wizard-Revised-Edition/dp/0770436471">excellent book on baby names</a> when we were expecting our second baby, and I also discovered the <a href="http://www.babynamewizard.com/voyager">NameVoyager</a> on Wattenberg&rsquo;s website. I just love that kind of thing.</p>
+
+<p>The data used to make the NameVoyager interactive is from the <a href="https://www.ssa.gov/OACT/babynames/background.html">Social Security Administration</a> based on Social Security card applications, and Hadley Wickham has done the work of taking the same data and making it <a href="https://github.com/hadley/babynames">an R package</a>. Lucky us! Let&rsquo;s use this package and take a look at how the popularity of my name has changed over time.</p>
+
+<pre><code class="language-r">library(babynames)
+library(ggplot2)
+library(dplyr)
+data(babynames)
+juliejulia &lt;- babynames %&gt;% filter(sex == &quot;F&quot;, name %in% c(&quot;Julia&quot;, &quot;Julie&quot;))
+ggplot(juliejulia, aes(x = year, y = prop, color = name)) + 
+        geom_line(size = 1.1) + 
+        theme(legend.title=element_blank()) + 
+        scale_color_manual(values = c(&quot;tomato&quot;, &quot;midnightblue&quot;)) + 
+        ggtitle(&quot;My Name Is NOT JULIE!&quot;) +
+        ylab(&quot;Proportion of total applicants for year&quot;) + xlab(&quot;Year&quot;)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-02-29-My-Baby-Boomer-Name/unnamed-chunk-2-1.png" src="/figs/2016-02-29-My-Baby-Boomer-Name/low/unnamed-chunk-2-1.png" alt="center" /></p></figure>
+
+<p>The <code>babynames</code> package includes data from 1880 through 2014. I was born in 1978; notice that for about 20 years or so before my birth, the name &ldquo;Julie&rdquo; was very popular, about 4 times as popular as &ldquo;Julia&rdquo;. This means that by the time I was born, there were many more girls and women named Julie walking around than those named Julia. During my childhood, I got called &ldquo;Julie&rdquo; all the time by people who misheard or misread my name, and oh, how it rankled! It bothered me so, so much at the time. My actual name started to gain in popularity a little after &ldquo;Julie&rdquo; started to decline in popularity, so this doesn&rsquo;t happen to me much as an adult. In fact, I have known a number of other girls and women named Julia at this point in my life, although they have all been younger than me.</p>
+
+<h2 id="my-parents-the-trendsetters">My Parents, the Trendsetters</h2>
+
+<p>I&rsquo;ve always thought it was interesting that my parents somehow picked a name like mine; they picked a name that was on its way to becoming popular again, after its long decline from the 19th century, but wasn&rsquo;t yet really. (They did the same thing for my one sibling, too; her name also was about to become popular when she was born and named.) Let&rsquo;s look a bit more deeply at my name&rsquo;s popularity around my birth year.</p>
+
+<pre><code class="language-r">pickaname &lt;- babynames %&gt;% filter(sex == &quot;F&quot;, name == &quot;Julia&quot;)
+pickaname[pickaname$year == 1978,]
+</code></pre>
+
+<pre><code>## Source: local data frame [1 x 5]
+## 
+##    year   sex  name     n        prop
+##   (dbl) (chr) (chr) (int)       (dbl)
+## 1  1978     F Julia  2592 0.001576993
+</code></pre>
+
+<p>So that is the proportion of the total applicants for Social Security cards who had the name &ldquo;Julia&rdquo; in 1978, a measure of the popularity of a name. How is the popularity changing? Let&rsquo;s take 5 years before and after my birth year and fit a linear model to just those years.</p>
+
+<pre><code class="language-r">subsetfitname &lt;- pickaname %&gt;% filter(year %in% seq(1978-5,1978+5))
+myfit &lt;- lm(prop ~ year, subsetfitname)
+subsetfitname$prop &lt;- myfit$fitted.values
+
+fitname &lt;- pickaname %&gt;% mutate(fit = &quot;data&quot;)
+subsetfitname &lt;- subsetfitname %&gt;% mutate(fit = &quot;fit&quot;)
+fitname &lt;- rbind(fitname, subsetfitname)
+fitname$fit &lt;- as.factor(fitname$fit)
+goalprop &lt;- as.numeric(fitname[fitname$year == 1978 &amp; fitname$fit == &quot;data&quot;,'prop'])
+goalslope &lt;- myfit$coefficients[2]
+
+ggplot(fitname, aes(x = year, y = prop, color = fit, size = fit, alpha = fit)) + 
+        geom_line() + 
+        annotate(&quot;point&quot;, x = 1978, y = goalprop,
+                 color = &quot;tomato&quot;, size = 4, alpha = .8) +
+        theme(legend.title=element_blank()) + 
+        scale_color_manual(values = c(&quot;black&quot;, &quot;blue&quot;)) +
+        scale_size_manual(values = c(1.1, 2)) +
+        scale_alpha_manual(values = c(1, 0.8)) +
+        ggtitle(&quot;How Was the Popularity of My Name Changing Around 1978?&quot;) +
+        ylab(&quot;Proportion of total applicants for year&quot;) + xlab(&quot;Year&quot;)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-02-29-My-Baby-Boomer-Name/unnamed-chunk-4-1.png" src="/figs/2016-02-29-My-Baby-Boomer-Name/low/unnamed-chunk-4-1.png" alt="center" /></p></figure>
+
+<p>Here we can see the positive slope for the proportion of applicants with year; the popularity of the name &ldquo;Julia&rdquo; is increasing around 1978.</p>
+
+<h2 id="finding-similar-names-in-a-different-year">Finding Similar Names in a Different Year</h2>
+
+<p>Now we have a magnitude and a slope to characterize the popularity of my name in my birth year. Let&rsquo;s find similar names in other years. This type of analysis was <a href="http://time.com/3856405/baby-name-popularity/">done by Time last year</a>, but they ranked names and then matched names by their rank (i.e. what was the 112th most common name today and in the past decades?). Here, we are approaching the question a little differently. What names in other years have similar proportion of the total applicants and change in that proportion to my name in my birth year? My oldest daughter was born in 2006; let&rsquo;s try that year. First, let&rsquo;s find all the names with about the same proportion. Then, let&rsquo;s calculate the slope for each of those names.</p>
+
+<pre><code class="language-r">goalyear &lt;- 2006
+findmatches &lt;- babynames %&gt;% filter(sex == &quot;F&quot;, year == goalyear, 
+                     prop &lt; goalprop*1.1 &amp; prop &gt; goalprop*0.9) %&gt;%
+        mutate(slope = 0.00)
+
+for (i in seq_along(findmatches$name)) {
+        matchfitname &lt;- babynames %&gt;% filter(sex == &quot;F&quot;, 
+                                             name == as.character(findmatches[i,'name']))
+        matchfitname &lt;- matchfitname %&gt;% filter(year %in% seq(goalyear-5,goalyear+5))
+        matchfit &lt;- lm(prop ~ year, matchfitname)
+        findmatches[i,'slope'] &lt;- matchfit$coefficients[2]
+}
+</code></pre>
+
+<p>Now, let&rsquo;s keep only the names that have about the same slope as the original name. For matching purposes, the slopes here are divided into three categories: positive, negative, and mostly flat (between -0.00005 and 0.00005).</p>
+
+<pre><code class="language-r">if (goalslope &gt;= 0.00005) {
+        matchnames &lt;- findmatches %&gt;% filter(slope &gt;= 0.00005) %&gt;% select(name)
+} else if (goalslope &lt;= -0.00005) {
+        matchnames &lt;- findmatches %&gt;% filter(slope &lt;= -0.00005) %&gt;% select(name)
+} else {
+        matchnames &lt;- findmatches %&gt;% 
+                filter(slope &gt; -0.00005 &amp; slope &lt; 0.00005) %&gt;% select(name) 
+}
+
+matchnames &lt;- babynames %&gt;% filter(sex == &quot;F&quot;, name %in% matchnames$name)
+plotname &lt;- rbind(pickaname, matchnames)
+</code></pre>
+
+<p>So what do we have?</p>
+
+<pre><code class="language-r">ggplot(plotname, aes(x = year, y = prop, color = name)) + 
+        geom_line(size = 1.1) + 
+        annotate(&quot;text&quot;, x = 1978, y = goalprop*1.3, label = &quot;1978&quot;) +
+        annotate(&quot;point&quot;, x = 1978, y = goalprop,
+                 color = &quot;blue&quot;, size = 4.5, alpha = .8) +
+        annotate(&quot;text&quot;, x = goalyear, y = goalprop*1.3, label = goalyear) +
+        annotate(&quot;point&quot;, x = goalyear, y = goalprop,
+                 color = &quot;blue&quot;, size = 4.5, alpha = .8) +
+        theme(legend.title=element_blank()) + 
+        ggtitle(&quot;Which Names For a Girl Born in 2006 Are Similar to Julia Born in 1978?&quot;) +
+        ylab(&quot;Proportion of total applicants for year&quot;) + xlab(&quot;Year&quot;)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-02-29-My-Baby-Boomer-Name/unnamed-chunk-7-1.png" src="/figs/2016-02-29-My-Baby-Boomer-Name/low/unnamed-chunk-7-1.png" alt="center" /></p></figure>
+
+<p>These names all have about the same proportion of the population in 2006 as &ldquo;Julia&rdquo; in 1978, and they are all increasing in popularity.</p>
+
+<h2 id="what-if-i-was-a-baby-boomer">What If I Was a Baby Boomer?</h2>
+
+<p>My mom was born in 1953, so let&rsquo;s do this one more time.</p>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-02-29-My-Baby-Boomer-Name/unnamed-chunk-8-1.png" src="/figs/2016-02-29-My-Baby-Boomer-Name/low/unnamed-chunk-8-1.png" alt="center" /></p></figure>
+
+<p>These names definitely sound different than the 2006 matches. They don&rsquo;t necessarily sound like 1950s names, which makes sense when we look at the patterns in their popularity. These names were all at the beginning of becoming more popular in 1953, some of them <em>extremely</em> popular; they sound more like 1970s names to me. Coincidentally, the proportion for Julia at 1953 is within the bounds to match the proportion for Julia at 1978, but the slope at 1953 is flat and not increasing.</p>
+
+<h2 id="explore-the-names-yourself">Explore the Names Yourself</h2>
+
+<p><a href="https://juliasilge.shinyapps.io/PredictNamesApp/"><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-02-29-My-Baby-Boomer-Name/NamesScreenshot1.jpg" src="/figs/2016-02-29-My-Baby-Boomer-Name/low/NamesScreenshot1.jpg" alt="Shiny App Screenshot" /></a></p></figure>
+
+<p>I made a Shiny app to explore the names further. Check out <a href="https://github.com/juliasilge/PredictNamesApp">the code for the app</a>, and explore the names in the <a href="https://juliasilge.shinyapps.io/PredictNamesApp/">app itself</a>. The app works pretty much just as described in this blog post. Let&rsquo;s look at some screenshots for a few cases.</p>
+
+<p><a href="https://juliasilge.shinyapps.io/PredictNamesApp/"><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-02-29-My-Baby-Boomer-Name/NamesScreenshot2.jpg" src="/figs/2016-02-29-My-Baby-Boomer-Name/low/NamesScreenshot2.jpg" alt="Robert in 1910" /></a></p></figure>
+
+<p>There is only one name in 1980 as popular as Robert in 1910, and that is Christopher, which was the second most popular male name in 1980. Robert is further down the list in 1910. This illustrates a trend in U.S. baby naming; in general, more parents now are choosing less common names than in the past. You can see this in the <a href="http://www.babynamewizard.com/voyager">NameVoyager</a>. That visualization includes the top 1000 names for each year; notice that this makes up a smaller proportion of total births in recent years than in earlier years.</p>
+
+<p>It&rsquo;s not that there aren&rsquo;t ever very popular, common names in recent decades, though.</p>
+
+<p><a href="https://juliasilge.shinyapps.io/PredictNamesApp/"><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-02-29-My-Baby-Boomer-Name/NamesScreenshot3.jpg" src="/figs/2016-02-29-My-Baby-Boomer-Name/low/NamesScreenshot3.jpg" alt="Jennifer in 1980" /></a></p></figure>
+
+<p>Gosh, Jennifer was just so dominant during my childhood. So much so that there was no name for girls as popular in 2010 as Jennifer was in 1980. I think my younger sister regularly had multiple Jennifers in her classes all through school.</p>
+
+<p>What if we switch those dates?</p>
+
+<p><a href="https://juliasilge.shinyapps.io/PredictNamesApp/"><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-02-29-My-Baby-Boomer-Name/NamesScreenshot4.jpg" src="/figs/2016-02-29-My-Baby-Boomer-Name/low/NamesScreenshot4.jpg" alt="Jennifer in 2010" /></a></p></figure>
+
+<p>By 2010, Jennifer is on the decline. Naming one&rsquo;s daughter Jennifer in 2010 is like someone my age being named Barbara, Sharon, or Cheryl. I do not know many women my age with these names, and I will say they sound significantly older to me. (Probably my children or grandchildren will revive these names as adorably retro.)</p>
+
+<p>What happens if you choose a name that is rare in your chosen year? Like, say, Leonard in 1990?</p>
+
+<p><a href="https://juliasilge.shinyapps.io/PredictNamesApp/"><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-02-29-My-Baby-Boomer-Name/NamesScreenshot5.jpg" src="/figs/2016-02-29-My-Baby-Boomer-Name/low/NamesScreenshot5.jpg" alt="Leonard in 1990" /></a></p></figure>
+
+<p>There are many more rare names than common names (<a href="http://arxiv.org/abs/cond-mat/0412004">everything&rsquo;s a power law?</a>). In fact, I ended up adding a ceiling to how many names the app will display because it would just get too overwhelming. The matches to display for the rare names are chosen randomly so you might get different names if you put in the same rare name twice.</p>
+
+<p>Looking at the rare names can be pretty entertaining, though. Notice how a few of the extremely rare names in 1920 (Austin, Steven, Larry) went on to significant popularity. Some, of course, stayed rare and sound rather hilariously antique (Cornelius, Millard, Gerard), and we can see the rise of Hispanic names like Carlos throughout this app. After playing with the app for a while, I&rsquo;ve come to the conclusion that this matching process is the least meaningful for very rare names with flat slopes; it&rsquo;s just a slush of super rare names not changing in popularity down there.</p>
+
+<h2 id="the-end">The End</h2>
+
+<p>There are a <a href="https://dpmartin42.shinyapps.io/babynameR/">couple</a> of <a href="https://justmarkham.shinyapps.io/babynames/">other</a> Shiny <a href="https://adrianvs.shinyapps.io/Babynames/">apps</a> out there for exploring the <code>babynames</code> data set in different ways, if you just can&rsquo;t get enough. The R Markdown file used to make this blog post is available <a href="https://github.com/juliasilge/juliasilge.github.io/blob/master/_R/2016-02-29-My-Baby-Boomer-Name.Rmd">here</a>. I am very happy to hear feedback or questions!</p>
+
+
+                <br>
+            </div>
+            
+                <div class="navigation">
+                    
+                    <div>
+                        <img class="icon" src="/img/back.svg" alt="back" />
+                        <a href="/blog/your-floor/">Your Floor Is the Most Dangerous Thing In Your House</a>
+                    </div>
+                    
+                    <div style="width: 100%;"></div>
+                    
+                    <div>
+                        <a href="/blog/you-must-allow-me/">You Must Allow Me To Tell You How Ardently I Admire and Love Natural Language Processing</a>
+                        <img class="icon" src="/img/next.svg" alt="next" />
+                    </div>
+                    
+                </div>
+            
+            <br>
+            <div class="disqus">
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'datascienceish';
+    var disqus_identifier = '\/blog\/my-baby-boomer-name\/';
+    var disqus_title = 'My Baby Boomer Name Might Have Been \x22Debbie\x22';
+    var disqus_url = '\/blog\/my-baby-boomer-name\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="footer">
+    <div class="container">
+        <div class="copyright">
+
+        
+            <a href="/license">Copyright © 2017 Julia Silge</a>
+        
+
+        </div>
+        <div class="icons">
+
+        
+            <a href="https://github.com/juliasilge" target="_blank">
+                <img class="icon" src="/img/github.svg" alt="github" />
+            </a>
+        
+
+        
+            <a href="https://twitter.com/juliasilge" target="_blank">
+                <img class="icon" src="/img/twitter.svg" alt="twitter" />
+            </a>
+        
+
+        
+            <a href="https://www.linkedin.com/in/juliasilge" target="_blank">
+                <img class="icon" src="/img/linkedin.svg" alt="linkedin" />
+            </a>
+        
+
+        
+
+        
+            <a href="/index.xml">
+                <img class="icon" src="/img/rss.svg" alt="rss" />
+            </a>
+        
+
+        </div>
+    </div>
+</section>
+
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+<script>
+  WebFont.load({
+    google: {
+      families: ['Raleway:400,600,700', 'Merriweather:300,300i,700,700i', 'Ubuntu+Mono:400,700']
+    }
+  });
+</script>
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?...">
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+
+
+  <script src="/js/highlight.min.js" defer></script>
+  
+
+
+
+  <script src="/js/progressively.min.js" defer></script>
+
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-68765210-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+<script>
+  window.onload = function() {
+    
+      hljs.initHighlighting();
+    
+    
+      progressively.init({delay: 30, throttle: 50});
+    
+  };
+</script>
+
+
+</body>
+</html>
+

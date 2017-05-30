@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Example blog">
+
+
+    <meta property="twitter:site" content="@juliasilge">
+
+<meta property="twitter:title" content="Health Care Indicators in Utah Counties">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:image" content="/img/banner.png">
+
+<meta property="twitter:description" content="">
+
+<title>
+
+
+     Julia Silge - Health Care Indicators in Utah Counties 
+
+</title>
+<link rel="canonical" href="/blog/health-care-indicators/">
+
+
+<style media="screen">
+  @font-face {
+  font-family: 'Nexa Bold';
+  src: url('/fonts/Nexa Bold.otf');
+}
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+a,
+a:visited,
+a:focus,
+a:active {
+  text-decoration: none;
+}
+html {
+  height: 100%;
+  font-size: 16px;
+}
+body {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  -ms-justify-content: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 100%;
+  font-weight: 400;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  color: #111111;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility !important;
+}
+.icon {
+  text-rendering: geometricPrecision !important;
+}
+section {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  width: 100%;
+}
+.container {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  width: 100%;
+}
+section.header .container {
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+}
+section.header .content {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.header .container .logo {
+  max-width: 100px;
+  margin-left: -2em;
+}
+section.header .name {
+  padding-top: 20px;
+  font-size: 28px;
+  font-family: 'Nexa Bold', 'Helvetica Neue', 'Arial', sans-serif;
+  letter-spacing: -0.005rem;
+  text-transform: uppercase;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  color: #333333;
+  color: #555555;
+}
+section.header nav {
+  margin-bottom: 16px;
+}
+section.header nav ul {
+  list-style: none;
+  text-align: center;
+  display: -webkit-inline-flex;
+  display: -moz-inline-flex;
+  display: -ms-inline-flexbox;
+  display: -ms-inline-flex;
+  display: inline-flex;
+}
+section.header nav ul a {
+  margin-left: 6px;
+  margin-right: 6px;
+}
+section.header nav ul a:first-child {
+  margin-left: 0;
+}
+section.header nav ul a:last-child {
+  margin-right: 0;
+}
+section.header nav ul li {
+  color: #555555;
+  font-weight: 400;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  -webkit-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+section.header nav ul li:hover {
+  color: #111111;
+}
+section.footer .container {
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+  flex-direction: column-reverse;
+  width: 100%;
+  text-align: center;
+}
+section.footer .container a {
+  font-size: 14px;
+  margin-left: 6px;
+  margin-right: 6px;
+  opacity: 0.6;
+  -webkit-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+section.footer .container a:first-child {
+  margin-left: 0;
+}
+section.footer .container a:last-child {
+  margin-right: 0;
+}
+section.footer .container a:hover {
+  opacity: 0.8;
+}
+section.footer .container a .icon {
+  width: 16px;
+  height: 16px;
+}
+section.footer .container .copyright {
+  flex-grow: 0.5;
+  text-align: start;
+}
+section.footer .container .icons {
+  flex-grow: 0.5;
+  text-align: end;
+}
+section.main .container {
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  -ms-justify-content: flex-start;
+  justify-content: flex-start;
+}
+section.main .content {
+  color: #111111;
+  font-size: 16px;
+}
+section.main .content .title-container {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  justify-content: space-between;
+}
+section.main .content .posts {
+  margin-bottom: 4em;
+}
+section.main .content .page-heading {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  letter-spacing: -0.005rem;
+  text-transform: uppercase;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  color: #333333;
+  margin-bottom: 16px;
+}
+section.main .content .front-matter .page-heading {
+  margin-bottom: 0;
+}
+section.main .content .front-matter .meta {
+  font-size: 14px;
+  color: #666666;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  margin-bottom: 32px;
+}
+section.main .content .front-matter .date,
+section.main .content .front-matter .author,
+section.main .content .front-matter .tags,
+section.main .content .front-matter .word-count,
+section.main .content .front-matter .reading-time .middot {
+  display: none;
+}
+section.main .content .front-matter .middot {
+  font-size: 6px;
+  margin: 0 6px;
+  display: inline;
+  vertical-align: middle;
+}
+section.main .content .front-matter .middot:before {
+  content: "•";
+}
+section.main .content .front-matter .tags ul {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.main .content .front-matter .tags ul li {
+  -webkit-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+section.main .content .front-matter .tags ul li:hover {
+  opacity: 0.7;
+}
+section.main .content .front-matter .tags ul li a {
+  color: #666666;
+}
+section.main .container.f04 {
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+}
+section.main .container.f04 .content {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.main .container.f04 .content .num {
+  margin: 30px 0px 30px 0;
+  font-weight: 400;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  font-size: 50px;
+}
+section.main .container.f04 .content .detail {
+  margin-bottom: 40px;
+}
+section.main .container .content .groupby {
+  margin-top: 1em;
+  padding-left: 0.5em;
+}
+section.main .container .content .post-item {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  display: list-item;
+  list-style: disc inside;
+}
+section.main .container .content .post-item .meta {
+  font-size: 14px;
+  color: #666666;
+  display: none;
+  min-width: 100px;
+}
+section.main .container .content .see-more {
+  font-style: italic;
+  float: right;
+  font-size: 0.9em;
+  margin-top: 2em;
+  color: #313537;
+}
+section.main .container .content .see-more:hover {
+  color: #666;
+}
+section {
+  padding: 0 16px;
+}
+section.header {
+  padding-top: 10px;
+}
+section.header-home {
+  padding-top: 36px;
+}
+section.main {
+  padding-top: 32px;
+}
+section.main .container .content .post-item .meta {
+    display: block;
+}
+section.main .container .content .post-item {
+    display: flex;
+    list-style: none;
+}
+a {
+  color: #428bca;
+  -webkit-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+a:hover {
+  color: #2a6496;
+}
+img {
+  max-width: 100%;
+}
+section.main .content {
+    width: 100%;
+}
+section.main .content .markdown {
+  font-size: 1.1em;
+  line-height: 1.75em;
+  color: #313537;
+  font-family: serif;
+  font-weight: 300;
+}
+section.main .content .markdown h1,
+section.main .content .markdown h2,
+section.main .content .markdown h3,
+section.main .content .markdown h4,
+section.main .content .markdown h5,
+section.main .content .markdown h6 {
+  font-size: 22px;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  letter-spacing: -0.005rem;
+  font-weight: 700;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  color: #333333;
+  text-transform: none;
+  margin-top: 1.75rem;
+}
+section.main .content .markdown h1 {
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
+}
+section.main .content .markdown h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+section.main .content .markdown h3 {
+  font-size: 1em;
+  margin-bottom: 1rem;
+}
+section.main .content .markdown h4,
+section.main .content .markdown h5,
+section.main .content .markdown h6 {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  letter-spacing: none;
+}
+section.main .content .markdown code,
+section.main .content .markdown pre {
+  font-family: 'Menlo', monospace;
+  font-size: 0.98rem;
+  background-color: #f7f7f7;
+}
+section.main .content .markdown code {
+  /* enclosed by single backtick (`) */
+  padding: .15em .5em;
+  border-radius: 2px;
+}
+section.main .content .markdown pre {
+  /* Hugo specific: consider using the 'highlight' shortcode */
+  display: block;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  line-height: 1.5em;
+  white-space: pre;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+@media (min-width: 769px) {
+  section.main .content .markdown pre {
+    width: 110%;
+    margin-left: -4%;
+  }
+}
+section.main .content .markdown pre code {
+  /* enclosed by 4 backticks (````) */
+  padding: 0;
+  font-size: 0.9rem;
+}
+section.main .content .markdown a code {
+  color: #428bca !important;
+}
+section.main .content .markdown a code:hover {
+  text-decoration: underline;
+}
+section.main .content .markdown p {
+  text-align: justify;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+section.main .content .markdown ul,
+section.main .content .markdown ol,
+section.main .content .markdown dl {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+section.main .content .markdown dt {
+  font-weight: bold;
+}
+section.main .content .markdown dd {
+  margin-bottom: .5rem;
+}
+section.main .content .markdown ul {
+  list-style-type: disc;
+  list-style-position: outside;
+  margin-bottom: 1.25rem;
+}
+section.main .content .markdown ol {
+  list-style-type: decimal;
+  margin-bottom: 1.25rem;
+}
+section.main .content .markdown li {
+  margin-left: 2em;
+}
+section.main .content .markdown em {
+  font-style: italic;
+}
+section.main .content .markdown strong {
+  font-weight: 700;
+}
+section.main .content .markdown hr {
+  position: relative;
+  margin: 1.75rem 0;
+  border: 0;
+  border-top: 1px solid #808080;
+  border-top: 1px solid #999999;
+}
+section.main .content .markdown abbr {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #666666;
+  text-transform: uppercase;
+}
+section.main .content .markdown abbr[title] {
+  cursor: help;
+  border-bottom: 1px dotted #808080;
+}
+section.main .content .markdown blockquote {
+  padding: .5rem 1rem;
+  margin: .8rem 0;
+  color: #7a7a7a;
+  border-left: .25rem solid #e5e5e5;
+}
+section.main .content .markdown blockquote p:last-child {
+  margin-bottom: 0;
+}
+section.main .content .markdown figure {
+  width: 100%;
+  background: #fff;
+  margin-bottom: 1em;
+}
+section.main .content .markdown figure img {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  display: block;
+  position: static;
+  margin: auto;
+}
+section.main .content .markdown table {
+  margin-bottom: 1rem;
+  width: 100%;
+  border: 1px solid #e5e5e5;
+  border-collapse: collapse;
+}
+section.main .content .markdown td,
+section.main .content .markdown th {
+  padding: .25rem .5rem;
+  border: 1px solid #e5e5e5;
+}
+section.main .content .markdown tbody tr:nth-child(odd) td,
+section.main .content .markdown tbody tr:nth-child(odd) th {
+  background-color: #f7f7f7;
+}
+section.main .content .markdown .footnotes ol {
+  list-style-type: decimal;
+  margin-left: 16px;
+}
+section.main .content .markdown .footnotes li {
+  list-style-type: unset;
+}
+section.main .content .markdown .footnote-ref {
+  font-size: 0.7em;
+}
+section.main .content .navigation {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.main .content .navigation div {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  margin-top: 1em;
+}
+section.main .content .navigation .icon {
+  width: 16px;
+  height: 16px;
+}
+section.main .content .navigation a {
+  width: 250px;
+  margin-left: 1em;
+  text-align: center;
+  font-style: italic;
+  color: #313537;
+}
+
+/* Fonts */
+
+.wf-raleway-n4-active body, 
+.wf-raleway-n4-active section.header nav ul li,
+.wf-raleway-n7-active section.main .content .page-heading,
+.wf-raleway-n2-active section.main .container.f04 .content .num,
+.wf-raleway-n7-active section.main .content .markdown h1,
+.wf-raleway-n7-active section.main .content .markdown h2,
+.wf-raleway-n7-active section.main .content .markdown h3,
+.wf-raleway-n7-active section.main .content .markdown h4,
+.wf-raleway-n7-active section.main .content .markdown h5,
+.wf-raleway-n7-active section.main .content .markdown h6 {
+  font-family: 'Raleway';
+}
+
+.wf-merriweather-n3-active section.main .content .markdown {
+  font-family: 'Merriweather';
+}
+
+.wf-ubuntu-mono-n4-active section.main .content .markdown code,
+.wf-ubuntu-mono-n4-active section.main .content .markdown pre {
+  font-family: 'Ubuntu Mono';
+}
+</style>
+<style media="(min-width: 600px)">
+  body {
+-webkit-justify-content: center;
+-moz-justify-content: center;
+-ms-justify-content: center;
+justify-content: center;
+}
+.non-narrow.zero-top-spacing {
+padding-top: 0 !important;
+}
+section {
+padding: 0 16px;
+margin-left: 100px;
+margin-right: 100px;
+max-width: 750px;
+}
+section.header {
+background-color: transparent;
+}
+section.header .container {
+-webkit-justify-content: flex-start;
+-moz-justify-content: flex-start;
+-ms-justify-content: flex-start;
+justify-content: flex-start;
+}
+section.header .container .logo {
+margin: 0;
+}
+section.header-home .container .logo {
+max-width: 180px;
+margin-left: 20px;
+}
+section.header-home .name-home {
+padding-top: 30px;
+font-size: 40px;
+}
+section.header-home nav ul li {
+font-size: 18px;
+}
+section.header .content {
+-webkit-align-items: flex-start;
+-moz-align-items: flex-start;
+-ms-align-items: flex-start;
+align-items: flex-start;
+}
+section.header .name {
+color: #333333;
+}
+section.header nav {
+font-size: 14px;
+margin-bottom: 0;
+}
+section.header nav ul {
+text-align: left;
+}
+section.header nav ul li {
+color: #666666;
+}
+section.header nav ul li:hover {
+color: #333333;
+}
+section.footer {
+background-color: transparent;
+}
+section.footer .container {
+flex-direction: row;
+}
+section.footer .container a {
+margin-left: 3px;
+margin-right: 3px;
+color: #666666;
+}
+section.footer .container a:hover {
+color: #333333;
+}
+section.footer .container a .icon {
+font-size: 18px;
+}
+section.footer .container a .icon.larger {
+font-size: 20px;
+}
+section.main .content .front-matter .date,
+section.main .content .front-matter .author,
+section.main .content .front-matter .tags,
+section.main .content .front-matter .word-count,
+section.main .content .front-matter .reading-time .middot {
+display: initial;
+}
+section.main .container.f04 {
+-webkit-justify-content: flex-start;
+-moz-justify-content: flex-start;
+-ms-justify-content: flex-start;
+justify-content: flex-start;
+}
+section.main .container.f04 .content {
+-webkit-align-items: flex-start;
+-moz-align-items: flex-start;
+-ms-align-items: flex-start;
+align-items: flex-start;
+}
+section.main .container.f04 .content .num {
+margin: 0 0 10px 0;
+font-size: 32px;
+}
+section.main .container.f04 .content .detail {
+margin-bottom: 30px;
+}
+.container {
+padding: 0 30px;
+}
+section.header {
+padding-top: 60px;
+padding-bottom: 60px;
+}
+section.footer {
+padding-top: 30px;
+padding-bottom: 60px;
+}
+section.main {
+padding-top: 0;
+}
+section.main .container .content .post-item {
+display: flex;
+list-style: none;
+padding-left: 1.5em;
+}
+section.main .container .content .post-item .meta {
+display: block;
+}
+section.main.post {
+padding-top: 60px;
+padding-bottom: 60px;
+}
+section.main .content .markdown blockquote {
+padding-right: 5rem;
+padding-left: 1.25rem;
+}
+section.main .content .navigation {
+-webkit-flex-direction: row;
+-moz-flex-direction: row;
+-ms-flex-direction: row;
+flex-direction: row;
+}
+section.main .content .navigation div {
+margin-top: 0em;
+}
+</style>
+<style media="(min-width: 769px)">
+  section.main .content .markdown figure {
+width: 110%;
+margin-left: -4%;
+}
+section.main .content .markdown img {
+max-width: 110%;
+width: 110%;
+margin-left: -4%;
+}
+</style>
+
+<noscript>
+  <link href="https://fonts.googleapis.com/css?family=Raleway:400,600,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Merriweather:300,300i,700,700i" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700" rel="stylesheet">
+</noscript>
+
+
+  <style type="text/css" media="screen">
+    .hljs{display:block;background:white;padding:0.5em;color:#333333;overflow-x:auto}.hljs-comment,.hljs-meta{color:#969896}.hljs-string,.hljs-variable,.hljs-template-variable,.hljs-strong,.hljs-emphasis,.hljs-quote{color:#df5000}.hljs-keyword,.hljs-selector-tag,.hljs-type{color:#a71d5d}.hljs-literal,.hljs-symbol,.hljs-bullet,.hljs-attribute{color:#0086b3}.hljs-section,.hljs-name{color:#63a35c}.hljs-tag{color:#333333}.hljs-title,.hljs-attr,.hljs-selector-id,.hljs-selector-class,.hljs-selector-attr,.hljs-selector-pseudo{color:#795da3}.hljs-addition{color:#55a532;background-color:#eaffea}.hljs-deletion{color:#bd2c00;background-color:#ffecec}.hljs-link{text-decoration:underline}
+  </style>
+
+
+
+  <style type="text/css" media="screen">
+    .progressive{overflow:hidden;position:relative;background:#efefef}.progressive__img{width:100%;height:100%;position:absolute;-webkit-transform:translateZ(0);transform:translateZ(0)}.progressive--not-loaded{filter:blur(30px);-webkit-filter:blur(30px)}.progressive--is-loaded{filter:blur(20px);-webkit-filter:blur(20px);-webkit-animation:sharpen .5s both;animation:sharpen .5s both}@-webkit-keyframes sharpen{from{filter:blur(20px);-webkit-filter:blur(20px)}to{filter:blur(0);-webkit-filter:blur(0)}}@keyframes sharpen{from{filter:blur(20px);-webkit-filter:blur(20px)}to{filter:blur(0);-webkit-filter:blur(0)}}
+  </style>
+
+
+
+
+
+
+
+<link rel="shortcut icon"
+
+    href="/_images/favicon.ico"
+
+>
+
+
+
+
+</head>
+
+
+<body>
+
+
+<section class="header">
+
+    <div class="container">
+        <a href="/"><img class="logo" src="/_images/avatar_green.png" alt="logo" /></a>
+        <div class="content">
+            <a href="/"><div class="name"><h1>Julia Silge</h1></div></a>
+            <nav>
+                <ul>
+                    
+                        <a href="/blog/"><li>Blog</li></a>
+                    
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                    
+                        
+                            <a href="/about/"><li>about</li></a>
+                        
+                    
+                        
+                            <a href="/resume/"><li>resume</li></a>
+                        
+                    
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+
+<section class="main post non-narrow zero-top-spacing">
+    <div class="container">
+        <div class="content">
+            <div class="front-matter">
+                <div class="title-container">
+                    <div class="page-heading">
+
+    Health Care Indicators in Utah Counties
+
+</div>
+
+                </div>
+                <div class="meta">
+                    <div class="date" title="Mon Jan 11 2016 00:00:00 UTC">Jan 11, 2016</div>
+                    
+                        
+                    
+                    <div class="reading-time"><div class="middot"></div>13 minute read</div>
+                    <div class="tags">
+                        <ul>
+                          
+                            <div class="middot"></div>
+                            <li><a href="/tags/rstats">rstats</a> </li>
+                          
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="markdown">
+                
+    
+    
+
+<p>The state of Utah (my adopted home) has an <a href="https://opendata.utah.gov/">Open Data Catalog</a> with lots of interesting data sets, including a collection of <a href="https://opendata.utah.gov/Health/Health-Care-Indicators-By-Counties-In-Utah-2014/qmsu-gki4">health care indicators from 2014 for the 29 counties in Utah</a>. The observations for each county include measurements such as the infant mortality rate, the percent of people who don&rsquo;t have insurance, what percent of people have diabetes, and so forth. Let&rsquo;s see how these health care indicators are related to each other and if we can use these data to cluster Utah counties into similar groups.</p>
+
+<h2 id="something-to-keep-in-mind">Something to Keep in Mind</h2>
+
+<p>Before we start, let&rsquo;s look at one demographic map of Utah that is important to remember.</p>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-1-11-Health-Care-Indicators/unnamed-chunk-2-1.png" src="/figs/2016-1-11-Health-Care-Indicators/low/unnamed-chunk-2-1.png" alt="center" /></p></figure>
+
+<p>The population in Utah is not evenly distributed among counties. Salt Lake County, where I live, has a population over 1 million people and the rest of the counties have much lower populations. Utah County, just to the south of Salt Lake, has a population that is about half of Salt Lake&rsquo;s, and the numbers go down very quickly after that; there are a number of counties with populations only in the 1000s. This will effect both the actual health care indicators (rural populations can have different healthcare issues than more urban ones) and the measurements of the health care indicators.</p>
+
+<h2 id="getting-started">Getting Started</h2>
+
+<p>The data sets at Utah&rsquo;s Open Data Catalog can be downloaded via Socrata Open API. Let&rsquo;s load the data, fix the data types, and remove the row that contains numbers for the state as a whole.</p>
+
+<pre><code class="language-r">library(RSocrata)
+allHealth &lt;- read.socrata(&quot;https://opendata.utah.gov/resource/qmsu-gki4.csv&quot;)
+allHealth[,3:67] &lt;- lapply(allHealth[,3:67], as.numeric)
+allHealth &lt;- allHealth[c(-1),]
+</code></pre>
+
+<p>Now let&rsquo;s explore how some of these health care indicators are related to each other. Some of the indicators are correlated with each other in ways that make sense.</p>
+
+<pre><code class="language-r">ggplot(data = allHealth, 
+       aes(x = Median.Household.Income, y = Children.Eligible.Free.Lunch...Free.Lunch)) +
+        geom_point(alpha = 0.6, size = 3) +
+        stat_smooth(method = &quot;lm&quot;) +
+        geom_point(data = subset(allHealth, County == &quot;Salt Lake&quot;), size = 5, colour = &quot;maroon&quot;) +
+        xlab(&quot;Median household income (dollars)&quot;) +
+        ylab(&quot;Children eligible for free lunch (percent)&quot;)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-1-11-Health-Care-Indicators/unnamed-chunk-4-1.png" src="/figs/2016-1-11-Health-Care-Indicators/low/unnamed-chunk-4-1.png" alt="center" /></p></figure>
+
+<pre><code class="language-r">myCor &lt;- cor.test(allHealth$Median.Household.Income, allHealth$Children.Eligible.Free.Lunch...Free.Lunch)
+</code></pre>
+
+<p>I&rsquo;ve highlighted Salt Lake County in this plot and the following ones, just to give some context. The correlation coefficient between these two economic/health indicators is -0.652 with a 95% confidence interval from -0.822 to -0.374. Counties with higher incomes have fewer children eligible for free lunch.</p>
+
+<pre><code class="language-r">ggplot(data = allHealth, 
+       aes(x = X65.and.over, y = X..Diabetic)) +
+        geom_point(alpha = 0.6, size = 3) +
+        stat_smooth(method = &quot;lm&quot;) +
+        geom_point(data = subset(allHealth, County == &quot;Salt Lake&quot;), size = 5, colour = &quot;maroon&quot;) +
+        xlab(&quot;Population over 65 (percent)&quot;) +
+        ylab(&quot;Diabetic population (percent)&quot;)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-1-11-Health-Care-Indicators/unnamed-chunk-5-1.png" src="/figs/2016-1-11-Health-Care-Indicators/low/unnamed-chunk-5-1.png" alt="center" /></p></figure>
+
+<pre><code class="language-r">myCor &lt;- cor.test(allHealth$X65.and.over, allHealth$X..Diabetic)
+</code></pre>
+
+<p>The correlation coefficient between the population percentage over 65 and the percentage of the population with diabetes is 0.667 with a 95% confidence interval from 0.398 to 0.831. Counties with more older people in them have more people with diabetes in them. Notice that Salt Lake County has less than 10% of its population 65 or older; we are very young here in Utah, <a href="https://twitter.com/juliasilge/status/630122552212324352">the youngest in the nation, in fact</a>.</p>
+
+<p>Then there are lots of health care indicators that are not correlated with each other.</p>
+
+<pre><code class="language-r">ggplot(data = allHealth, 
+       aes(x = Premature.Age.adjusted.Mortality, y = X..Uninsured.Children.1)) +
+        geom_point(alpha = 0.6, size = 3) +
+        stat_smooth(method = &quot;lm&quot;) +
+        geom_point(data = subset(allHealth, County == &quot;Salt Lake&quot;), size = 5, colour = &quot;maroon&quot;) +
+        xlab(&quot;Premature mortality rate (per 100,000 population)&quot;) +
+        ylab(&quot;Uninsured children (percent)&quot;)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-1-11-Health-Care-Indicators/unnamed-chunk-6-1.png" src="/figs/2016-1-11-Health-Care-Indicators/low/unnamed-chunk-6-1.png" alt="center" /></p></figure>
+
+<pre><code class="language-r">myCor &lt;- cor.test(allHealth$Premature.Age.adjusted.Mortality, allHealth$X..Uninsured.Children.1)
+</code></pre>
+
+<p>The correlation coefficient between the percentage of uninsured children and premature age adjusted mortality is 0.221 with a 95% confidence interval from -0.173 to 0.555.</p>
+
+<p>To facilitate exploring all of the health care indicators in the data set, I made a <a href="https://juliasilge.shinyapps.io/CountyHealthApp">Shiny app</a> where the user can plot any two indicators from the data set, add a linear regression line, calculate a correlation coefficient, and highlight any county of choice. <a href="https://juliasilge.shinyapps.io/CountyHealthApp">Use the app</a> to explore the data, and check out the code for the app <a href="https://github.com/juliasilge/CountyHealthApp">on Github</a>.</p>
+
+<p><a href="https://juliasilge.shinyapps.io/CountyHealthApp"><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-1-11-Health-Care-Indicators/CountyHealthAppScreenShot.jpg" src="/figs/2016-1-11-Health-Care-Indicators/low/CountyHealthAppScreenShot.jpg" alt="Shiny App Screen Shot" /></a></p></figure>
+
+<h2 id="woe-is-me-na-values">Woe Is Me, <code>NA</code> Values&hellip;</h2>
+
+<p>The clustering analysis we would like to do requires that each county has complete information for all columns, i.e. no missing values. The populations of some Utah counties are so low that some of these health care indicators cannot be measured or are zero. Let&rsquo;s look at how this plays out.</p>
+
+<pre><code class="language-r">health &lt;- allHealth[,c(4:5,18,22,24,27,31,34,36,38,42,44,48,51,55,60,63,64)]
+rownames(health) &lt;- allHealth$County
+colnames(health) &lt;- c(&quot;PercentUnder18&quot;,
+              &quot;PercentOver65&quot;,
+              &quot;DiabeticRate&quot;, 
+              &quot;HIVRate&quot;,
+              &quot;PrematureMortalityRate&quot;,
+              &quot;InfantMortalityRate&quot;,
+              &quot;ChildMortalityRate&quot;,
+              &quot;LimitedAccessToFood&quot;,
+              &quot;FoodInsecure&quot;, 
+              &quot;MotorDeathRate&quot;,
+              &quot;DrugDeathRate&quot;,
+              &quot;Uninsured&quot;, 
+              &quot;UninsuredChildren&quot;,
+              &quot;HealthCareCosts&quot;, 
+              &quot;CouldNotSeeDr&quot;,
+              &quot;MedianIncome&quot;,
+              &quot;ChildrenFreeLunch&quot;,
+              &quot;HomicideRate&quot;)
+scaledhealth &lt;- scale(health)
+library(viridis)
+heatmap(scaledhealth, Colv = NA, Rowv = NA, margins = c(10,4), 
+        main = &quot;Heatmap of Data Set Values&quot;, col = viridis(32, 1))
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-1-11-Health-Care-Indicators/unnamed-chunk-7-1.png" src="/figs/2016-1-11-Health-Care-Indicators/low/unnamed-chunk-7-1.png" alt="center" /></p></figure>
+
+<p>The values for the health indicators have been scaled for this heat map (otherwise, for example, the numbers for the median income would swamp out the numbers for the HIV rate because of the units they are measured with). The blank spaces in the heat map show where we have <code>NA</code> values to deal with. HIV/AIDs is not a very common disease and there are no reported cases of HIV in many of the sparsely populated counties in Utah. It probably makes sense to just put a zero in those spots because more urban areas have more HIV cases. Having an infant die is also quite uncommon in the United States and there are many counties in Utah where no infants died in 2014. Does it make sense to just put a zero in those spots?</p>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-1-11-Health-Care-Indicators/unnamed-chunk-8-1.png" src="/figs/2016-1-11-Health-Care-Indicators/low/unnamed-chunk-8-1.png" alt="center" /></p></figure>
+
+<p>Probably not, right? Outcomes for newborn babies appear to be worse in more rural counties. While plugging in a zero for the infant mortality rate in a county where zero newborns died does make sense on one level, it is a problematic thing to do.</p>
+
+<p>One option is to impute the missing values based on the values for other, similar counties. One possible method for this is the random forest, an ensemble decision tree algorithm.</p>
+
+<pre><code class="language-r">library(missForest)
+healthimputed &lt;- missForest(health)
+</code></pre>
+
+<pre><code>##   missForest iteration 1 in progress...done!
+##   missForest iteration 2 in progress...done!
+##   missForest iteration 3 in progress...done!
+##   missForest iteration 4 in progress...done!
+##   missForest iteration 5 in progress...done!
+</code></pre>
+
+<p>We can access the new matrix with the imputed values via <code>healthimputed$ximp</code>. Unfortunately, this was not a screaming success because some of the columns have so few real measured values; the mean squared error was not good and this approach doesn&rsquo;t seem like a good idea. The good news is that I tested the rest of this analysis both with the random forest imputed data and just replacing <code>NA</code> values with 0, and the results were pretty much the same. There were some minor differences in exactly how the counties clustered, but no major differences in the main results. Given that, let&rsquo;s just replace all the <code>NA</code> values with zeroes, scale and center the data, and move forward.</p>
+
+<pre><code class="language-r">health[is.na(health)] &lt;- 0
+health &lt;- scale(health)
+</code></pre>
+
+<h2 id="principal-component-wonderfulness">Principal Component Wonderfulness</h2>
+
+<p>We can think of a data set like this as a high-dimensional space where each county is at a certain spot in that space. At this point in the analysis we are working with 18 columns of observations. We removed the columns that directly measure how many people live in each county such as population number, percentage of population who are rural dwellers, etc. and kept the columns on health care indicators such as child mortality rate, homicide rate, and percentage of population who is uninsured. Thus we have an 18-dimensional space and each county is located at its own spot in that space. Principal component analysis is a way to project these data points onto a new, special coordinate system. In our new coordinate system, each coordinate, or principal component, is a weighted sum of the original coordinates. The first principal component has the most variance in the data in its direction, the second principal component has the second most variance in the data in its direction, and so forth. Let&rsquo;s do it!</p>
+
+<pre><code class="language-r">myPCA &lt;- prcomp(health)
+</code></pre>
+
+<p>Welp, that was easy.</p>
+
+<p><img src="https://i.imgflip.com/x1goe.jpg" alt="Success Kid Does PCA" /></p>
+
+<p>I just love PCA; it&rsquo;s one of my very favorite algorithmic-y things. Let&rsquo;s see what the first few of the principal components actually look like.</p>
+
+<pre><code class="language-r">library(reshape2)
+melted &lt;- melt(myPCA$rotation[,1:9])
+ggplot(data = melted) +
+        theme(legend.position = &quot;none&quot;, axis.text.x = element_blank(), 
+              axis.ticks.x = element_blank()) + 
+        xlab(&quot;Health care indicator measurements&quot;) +
+        ylab(&quot;Relative importance in each principle component&quot;) +
+        ggtitle(&quot;Variables in Principal Component Analysis&quot;) +
+        geom_bar(aes(x=Var1, y=value, fill=Var1), stat=&quot;identity&quot;) +
+        facet_wrap(~Var2)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-1-11-Health-Care-Indicators/unnamed-chunk-12-1.png" src="/figs/2016-1-11-Health-Care-Indicators/low/unnamed-chunk-12-1.png" alt="center" /></p></figure>
+
+<p>So each of these components are orthogonal to each other, and the colored bars show the contribution of each original health care indicator to that principal component. Each principal component is uncorrelated to the others and together, the principal components contain the information in the data set. Let&rsquo;s zoom in on the first principal component, the one that has the largest variance and accounts for the most variability between the counties.</p>
+
+<pre><code class="language-r">ggplot(data = melted[melted$Var2 == &quot;PC1&quot;,]) +
+         theme(legend.position = &quot;none&quot;, 
+               axis.text.x= element_text(angle=45, hjust = 1), 
+               axis.ticks.x = element_blank()) + 
+         xlab(&quot;Health care indicator measurements&quot;) +
+         ylab(&quot;Relative importance in principle component&quot;) +
+         ggtitle(&quot;Variables in PC1&quot;) +
+         geom_bar(aes(x=Var1, y=value, fill=Var1), stat=&quot;identity&quot;)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-1-11-Health-Care-Indicators/unnamed-chunk-13-1.png" src="/figs/2016-1-11-Health-Care-Indicators/low/unnamed-chunk-13-1.png" alt="center" /></p></figure>
+
+<p>We can see here that counties with higher positive values for PC1 (the component that accounts for the most variability among the counties) have fewer children, more older people, low HIV and homicide rates, are more poor, and have more uninsured people. These sound like more rural counties.</p>
+
+<h2 id="it-s-clustering-time">It&rsquo;s Clustering Time</h2>
+
+<p>Now let&rsquo;s see if this data set of health care indicators can be used to cluster similar counties together. Clustering is an example of unsupervised machine learning, where we want to use an algorithm to find structure in unlabeled data. Let&rsquo;s begin with hierarchical clustering. This method of clustering begins with all the individual items (counties, in our case) alone by themselves and then starts merging them into clusters with the items that are closest to them within the space we are considering. First, the algorithm merges them into two-item clusters, then it will merge another nearby item into each cluster, and so forth, until all the items are merged together into one big cluster. We can examine the tree structure the algorithm used to do the clustering to see what kind of clustering makes sense for the data, given the context, etc. Hierarchical clustering can be done with different methods of computing the distance (or similarity) of the items.</p>
+
+<p>Let&rsquo;s use the <code>fpc</code> package, a package with lots of resources for clustering algorithms, to do some hierarchical clustering of this county health data. Let&rsquo;s do the hierarchical clustering algorithm, but let&rsquo;s do it with bootstrap resampling of the county sample to assess how stable the clusters are to individual counties within the sample and what the best method for computing the distance/similarity is.</p>
+
+<pre><code class="language-r">library(fpc)
+myClusterBoot &lt;- clusterboot(health,clustermethod=hclustCBI, method=&quot;ward.D&quot;, k=3, seed = 6789)
+</code></pre>
+
+<p>I tested different methods for computing the distance and found Ward clustering to be the most stable. The bootstrap results also indicate that 3 clusters is a stable, sensible choice. Let&rsquo;s look at the results for these parameters for the hierarchical clustering.</p>
+
+<pre><code class="language-r">myClusterBoot$bootmean
+</code></pre>
+
+<pre><code>## [1] 0.8090913 0.7216360 0.6972370
+</code></pre>
+
+<pre><code class="language-r">myClusterBoot$bootbrd
+</code></pre>
+
+<pre><code>## [1] 10 26 21
+</code></pre>
+
+<p>The <code>bootmean</code> value measures the cluster stability, where a value close to 1 indicates a stable cluster. The <code>bootbrd</code> value measures how many times (out of the 100 resampling runs) that cluster dissolved. These three clusters look pretty stable, so let&rsquo;s take a look at how the hierarchical clustering algorithm has grouped the counties here.</p>
+
+<pre><code class="language-r">library(dendextend)
+myDend &lt;- health %&gt;% dist %&gt;% hclust(method = &quot;ward.D&quot;) %&gt;% 
+    as.dendrogram %&gt;%
+    set(&quot;branches_k_color&quot;, k = 3) %&gt;% 
+    set(&quot;labels_col&quot;, k=3) %&gt;%
+    hang.dendrogram(hang_height=0.8)
+par(mar = c(3,3,3,7))
+plot(myDend, horiz = TRUE, 
+     main = &quot;Clustering in Utah County Health Care Indicators&quot;)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-1-11-Health-Care-Indicators/unnamed-chunk-16-1.png" src="/figs/2016-1-11-Health-Care-Indicators/low/unnamed-chunk-16-1.png" alt="center" /></p></figure>
+
+<p>The scale along the bottom shows a measure of how separated the branches of the tree structure are. As a resident of Utah, these county names look like they may be in a certain order to me; let&rsquo;s check it out. What if I looked at county names ordered from lowest population to highest? (This is from the original data frame, not the data used to do the clustering.)</p>
+
+<pre><code class="language-r">allHealth$County[order(allHealth$Population)]
+</code></pre>
+
+<pre><code>##  [1] &quot;Daggett&quot;    &quot;Piute&quot;      &quot;Rich&quot;       &quot;Wayne&quot;      &quot;Garfield&quot;  
+##  [6] &quot;Beaver&quot;     &quot;Kane&quot;       &quot;Grand&quot;      &quot;Morgan&quot;     &quot;Juab&quot;      
+## [11] &quot;Emery&quot;      &quot;Millard&quot;    &quot;San Juan&quot;   &quot;Duchesne&quot;   &quot;Sevier&quot;    
+## [16] &quot;Carbon&quot;     &quot;Wasatch&quot;    &quot;Sanpete&quot;    &quot;Uintah&quot;     &quot;Summit&quot;    
+## [21] &quot;Iron&quot;       &quot;Box Elder&quot;  &quot;Tooele&quot;     &quot;Cache&quot;      &quot;Washington&quot;
+## [26] &quot;Weber&quot;      &quot;Davis&quot;      &quot;Utah&quot;       &quot;Salt Lake&quot;
+</code></pre>
+
+<p>Yes indeed! The pink counties are the lowest population counties, the green ones are intermediate in population, and the blue counties are the most populous. The hierarchical clustering algorithm groups the counties by population based on their health care indicators.</p>
+
+<p>Another algorithm for grouping similar objects is k-means clustering. K-means clustering works a bit differently than hierarchical clustering. You decide ahead of time how many clusters you are going to have (the number k) and randomly pick centers for each cluster (perhaps by picking data points at random to be the centers of each cluster). Then, the algorithm assigns each data point (county, in our case) to the closest cluster. After the clusters have their new members, the algorithm calculates new centers for each cluster. These steps of calculating the centers and assigning points to the clusters are repeated until the assignment of points to clusters converges (hopefully to a real minimum). Then you have your final cluster assignments!</p>
+
+<p>The <code>kmeansruns</code> function in the <code>fpc</code> library will run k-means clustering many times to find the best clustering.</p>
+
+<pre><code class="language-r">myKmeans &lt;- kmeansruns(health, krange=1:5)
+</code></pre>
+
+<p>Helpfully, this function estimates the number of clusters in the data; it can use two different methods for this estimate but both give the same answer for our county health data here. If we include 1 in the range for <code>krange</code>, this function also tests whether there should even be more than one cluster at all. For the county health data, the best k is 2. Let&rsquo;s plot what this k-means clustering looks like.</p>
+
+<pre><code class="language-r">library(ggfortify)
+library(ggrepel)
+set.seed(2346)
+autoplot(kmeans(health, 2), data = health, size = 3, aes = 0.8) + 
+        ggtitle(&quot;K-Means Clustering of Utah Counties&quot;) +
+        theme(legend.position=&quot;none&quot;) + 
+        geom_label_repel(aes(PC1, PC2, 
+                             fill = factor(kmeans(health, 2)$cluster), 
+                             label = rownames(health)),
+                         fontface = 'bold', color = 'white', 
+                         box.padding = unit(0.5, &quot;lines&quot;))
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-1-11-Health-Care-Indicators/unnamed-chunk-19-1.png" src="/figs/2016-1-11-Health-Care-Indicators/low/unnamed-chunk-19-1.png" alt="center" /></p></figure>
+
+<p>This plot puts the counties on a plane where the x-axis is the first principal component and the y-axis is the second principal component; this kind of plotting can be helpful to show how data points are different from each other. Like with hierarchical clustering, k-means clustering has grouped counties by population. The cluster on the right is a low-population cluster while the cluster on the left is a high population cluster.</p>
+
+<p>Remember that when we looked in detail at PC1, lower negative values of PC1 correspond to higher homicide rate, higher HIV rate, more children and fewer older poeple, higher income, lower rates of being food insecure and children eligible for free lunch, etc. Notice which counties have the lowest negatives values for PC1: the three most populous counties in Utah. That is heartening to see.</p>
+
+<p>The methods for estimating numbers of clusters in the k-means algorithm indicated that 2 was the best number, but we can do a 3-cluster k-means clustering to compare to the groups found by hierarchical clustering.</p>
+
+<pre><code class="language-r">set.seed(2350)
+autoplot(kmeans(health, 3), data = health, size = 3, aes = 0.8) + 
+        ggtitle(&quot;K-Means Clustering of Utah Counties&quot;) + 
+        theme(legend.position=&quot;none&quot;) + 
+        geom_label_repel(aes(PC1, PC2, 
+                             fill = factor(kmeans(health, 3)$cluster), 
+                             label = rownames(health)), 
+                         fontface = 'bold', color = 'white', 
+                         box.padding = unit(0.5, &quot;lines&quot;))
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-1-11-Health-Care-Indicators/unnamed-chunk-20-1.png" src="/figs/2016-1-11-Health-Care-Indicators/low/unnamed-chunk-20-1.png" alt="center" /></p></figure>
+
+<p>These groups are very similar to those found by hierarchical clustering.</p>
+
+<h2 id="the-end">The End</h2>
+
+<p>If you have a skeptical turn of mind (as I tend to do), you might suggest that what the clustering algorithms are actually finding is just how many <code>NA</code> values each county had. The least populous counties have the most <code>NA</code> values, counties with more intermediate populations have just a few <code>NA</code> values, and the most populous counties have none. There are a couple of things to consider about this perspective. One is that the pattern of <code>NA</code> values is not random; it could be considered informative in itself so perhaps it is not a problem if that affected the clustering results. Another is that I tested this clustering analysis with a subset of the data that excluded the columns that had many missing values (HIV rate, homicide rate, infant mortality rate, and child mortality rate). The clustering results still showed groups of low and high population counties, although the results were messier since there was less data and the excluded columns were highly predictive. The R Markdown file used to make this blog post is available <a href="https://github.com/juliasilge/juliasilge.github.io/blob/master/_R/2016-1-11-Health-Care-Indicators.Rmd">here</a>. I am very happy to hear feedback and other perspectives!</p>
+
+
+                <br>
+            </div>
+            
+                <div class="navigation">
+                    
+                    <div>
+                        <img class="icon" src="/img/back.svg" alt="back" />
+                        <a href="/blog/this-is-the-place/">This Is the Place, Apparently</a>
+                    </div>
+                    
+                    <div style="width: 100%;"></div>
+                    
+                    <div>
+                        <a href="/blog/water-world/">Water World</a>
+                        <img class="icon" src="/img/next.svg" alt="next" />
+                    </div>
+                    
+                </div>
+            
+            <br>
+            <div class="disqus">
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'datascienceish';
+    var disqus_identifier = '\/blog\/health-care-indicators\/';
+    var disqus_title = 'Health Care Indicators in Utah Counties';
+    var disqus_url = '\/blog\/health-care-indicators\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="footer">
+    <div class="container">
+        <div class="copyright">
+
+        
+            <a href="/license">Copyright © 2017 Julia Silge</a>
+        
+
+        </div>
+        <div class="icons">
+
+        
+            <a href="https://github.com/juliasilge" target="_blank">
+                <img class="icon" src="/img/github.svg" alt="github" />
+            </a>
+        
+
+        
+            <a href="https://twitter.com/juliasilge" target="_blank">
+                <img class="icon" src="/img/twitter.svg" alt="twitter" />
+            </a>
+        
+
+        
+            <a href="https://www.linkedin.com/in/juliasilge" target="_blank">
+                <img class="icon" src="/img/linkedin.svg" alt="linkedin" />
+            </a>
+        
+
+        
+
+        
+            <a href="/index.xml">
+                <img class="icon" src="/img/rss.svg" alt="rss" />
+            </a>
+        
+
+        </div>
+    </div>
+</section>
+
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+<script>
+  WebFont.load({
+    google: {
+      families: ['Raleway:400,600,700', 'Merriweather:300,300i,700,700i', 'Ubuntu+Mono:400,700']
+    }
+  });
+</script>
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?...">
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+
+
+  <script src="/js/highlight.min.js" defer></script>
+  
+
+
+
+  <script src="/js/progressively.min.js" defer></script>
+
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-68765210-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+<script>
+  window.onload = function() {
+    
+      hljs.initHighlighting();
+    
+    
+      progressively.init({delay: 30, throttle: 50});
+    
+  };
+</script>
+
+
+</body>
+</html>
+

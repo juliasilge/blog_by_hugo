@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Example blog">
+
+
+    <meta property="twitter:site" content="@juliasilge">
+
+<meta property="twitter:title" content="Song Lyrics Across the United States">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:image" content="/img/banner.png">
+
+<meta property="twitter:description" content="">
+
+<title>
+
+
+     Julia Silge - Song Lyrics Across the United States 
+
+</title>
+<link rel="canonical" href="/blog/song-lyrics-across/">
+
+
+<style media="screen">
+  @font-face {
+  font-family: 'Nexa Bold';
+  src: url('/fonts/Nexa Bold.otf');
+}
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+a,
+a:visited,
+a:focus,
+a:active {
+  text-decoration: none;
+}
+html {
+  height: 100%;
+  font-size: 16px;
+}
+body {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  -ms-justify-content: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 100%;
+  font-weight: 400;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  color: #111111;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility !important;
+}
+.icon {
+  text-rendering: geometricPrecision !important;
+}
+section {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  width: 100%;
+}
+.container {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  width: 100%;
+}
+section.header .container {
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+}
+section.header .content {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.header .container .logo {
+  max-width: 100px;
+  margin-left: -2em;
+}
+section.header .name {
+  padding-top: 20px;
+  font-size: 28px;
+  font-family: 'Nexa Bold', 'Helvetica Neue', 'Arial', sans-serif;
+  letter-spacing: -0.005rem;
+  text-transform: uppercase;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  color: #333333;
+  color: #555555;
+}
+section.header nav {
+  margin-bottom: 16px;
+}
+section.header nav ul {
+  list-style: none;
+  text-align: center;
+  display: -webkit-inline-flex;
+  display: -moz-inline-flex;
+  display: -ms-inline-flexbox;
+  display: -ms-inline-flex;
+  display: inline-flex;
+}
+section.header nav ul a {
+  margin-left: 6px;
+  margin-right: 6px;
+}
+section.header nav ul a:first-child {
+  margin-left: 0;
+}
+section.header nav ul a:last-child {
+  margin-right: 0;
+}
+section.header nav ul li {
+  color: #555555;
+  font-weight: 400;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  -webkit-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+section.header nav ul li:hover {
+  color: #111111;
+}
+section.footer .container {
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+  flex-direction: column-reverse;
+  width: 100%;
+  text-align: center;
+}
+section.footer .container a {
+  font-size: 14px;
+  margin-left: 6px;
+  margin-right: 6px;
+  opacity: 0.6;
+  -webkit-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+section.footer .container a:first-child {
+  margin-left: 0;
+}
+section.footer .container a:last-child {
+  margin-right: 0;
+}
+section.footer .container a:hover {
+  opacity: 0.8;
+}
+section.footer .container a .icon {
+  width: 16px;
+  height: 16px;
+}
+section.footer .container .copyright {
+  flex-grow: 0.5;
+  text-align: start;
+}
+section.footer .container .icons {
+  flex-grow: 0.5;
+  text-align: end;
+}
+section.main .container {
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  -ms-justify-content: flex-start;
+  justify-content: flex-start;
+}
+section.main .content {
+  color: #111111;
+  font-size: 16px;
+}
+section.main .content .title-container {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  justify-content: space-between;
+}
+section.main .content .posts {
+  margin-bottom: 4em;
+}
+section.main .content .page-heading {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  letter-spacing: -0.005rem;
+  text-transform: uppercase;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  color: #333333;
+  margin-bottom: 16px;
+}
+section.main .content .front-matter .page-heading {
+  margin-bottom: 0;
+}
+section.main .content .front-matter .meta {
+  font-size: 14px;
+  color: #666666;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  margin-bottom: 32px;
+}
+section.main .content .front-matter .date,
+section.main .content .front-matter .author,
+section.main .content .front-matter .tags,
+section.main .content .front-matter .word-count,
+section.main .content .front-matter .reading-time .middot {
+  display: none;
+}
+section.main .content .front-matter .middot {
+  font-size: 6px;
+  margin: 0 6px;
+  display: inline;
+  vertical-align: middle;
+}
+section.main .content .front-matter .middot:before {
+  content: "•";
+}
+section.main .content .front-matter .tags ul {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.main .content .front-matter .tags ul li {
+  -webkit-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+section.main .content .front-matter .tags ul li:hover {
+  opacity: 0.7;
+}
+section.main .content .front-matter .tags ul li a {
+  color: #666666;
+}
+section.main .container.f04 {
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+}
+section.main .container.f04 .content {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.main .container.f04 .content .num {
+  margin: 30px 0px 30px 0;
+  font-weight: 400;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  font-size: 50px;
+}
+section.main .container.f04 .content .detail {
+  margin-bottom: 40px;
+}
+section.main .container .content .groupby {
+  margin-top: 1em;
+  padding-left: 0.5em;
+}
+section.main .container .content .post-item {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  display: list-item;
+  list-style: disc inside;
+}
+section.main .container .content .post-item .meta {
+  font-size: 14px;
+  color: #666666;
+  display: none;
+  min-width: 100px;
+}
+section.main .container .content .see-more {
+  font-style: italic;
+  float: right;
+  font-size: 0.9em;
+  margin-top: 2em;
+  color: #313537;
+}
+section.main .container .content .see-more:hover {
+  color: #666;
+}
+section {
+  padding: 0 16px;
+}
+section.header {
+  padding-top: 10px;
+}
+section.header-home {
+  padding-top: 36px;
+}
+section.main {
+  padding-top: 32px;
+}
+section.main .container .content .post-item .meta {
+    display: block;
+}
+section.main .container .content .post-item {
+    display: flex;
+    list-style: none;
+}
+a {
+  color: #428bca;
+  -webkit-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+a:hover {
+  color: #2a6496;
+}
+img {
+  max-width: 100%;
+}
+section.main .content {
+    width: 100%;
+}
+section.main .content .markdown {
+  font-size: 1.1em;
+  line-height: 1.75em;
+  color: #313537;
+  font-family: serif;
+  font-weight: 300;
+}
+section.main .content .markdown h1,
+section.main .content .markdown h2,
+section.main .content .markdown h3,
+section.main .content .markdown h4,
+section.main .content .markdown h5,
+section.main .content .markdown h6 {
+  font-size: 22px;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  letter-spacing: -0.005rem;
+  font-weight: 700;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  color: #333333;
+  text-transform: none;
+  margin-top: 1.75rem;
+}
+section.main .content .markdown h1 {
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
+}
+section.main .content .markdown h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+section.main .content .markdown h3 {
+  font-size: 1em;
+  margin-bottom: 1rem;
+}
+section.main .content .markdown h4,
+section.main .content .markdown h5,
+section.main .content .markdown h6 {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  letter-spacing: none;
+}
+section.main .content .markdown code,
+section.main .content .markdown pre {
+  font-family: 'Menlo', monospace;
+  font-size: 0.98rem;
+  background-color: #f7f7f7;
+}
+section.main .content .markdown code {
+  /* enclosed by single backtick (`) */
+  padding: .15em .5em;
+  border-radius: 2px;
+}
+section.main .content .markdown pre {
+  /* Hugo specific: consider using the 'highlight' shortcode */
+  display: block;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  line-height: 1.5em;
+  white-space: pre;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+@media (min-width: 769px) {
+  section.main .content .markdown pre {
+    width: 110%;
+    margin-left: -4%;
+  }
+}
+section.main .content .markdown pre code {
+  /* enclosed by 4 backticks (````) */
+  padding: 0;
+  font-size: 0.9rem;
+}
+section.main .content .markdown a code {
+  color: #428bca !important;
+}
+section.main .content .markdown a code:hover {
+  text-decoration: underline;
+}
+section.main .content .markdown p {
+  text-align: justify;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+section.main .content .markdown ul,
+section.main .content .markdown ol,
+section.main .content .markdown dl {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+section.main .content .markdown dt {
+  font-weight: bold;
+}
+section.main .content .markdown dd {
+  margin-bottom: .5rem;
+}
+section.main .content .markdown ul {
+  list-style-type: disc;
+  list-style-position: outside;
+  margin-bottom: 1.25rem;
+}
+section.main .content .markdown ol {
+  list-style-type: decimal;
+  margin-bottom: 1.25rem;
+}
+section.main .content .markdown li {
+  margin-left: 2em;
+}
+section.main .content .markdown em {
+  font-style: italic;
+}
+section.main .content .markdown strong {
+  font-weight: 700;
+}
+section.main .content .markdown hr {
+  position: relative;
+  margin: 1.75rem 0;
+  border: 0;
+  border-top: 1px solid #808080;
+  border-top: 1px solid #999999;
+}
+section.main .content .markdown abbr {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #666666;
+  text-transform: uppercase;
+}
+section.main .content .markdown abbr[title] {
+  cursor: help;
+  border-bottom: 1px dotted #808080;
+}
+section.main .content .markdown blockquote {
+  padding: .5rem 1rem;
+  margin: .8rem 0;
+  color: #7a7a7a;
+  border-left: .25rem solid #e5e5e5;
+}
+section.main .content .markdown blockquote p:last-child {
+  margin-bottom: 0;
+}
+section.main .content .markdown figure {
+  width: 100%;
+  background: #fff;
+  margin-bottom: 1em;
+}
+section.main .content .markdown figure img {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  display: block;
+  position: static;
+  margin: auto;
+}
+section.main .content .markdown table {
+  margin-bottom: 1rem;
+  width: 100%;
+  border: 1px solid #e5e5e5;
+  border-collapse: collapse;
+}
+section.main .content .markdown td,
+section.main .content .markdown th {
+  padding: .25rem .5rem;
+  border: 1px solid #e5e5e5;
+}
+section.main .content .markdown tbody tr:nth-child(odd) td,
+section.main .content .markdown tbody tr:nth-child(odd) th {
+  background-color: #f7f7f7;
+}
+section.main .content .markdown .footnotes ol {
+  list-style-type: decimal;
+  margin-left: 16px;
+}
+section.main .content .markdown .footnotes li {
+  list-style-type: unset;
+}
+section.main .content .markdown .footnote-ref {
+  font-size: 0.7em;
+}
+section.main .content .navigation {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.main .content .navigation div {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  margin-top: 1em;
+}
+section.main .content .navigation .icon {
+  width: 16px;
+  height: 16px;
+}
+section.main .content .navigation a {
+  width: 250px;
+  margin-left: 1em;
+  text-align: center;
+  font-style: italic;
+  color: #313537;
+}
+
+/* Fonts */
+
+.wf-raleway-n4-active body, 
+.wf-raleway-n4-active section.header nav ul li,
+.wf-raleway-n7-active section.main .content .page-heading,
+.wf-raleway-n2-active section.main .container.f04 .content .num,
+.wf-raleway-n7-active section.main .content .markdown h1,
+.wf-raleway-n7-active section.main .content .markdown h2,
+.wf-raleway-n7-active section.main .content .markdown h3,
+.wf-raleway-n7-active section.main .content .markdown h4,
+.wf-raleway-n7-active section.main .content .markdown h5,
+.wf-raleway-n7-active section.main .content .markdown h6 {
+  font-family: 'Raleway';
+}
+
+.wf-merriweather-n3-active section.main .content .markdown {
+  font-family: 'Merriweather';
+}
+
+.wf-ubuntu-mono-n4-active section.main .content .markdown code,
+.wf-ubuntu-mono-n4-active section.main .content .markdown pre {
+  font-family: 'Ubuntu Mono';
+}
+</style>
+<style media="(min-width: 600px)">
+  body {
+-webkit-justify-content: center;
+-moz-justify-content: center;
+-ms-justify-content: center;
+justify-content: center;
+}
+.non-narrow.zero-top-spacing {
+padding-top: 0 !important;
+}
+section {
+padding: 0 16px;
+margin-left: 100px;
+margin-right: 100px;
+max-width: 750px;
+}
+section.header {
+background-color: transparent;
+}
+section.header .container {
+-webkit-justify-content: flex-start;
+-moz-justify-content: flex-start;
+-ms-justify-content: flex-start;
+justify-content: flex-start;
+}
+section.header .container .logo {
+margin: 0;
+}
+section.header-home .container .logo {
+max-width: 180px;
+margin-left: 20px;
+}
+section.header-home .name-home {
+padding-top: 30px;
+font-size: 40px;
+}
+section.header-home nav ul li {
+font-size: 18px;
+}
+section.header .content {
+-webkit-align-items: flex-start;
+-moz-align-items: flex-start;
+-ms-align-items: flex-start;
+align-items: flex-start;
+}
+section.header .name {
+color: #333333;
+}
+section.header nav {
+font-size: 14px;
+margin-bottom: 0;
+}
+section.header nav ul {
+text-align: left;
+}
+section.header nav ul li {
+color: #666666;
+}
+section.header nav ul li:hover {
+color: #333333;
+}
+section.footer {
+background-color: transparent;
+}
+section.footer .container {
+flex-direction: row;
+}
+section.footer .container a {
+margin-left: 3px;
+margin-right: 3px;
+color: #666666;
+}
+section.footer .container a:hover {
+color: #333333;
+}
+section.footer .container a .icon {
+font-size: 18px;
+}
+section.footer .container a .icon.larger {
+font-size: 20px;
+}
+section.main .content .front-matter .date,
+section.main .content .front-matter .author,
+section.main .content .front-matter .tags,
+section.main .content .front-matter .word-count,
+section.main .content .front-matter .reading-time .middot {
+display: initial;
+}
+section.main .container.f04 {
+-webkit-justify-content: flex-start;
+-moz-justify-content: flex-start;
+-ms-justify-content: flex-start;
+justify-content: flex-start;
+}
+section.main .container.f04 .content {
+-webkit-align-items: flex-start;
+-moz-align-items: flex-start;
+-ms-align-items: flex-start;
+align-items: flex-start;
+}
+section.main .container.f04 .content .num {
+margin: 0 0 10px 0;
+font-size: 32px;
+}
+section.main .container.f04 .content .detail {
+margin-bottom: 30px;
+}
+.container {
+padding: 0 30px;
+}
+section.header {
+padding-top: 60px;
+padding-bottom: 60px;
+}
+section.footer {
+padding-top: 30px;
+padding-bottom: 60px;
+}
+section.main {
+padding-top: 0;
+}
+section.main .container .content .post-item {
+display: flex;
+list-style: none;
+padding-left: 1.5em;
+}
+section.main .container .content .post-item .meta {
+display: block;
+}
+section.main.post {
+padding-top: 60px;
+padding-bottom: 60px;
+}
+section.main .content .markdown blockquote {
+padding-right: 5rem;
+padding-left: 1.25rem;
+}
+section.main .content .navigation {
+-webkit-flex-direction: row;
+-moz-flex-direction: row;
+-ms-flex-direction: row;
+flex-direction: row;
+}
+section.main .content .navigation div {
+margin-top: 0em;
+}
+</style>
+<style media="(min-width: 769px)">
+  section.main .content .markdown figure {
+width: 110%;
+margin-left: -4%;
+}
+section.main .content .markdown img {
+max-width: 110%;
+width: 110%;
+margin-left: -4%;
+}
+</style>
+
+<noscript>
+  <link href="https://fonts.googleapis.com/css?family=Raleway:400,600,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Merriweather:300,300i,700,700i" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700" rel="stylesheet">
+</noscript>
+
+
+  <style type="text/css" media="screen">
+    .hljs{display:block;background:white;padding:0.5em;color:#333333;overflow-x:auto}.hljs-comment,.hljs-meta{color:#969896}.hljs-string,.hljs-variable,.hljs-template-variable,.hljs-strong,.hljs-emphasis,.hljs-quote{color:#df5000}.hljs-keyword,.hljs-selector-tag,.hljs-type{color:#a71d5d}.hljs-literal,.hljs-symbol,.hljs-bullet,.hljs-attribute{color:#0086b3}.hljs-section,.hljs-name{color:#63a35c}.hljs-tag{color:#333333}.hljs-title,.hljs-attr,.hljs-selector-id,.hljs-selector-class,.hljs-selector-attr,.hljs-selector-pseudo{color:#795da3}.hljs-addition{color:#55a532;background-color:#eaffea}.hljs-deletion{color:#bd2c00;background-color:#ffecec}.hljs-link{text-decoration:underline}
+  </style>
+
+
+
+  <style type="text/css" media="screen">
+    .progressive{overflow:hidden;position:relative;background:#efefef}.progressive__img{width:100%;height:100%;position:absolute;-webkit-transform:translateZ(0);transform:translateZ(0)}.progressive--not-loaded{filter:blur(30px);-webkit-filter:blur(30px)}.progressive--is-loaded{filter:blur(20px);-webkit-filter:blur(20px);-webkit-animation:sharpen .5s both;animation:sharpen .5s both}@-webkit-keyframes sharpen{from{filter:blur(20px);-webkit-filter:blur(20px)}to{filter:blur(0);-webkit-filter:blur(0)}}@keyframes sharpen{from{filter:blur(20px);-webkit-filter:blur(20px)}to{filter:blur(0);-webkit-filter:blur(0)}}
+  </style>
+
+
+
+
+
+
+
+<link rel="shortcut icon"
+
+    href="/_images/favicon.ico"
+
+>
+
+
+
+
+</head>
+
+
+<body>
+
+
+<section class="header">
+
+    <div class="container">
+        <a href="/"><img class="logo" src="/_images/avatar_green.png" alt="logo" /></a>
+        <div class="content">
+            <a href="/"><div class="name"><h1>Julia Silge</h1></div></a>
+            <nav>
+                <ul>
+                    
+                        <a href="/blog/"><li>Blog</li></a>
+                    
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                    
+                        
+                            <a href="/about/"><li>about</li></a>
+                        
+                    
+                        
+                            <a href="/resume/"><li>resume</li></a>
+                        
+                    
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+
+<section class="main post non-narrow zero-top-spacing">
+    <div class="container">
+        <div class="content">
+            <div class="front-matter">
+                <div class="title-container">
+                    <div class="page-heading">
+
+    Song Lyrics Across the United States
+
+</div>
+
+                </div>
+                <div class="meta">
+                    <div class="date" title="Mon Sep 26 2016 00:00:00 UTC">Sep 26, 2016</div>
+                    
+                        
+                    
+                    <div class="reading-time"><div class="middot"></div>13 minute read</div>
+                    <div class="tags">
+                        <ul>
+                          
+                            <div class="middot"></div>
+                            <li><a href="/tags/rstats">rstats</a> </li>
+                          
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="markdown">
+                
+    
+    
+
+<p>The inspiration for this post is a joint venture by both me and my husband, and its genesis lies more than 15 years in our past. One of the recurring conversations we have in our relationship (all long-term relationships have these, right?!) is about song lyrics and place names. I think the first time we ever had this conversation was in the late 1990s and was about Baltimore. &ldquo;Why do so many songs talk about Baltimore?&rdquo; we asked each other. &ldquo;And why does it always sound so miserable there?&rdquo; At the time we were listening to a lot of <a href="https://www.youtube.com/watch?v=3EJP99d8GsQ">Lyle Lovett</a>, and <a href="https://www.youtube.com/watch?v=gEnCxGh8kBg">Counting Crows</a> was on the radio a lot.</p>
+
+<p>We have continued to have this conversation many, many times over our years together, noticing state and city names in song lyrics and wondering if or why certain places are mentioned more often. Are certain locations mentioned in song lyrics at a higher rate, perhaps at a higher rate relative to their population? I&rsquo;ve recently realized that I know of pretty good data sets to make a stab at answering this, so let&rsquo;s go!</p>
+
+<h2 id="downloading-population-data-for-u-s-states">Downloading Population Data for U.S. States</h2>
+
+<p>For this first blog post, I am only going to look at mentions of state names, so let&rsquo;s download state population data from the U.S. Census Bureau. I use Census data from the <a href="https://www.census.gov/programs-surveys/acs/">American Community Survey</a> for my work, so let&rsquo;s use the acs package to find the most recent total population estimates for each state. (If you haven’t used the acs package before, you will need to get an API key and run <code>api.key.install()</code> one time to install your key on your system.)</p>
+
+<pre><code class="language-r">library(acs)
+library(dplyr)
+library(reshape2)
+stategeo &lt;- geo.make(state = &quot;*&quot;)
+popfetch &lt;- acs.fetch(geography = stategeo, 
+                      endyear = 2014,
+                      span = 5, 
+                      table.number = &quot;B01003&quot;,
+                      col.names = &quot;pretty&quot;)
+pop_df &lt;- tbl_df(melt(estimate(popfetch))) %&gt;%
+    mutate(state_name = tolower(Var1),
+           pop2014 = value) %&gt;%
+    select(state_name, pop2014) %&gt;%
+    filter(state_name != &quot;puerto rico&quot;)
+
+## sorry, Puerto Rico!
+</code></pre>
+
+<p>What do we have here, just to check?</p>
+
+<pre><code class="language-r">pop_df %&gt;% 
+    arrange(desc(pop2014)) %&gt;%
+    top_n(10)
+</code></pre>
+
+<pre><code>## # A tibble: 10 × 2
+##        state_name  pop2014
+##             &lt;chr&gt;    &lt;dbl&gt;
+## 1      california 38066920
+## 2           texas 26092033
+## 3        new york 19594330
+## 4         florida 19361792
+## 5        illinois 12868747
+## 6    pennsylvania 12758729
+## 7            ohio 11560380
+## 8         georgia  9907756
+## 9        michigan  9889024
+## 10 north carolina  9750405
+</code></pre>
+
+<p>There we go! We now have a data frame ready to go with the state names and their corresponding populations.</p>
+
+<h2 id="song-lyrics">Song Lyrics</h2>
+
+<p>For a data set of song lyrics, I am going to use the compilation of <em>Billboard</em>&rsquo;s Year-End Hot 100 from 1958 to the present put together by <a href="http://kaylinwalker.com/50-years-of-pop-music/">Kaylin Walker</a>. Her analysis is wonderful and so fun, and she has the data as well as her code for scraping/analysis on <a href="https://github.com/walkerkq/musiclyrics">GitHub</a>. This is a data set of pop lyrics; this means that a) my beloved Lyle Lovett is not in it and b) it is certainly going to be biased in certain ways compared to other genres when it comes to mentions of place names. However, it is somewhere to start.</p>
+
+<pre><code class="language-r">library(readr)
+song_lyrics &lt;- read_csv(&quot;./billboard_lyrics_1964-2015.csv&quot;)
+names(song_lyrics)
+</code></pre>
+
+<pre><code>## [1] &quot;Rank&quot;   &quot;Song&quot;   &quot;Artist&quot; &quot;Year&quot;   &quot;Lyrics&quot; &quot;Source&quot;
+</code></pre>
+
+<h2 id="finding-the-state-names-in-the-song-lyrics">Finding the State Names in the Song Lyrics</h2>
+
+<p>Now we need to find the mentions of each state as they appear in these song lyrics. State names are one or two words, so we will use <code>unnest_tokens</code> from the <a href="https://github.com/juliasilge/tidytext">tidytext</a> package, but we will do it twice. First, we&rsquo;ll unnest looking for single words and then we&rsquo;ll unnest making bigrams, all the combination of two words in the song lyrics. We will bind these two data frames together with all the possible words and bigrams that might contain state names.</p>
+
+<pre><code class="language-r">library(tidytext)
+tidy_lyrics &lt;- bind_rows(song_lyrics %&gt;% 
+                             unnest_tokens(state_name, Lyrics),
+                         song_lyrics %&gt;% 
+                             unnest_tokens(state_name, Lyrics, 
+                                           token = &quot;ngrams&quot;, n = 2))
+tidy_lyrics
+</code></pre>
+
+<pre><code>## # A tibble: 3,201,196 × 6
+##     Rank        Song                        Artist  Year Source
+##    &lt;int&gt;       &lt;chr&gt;                         &lt;chr&gt; &lt;int&gt;  &lt;int&gt;
+## 1      1 wooly bully sam the sham and the pharaohs  1965      3
+## 2      1 wooly bully sam the sham and the pharaohs  1965      3
+## 3      1 wooly bully sam the sham and the pharaohs  1965      3
+## 4      1 wooly bully sam the sham and the pharaohs  1965      3
+## 5      1 wooly bully sam the sham and the pharaohs  1965      3
+## 6      1 wooly bully sam the sham and the pharaohs  1965      3
+## 7      1 wooly bully sam the sham and the pharaohs  1965      3
+## 8      1 wooly bully sam the sham and the pharaohs  1965      3
+## 9      1 wooly bully sam the sham and the pharaohs  1965      3
+## 10     1 wooly bully sam the sham and the pharaohs  1965      3
+##       state_name
+##            &lt;chr&gt;
+## 1            sam
+## 2            the
+## 3           sham
+## 4  miscellaneous
+## 5          wooly
+## 6          bully
+## 7          wooly
+## 8          bully
+## 9            sam
+## 10           the
+## # ... with 3,201,186 more rows
+</code></pre>
+
+<p>The variable <code>state_name</code> in this data frame contains all the possible words and bigrams that might be state names in all the lyrics.</p>
+
+<p>Now we can use an inner join to find all the state names that are actually there.</p>
+
+<pre><code class="language-r">inner_join(tidy_lyrics, pop_df)
+</code></pre>
+
+<pre><code>## # A tibble: 526 × 7
+##     Rank               Song         Artist  Year Source state_name
+##    &lt;int&gt;              &lt;chr&gt;          &lt;chr&gt; &lt;int&gt;  &lt;int&gt;      &lt;chr&gt;
+## 1     12   king of the road   roger miller  1965      1      maine
+## 2     29 eve of destruction  barry mcguire  1965      1    alabama
+## 3     49   california girls the beach boys  1965      3 california
+## 4     49   california girls the beach boys  1965      3 california
+## 5     49   california girls the beach boys  1965      3 california
+## 6     49   california girls the beach boys  1965      3 california
+## 7     49   california girls the beach boys  1965      3 california
+## 8     49   california girls the beach boys  1965      3 california
+## 9     49   california girls the beach boys  1965      3 california
+## 10    49   california girls the beach boys  1965      3 california
+##     pop2014
+##       &lt;dbl&gt;
+## 1   1328535
+## 2   4817678
+## 3  38066920
+## 4  38066920
+## 5  38066920
+## 6  38066920
+## 7  38066920
+## 8  38066920
+## 9  38066920
+## 10 38066920
+## # ... with 516 more rows
+</code></pre>
+
+<p>Let&rsquo;s only count each state once per song that it is mentioned in.</p>
+
+<pre><code class="language-r">tidy_lyrics &lt;- inner_join(tidy_lyrics, pop_df) %&gt;%
+    distinct(Rank, Song, Artist, Year, state_name, .keep_all = TRUE)
+
+tidy_lyrics
+</code></pre>
+
+<pre><code>## # A tibble: 253 × 7
+##     Rank                          Song                         Artist
+##    &lt;int&gt;                         &lt;chr&gt;                          &lt;chr&gt;
+## 1     12              king of the road                   roger miller
+## 2     29            eve of destruction                  barry mcguire
+## 3     49              california girls                 the beach boys
+## 4     10            california dreamin           the mamas  the papas
+## 5     77            message to michael                 dionne warwick
+## 6     61             california nights                    lesley gore
+## 7      4 sittin on the dock of the bay                   otis redding
+## 8     10                    tighten up        archie bell  the drells
+## 9     25                      get back the beatles with billy preston
+## 10    25                      get back the beatles with billy preston
+##     Year Source state_name  pop2014
+##    &lt;int&gt;  &lt;int&gt;      &lt;chr&gt;    &lt;dbl&gt;
+## 1   1965      1      maine  1328535
+## 2   1965      1    alabama  4817678
+## 3   1965      3 california 38066920
+## 4   1966      3 california 38066920
+## 5   1966      1   kentucky  4383272
+## 6   1967      1 california 38066920
+## 7   1968      1    georgia  9907756
+## 8   1968      3      texas 26092033
+## 9   1969      3    arizona  6561516
+## 10  1969      3 california 38066920
+## # ... with 243 more rows
+</code></pre>
+
+<h2 id="calculating-counts">Calculating Counts</h2>
+
+<p>Let&rsquo;s count these up now!</p>
+
+<pre><code class="language-r">state_counts &lt;- tidy_lyrics %&gt;% 
+    group_by(state_name) %&gt;% 
+    summarise(n = n()) %&gt;% 
+    arrange(desc(n))
+
+state_counts
+</code></pre>
+
+<pre><code>## # A tibble: 33 × 2
+##     state_name     n
+##          &lt;chr&gt; &lt;int&gt;
+## 1     new york    64
+## 2   california    34
+## 3      georgia    22
+## 4    tennessee    14
+## 5        texas    14
+## 6      alabama    12
+## 7  mississippi    10
+## 8     kentucky     7
+## 9       hawaii     6
+## 10    illinois     6
+## # ... with 23 more rows
+</code></pre>
+
+<p>Now, I am going to use my vast knowledge of pop culture here and suggest that these mentions of New York are referencing New York City, not the state of New York, as lovely as it may be. I&rsquo;ll keep them in for now but we should be aware of that. Also, I am a bit surprised the numbers are this low overall; this makes me long for BIGGER DATA.</p>
+
+<p>Let&rsquo;s calculate a number relative to the population of each state (mentions per million population).</p>
+
+<pre><code class="language-r">pop_df &lt;- pop_df %&gt;% 
+    left_join(state_counts) %&gt;% 
+    mutate(rate = n/pop2014*1e6)
+
+pop_df %&gt;%
+    arrange(desc(rate)) %&gt;%
+    top_n(10)
+</code></pre>
+
+<pre><code>## # A tibble: 10 × 4
+##     state_name  pop2014     n     rate
+##          &lt;chr&gt;    &lt;dbl&gt; &lt;int&gt;    &lt;dbl&gt;
+## 1       hawaii  1392704     6 4.308166
+## 2  mississippi  2984345    10 3.350819
+## 3     new york 19594330    64 3.266251
+## 4      alabama  4817678    12 2.490826
+## 5        maine  1328535     3 2.258126
+## 6      georgia  9907756    22 2.220483
+## 7    tennessee  6451365    14 2.170083
+## 8      montana  1006370     2 1.987341
+## 9     nebraska  1855617     3 1.616713
+## 10    kentucky  4383272     7 1.596981
+</code></pre>
+
+<p>I was a little surprised that Maine was so high so I checked on those.</p>
+
+<pre><code class="language-r">tidy_lyrics %&gt;%
+    filter(state_name == &quot;maine&quot;) %&gt;%
+    select(Song, Artist, Year)
+</code></pre>
+
+<pre><code>## # A tibble: 3 × 3
+##               Song                      Artist  Year
+##              &lt;chr&gt;                       &lt;chr&gt; &lt;int&gt;
+## 1 king of the road                roger miller  1965
+## 2       every girl                 young money  2009
+## 3          bedrock young money featuring lloyd  2010
+</code></pre>
+
+<p>&ldquo;King of the Road&rdquo;, OK, sure, but it turns out that Mack Maine is a rap artist who is the president of a label named Young Money. It is possible there are other examples of this kind of confusion in this analysis, but I checked most of the other states and did not find anyway. The other state names seen here seem less likely to fall into such a mistake anyway. Let&rsquo;s drop Maine&rsquo;s number down to 1 and recalculate the rate.</p>
+
+<pre><code class="language-r">pop_df$n[pop_df$state_name == &quot;maine&quot;] &lt;- 1
+pop_df &lt;- pop_df %&gt;% 
+    mutate(rate = n/pop2014*1e6)
+</code></pre>
+
+<h2 id="making-a-map">Making a Map</h2>
+
+<p>Let&rsquo;s map these values so we can visualize which states have more or fewer mentions in the <em>Billboard</em> Year-End Hot 100. I&rsquo;m going to use the <a href="https://github.com/seankross/minimap">minimap package</a> from Sean Kross because I think a tile grid map is a good way to display this kind of information. (I don&rsquo;t want the relative geographical areas of states to mess too much with people&rsquo;s visual perception here.)</p>
+
+<p>The minimap package needs two things (mainly) to make a map: a vector of state postal abbreviations and a vector of colors. Let&rsquo;s work on making those.</p>
+
+<pre><code class="language-r">## abbreviations for states
+state_abb &lt;- c(state.abb[1:7], &quot;DC&quot;, state.abb[8:50])
+pop_df &lt;- pop_df %&gt;% 
+    bind_cols(data_frame(abb = state_abb))
+
+## colors for each state
+library(RColorBrewer)
+pop_df &lt;- pop_df %&gt;% 
+    bind_cols(data_frame(n_ntile = ntile(desc(pop_df$n), 11), 
+                         rate_ntile = ntile(desc(pop_df$rate), 11))) %&gt;%
+    mutate(color_n = if_else(is.na(n_ntile),
+                           &quot;gray95&quot;,
+                           brewer.pal(9,&quot;BuPu&quot;)[9-n_ntile]),
+           color_rate = if_else(is.na(rate_ntile),
+                                &quot;gray90&quot;,
+                                brewer.pal(9,&quot;BuPu&quot;)[9-rate_ntile]))
+</code></pre>
+
+<p>Now let&rsquo;s make some maps.</p>
+
+<pre><code class="language-r">library(minimap)
+quartzFonts(roboto = c(&quot;Roboto Condensed Regular&quot;, 
+                       &quot;Roboto Bold&quot;,
+                       &quot;Roboto Condensed Italic&quot;,
+                       &quot;Roboto Bold Italic&quot;))
+par(family = 'roboto')
+miniusa(pop_df$abb, pop_df$color_n, 
+        state_name_cex = 1.2, font = &quot;RobotoCondensed-Regular&quot;)
+title(main = &quot;What States Are Mentioned in Song Lyrics?\nNumber of Mentions&quot;,
+      line = -1)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-09-26-Song-Lyrics-Across/minimap-1.png" src="/figs/2016-09-26-Song-Lyrics-Across/low/minimap-1.png" alt="center" /></p></figure>
+
+<pre><code class="language-r">miniusa(pop_df$abb, pop_df$color_rate,
+        state_name_cex = 1.2, font = &quot;RobotoCondensed-Regular&quot;)
+title(main = &quot;What States Are Mentioned in Song Lyrics?\nNumber of Mentions per Million Population&quot;, 
+      line = -1)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-09-26-Song-Lyrics-Across/minimap-2.png" src="/figs/2016-09-26-Song-Lyrics-Across/low/minimap-2.png" alt="center" /></p></figure>
+
+<p>LOOK, EVERYONE, I DID BASE GRAPHICS. (After I made these plots, I rediscovered that Bob Rudis has a ggplot-based package for a similar tile grid map called <a href="https://github.com/hrbrmstr/statebins">statebins</a>.) Also, as a reminder, we can probably ignore the numbers for New York, as they all appear to reference New York City, not the state.</p>
+
+<p>Let&rsquo;s combine these into an animated GIF using the <a href="https://github.com/ropensci/magickget">magick</a> package.</p>
+
+<pre><code class="language-r">library(magick)
+map1 &lt;- image_read(&quot;../figs/2016-09-26-Song-Lyrics-Across/minimap-1.png&quot;)
+map2 &lt;- image_read(&quot;../figs/2016-09-26-Song-Lyrics-Across/minimap-2.png&quot;)
+(animate_map &lt;- image_animate(c(map1, map2), fps = 0.8))
+</code></pre>
+
+<pre><code>##   format width height colorspace filesize
+## 1    gif  1440   1080       sRGB        0
+## 2    gif  1440   1080       sRGB        0
+</code></pre>
+
+<pre><code class="language-r">image_write(animate_map, &quot;../figs/2016-09-26-Song-Lyrics-Across/animate_map.gif&quot;)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-09-26-Song-Lyrics-Across/animate_map.gif" src="/figs/2016-09-26-Song-Lyrics-Across/low/animate_map.gif" alt="States and Song Lyrics" /></p></figure>
+
+<h2 id="cartogram-map">Cartogram Map</h2>
+
+<p>Another way we might visualize this kind of information could be a cartogram, where the geometry of a map is distorted to show some variable. You can see some comparisons of tile grid maps (square and hexagonal) and a cartogram at this <a href="http://blog.apps.npr.org/2015/05/11/hex-tile-maps.html">NPR post from last year</a>. There is an R package from Sebastian Jeworutzki that will <a href="https://github.com/sjewo/cartogram">create a cartogram</a> from a <code>SpatialPolygonDataFrame</code>, so let&rsquo;s give it a go.</p>
+
+<pre><code class="language-r">library(ggplot2)
+library(ggthemes)
+library(ggalt)
+library(scales)
+library(rgeos)
+library(maptools)
+library(albersusa)
+library(cartogram)
+
+pop_df &lt;- pop_df %&gt;%
+    mutate(rate_all = rate)
+pop_df$rate_all[is.na(pop_df$rate_all)] &lt;- 0.05
+usa &lt;- usa_composite()
+usa &lt;- spTransform(usa, CRS(&quot;+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs&quot;))
+usa@data &lt;- usa@data %&gt;%
+    mutate(name2 = tolower(name)) %&gt;%
+    left_join(pop_df, by = c(&quot;name2&quot; = &quot;state_name&quot;))
+distorted &lt;- cartogram(usa, &quot;rate_all&quot;, 5)
+</code></pre>
+
+<p>The <code>cartogram</code> function could not accept some of the states having <code>NA</code> or zero for their rate value, which makes sense. When I tried using a very small number for the states which have zero mentions in this data set, the algorithm could not converge in a reasonable amount of time. I ended up using a small-ish but not-too-close to zero number for those states in order to have the distorting algorithm converge. Anyway, that code above has done the distorting; now let&rsquo;s map this.</p>
+
+<pre><code class="language-r">us_map &lt;- fortify(distorted, region=&quot;name&quot;)
+
+ggplot() +
+    geom_map(data = us_map, map = us_map,
+             aes(x = long, y = lat, map_id = id),
+             color = &quot;#2b2b2b&quot;, size = 0.05, fill = NA) +
+    geom_map(data = usa@data, map = us_map,
+             aes(fill = rate, map_id = name),
+             color = NA) +
+    scale_fill_distiller(palette = &quot;BuPu&quot;, direction = 1, guide=FALSE, na.value = &quot;grey95&quot;) +
+    theme_map(base_family = &quot;RobotoCondensed-Regular&quot;) +
+    theme(plot.title=element_text(family=&quot;Roboto-Bold&quot;)) +
+    labs(title=&quot;What States Are Mentioned Most in Song Lyrics?&quot;,
+         subtitle=&quot;States represented with larger than actual areas are mentioned more often relative to their population&quot;,
+         caption=&quot;Billboard's Year-End Hot 100 from 1958-2015&quot;)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-09-26-Song-Lyrics-Across/unnamed-chunk-15-1.png" src="/figs/2016-09-26-Song-Lyrics-Across/low/unnamed-chunk-15-1.png" alt="center" /></p></figure>
+
+<p>I&rsquo;m actually not so sure about this one. It&rsquo;s <em>cool</em> that it is possible but I think I prefer the tile map for actually communicating the information.</p>
+
+<p>Both kinds of maps show how important states like Mississippi, Georgia, Alabama, Tennessee, and Kentucky are in song lyrics. And remember that this is nominally pop music, not country music per se! Hawaii and Montana also have strong showings, relative to their populations.</p>
+
+<h2 id="the-end">The End</h2>
+
+<p>The rates per million population presented in the map are more uncertain for states that were mentioned in, say, 2 songs (like Montana) than for states that were mentioned many more times (like Georgia), even if those numbers relative to population were about the same. Georgia was mentioned about 10 times more often than Montana, meaning the sample size used to calculate Georgia&rsquo;s rate is about 10 times bigger than the sample size used to calculate Montana&rsquo;s rate. Thanks to our old friend, the Central Limit Theorem, this means the uncertainty associated with Montana&rsquo;s rate measurement is about $$\sqrt{10}$$ times bigger. For a more rigorous analysis, it might be worth calculating those differences in uncertainty and reporting them.</p>
+
+<p>I would like to extend this analysis to city names next, but I feel like I barely eked out anything useful or meaningful here, given the song counts I ended up with. I would love to work with a different data set of song lyrics that included more lyrics and/or more genres of music; I&rsquo;ve thought about doing something with the <a href="http://labrosa.ee.columbia.edu/millionsong/musixmatch">Million Song Dataset from musiXmatch</a>, or maybe I need to do some scraping myself. The R Markdown file used to make this blog post is available <a href="https://github.com/juliasilge/juliasilge.github.io/blob/master/_R/2016-09-26-Song-Lyrics-Across.Rmd">here</a>. I am very happy to hear feedback or questions!</p>
+
+
+                <br>
+            </div>
+            
+                <div class="navigation">
+                    
+                    <div>
+                        <img class="icon" src="/img/back.svg" alt="back" />
+                        <a href="/blog/evenly-distributed/">We Are Not Very Evenly Distributed</a>
+                    </div>
+                    
+                    <div style="width: 100%;"></div>
+                    
+                    <div>
+                        <a href="/blog/bayesian-blues/">Singing the Bayesian Beginner Blues</a>
+                        <img class="icon" src="/img/next.svg" alt="next" />
+                    </div>
+                    
+                </div>
+            
+            <br>
+            <div class="disqus">
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'datascienceish';
+    var disqus_identifier = '\/blog\/song-lyrics-across\/';
+    var disqus_title = 'Song Lyrics Across the United States';
+    var disqus_url = '\/blog\/song-lyrics-across\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="footer">
+    <div class="container">
+        <div class="copyright">
+
+        
+            <a href="/license">Copyright © 2017 Julia Silge</a>
+        
+
+        </div>
+        <div class="icons">
+
+        
+            <a href="https://github.com/juliasilge" target="_blank">
+                <img class="icon" src="/img/github.svg" alt="github" />
+            </a>
+        
+
+        
+            <a href="https://twitter.com/juliasilge" target="_blank">
+                <img class="icon" src="/img/twitter.svg" alt="twitter" />
+            </a>
+        
+
+        
+            <a href="https://www.linkedin.com/in/juliasilge" target="_blank">
+                <img class="icon" src="/img/linkedin.svg" alt="linkedin" />
+            </a>
+        
+
+        
+
+        
+            <a href="/index.xml">
+                <img class="icon" src="/img/rss.svg" alt="rss" />
+            </a>
+        
+
+        </div>
+    </div>
+</section>
+
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+<script>
+  WebFont.load({
+    google: {
+      families: ['Raleway:400,600,700', 'Merriweather:300,300i,700,700i', 'Ubuntu+Mono:400,700']
+    }
+  });
+</script>
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?...">
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+
+
+  <script src="/js/highlight.min.js" defer></script>
+  
+
+
+
+  <script src="/js/progressively.min.js" defer></script>
+
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-68765210-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+<script>
+  window.onload = function() {
+    
+      hljs.initHighlighting();
+    
+    
+      progressively.init({delay: 30, throttle: 50});
+    
+  };
+</script>
+
+
+</body>
+</html>
+

@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Example blog">
+
+
+    <meta property="twitter:site" content="@juliasilge">
+
+<meta property="twitter:title" content="Joy to the World, and also Anticipation, Disgust, Surprise...">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:image" content="/img/banner.png">
+
+<meta property="twitter:description" content="">
+
+<title>
+
+
+     Julia Silge - Joy to the World, and also Anticipation, Disgust, Surprise... 
+
+</title>
+<link rel="canonical" href="/blog/joy-to-the-world/">
+
+
+<style media="screen">
+  @font-face {
+  font-family: 'Nexa Bold';
+  src: url('/fonts/Nexa Bold.otf');
+}
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+a,
+a:visited,
+a:focus,
+a:active {
+  text-decoration: none;
+}
+html {
+  height: 100%;
+  font-size: 16px;
+}
+body {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  -ms-justify-content: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 100%;
+  font-weight: 400;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  color: #111111;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility !important;
+}
+.icon {
+  text-rendering: geometricPrecision !important;
+}
+section {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  width: 100%;
+}
+.container {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  width: 100%;
+}
+section.header .container {
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+}
+section.header .content {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.header .container .logo {
+  max-width: 100px;
+  margin-left: -2em;
+}
+section.header .name {
+  padding-top: 20px;
+  font-size: 28px;
+  font-family: 'Nexa Bold', 'Helvetica Neue', 'Arial', sans-serif;
+  letter-spacing: -0.005rem;
+  text-transform: uppercase;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  color: #333333;
+  color: #555555;
+}
+section.header nav {
+  margin-bottom: 16px;
+}
+section.header nav ul {
+  list-style: none;
+  text-align: center;
+  display: -webkit-inline-flex;
+  display: -moz-inline-flex;
+  display: -ms-inline-flexbox;
+  display: -ms-inline-flex;
+  display: inline-flex;
+}
+section.header nav ul a {
+  margin-left: 6px;
+  margin-right: 6px;
+}
+section.header nav ul a:first-child {
+  margin-left: 0;
+}
+section.header nav ul a:last-child {
+  margin-right: 0;
+}
+section.header nav ul li {
+  color: #555555;
+  font-weight: 400;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  -webkit-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+section.header nav ul li:hover {
+  color: #111111;
+}
+section.footer .container {
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+  flex-direction: column-reverse;
+  width: 100%;
+  text-align: center;
+}
+section.footer .container a {
+  font-size: 14px;
+  margin-left: 6px;
+  margin-right: 6px;
+  opacity: 0.6;
+  -webkit-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+section.footer .container a:first-child {
+  margin-left: 0;
+}
+section.footer .container a:last-child {
+  margin-right: 0;
+}
+section.footer .container a:hover {
+  opacity: 0.8;
+}
+section.footer .container a .icon {
+  width: 16px;
+  height: 16px;
+}
+section.footer .container .copyright {
+  flex-grow: 0.5;
+  text-align: start;
+}
+section.footer .container .icons {
+  flex-grow: 0.5;
+  text-align: end;
+}
+section.main .container {
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  -ms-justify-content: flex-start;
+  justify-content: flex-start;
+}
+section.main .content {
+  color: #111111;
+  font-size: 16px;
+}
+section.main .content .title-container {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  justify-content: space-between;
+}
+section.main .content .posts {
+  margin-bottom: 4em;
+}
+section.main .content .page-heading {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  letter-spacing: -0.005rem;
+  text-transform: uppercase;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  color: #333333;
+  margin-bottom: 16px;
+}
+section.main .content .front-matter .page-heading {
+  margin-bottom: 0;
+}
+section.main .content .front-matter .meta {
+  font-size: 14px;
+  color: #666666;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  margin-bottom: 32px;
+}
+section.main .content .front-matter .date,
+section.main .content .front-matter .author,
+section.main .content .front-matter .tags,
+section.main .content .front-matter .word-count,
+section.main .content .front-matter .reading-time .middot {
+  display: none;
+}
+section.main .content .front-matter .middot {
+  font-size: 6px;
+  margin: 0 6px;
+  display: inline;
+  vertical-align: middle;
+}
+section.main .content .front-matter .middot:before {
+  content: "•";
+}
+section.main .content .front-matter .tags ul {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.main .content .front-matter .tags ul li {
+  -webkit-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+section.main .content .front-matter .tags ul li:hover {
+  opacity: 0.7;
+}
+section.main .content .front-matter .tags ul li a {
+  color: #666666;
+}
+section.main .container.f04 {
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+}
+section.main .container.f04 .content {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.main .container.f04 .content .num {
+  margin: 30px 0px 30px 0;
+  font-weight: 400;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  font-size: 50px;
+}
+section.main .container.f04 .content .detail {
+  margin-bottom: 40px;
+}
+section.main .container .content .groupby {
+  margin-top: 1em;
+  padding-left: 0.5em;
+}
+section.main .container .content .post-item {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  display: list-item;
+  list-style: disc inside;
+}
+section.main .container .content .post-item .meta {
+  font-size: 14px;
+  color: #666666;
+  display: none;
+  min-width: 100px;
+}
+section.main .container .content .see-more {
+  font-style: italic;
+  float: right;
+  font-size: 0.9em;
+  margin-top: 2em;
+  color: #313537;
+}
+section.main .container .content .see-more:hover {
+  color: #666;
+}
+section {
+  padding: 0 16px;
+}
+section.header {
+  padding-top: 10px;
+}
+section.header-home {
+  padding-top: 36px;
+}
+section.main {
+  padding-top: 32px;
+}
+section.main .container .content .post-item .meta {
+    display: block;
+}
+section.main .container .content .post-item {
+    display: flex;
+    list-style: none;
+}
+a {
+  color: #428bca;
+  -webkit-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+a:hover {
+  color: #2a6496;
+}
+img {
+  max-width: 100%;
+}
+section.main .content {
+    width: 100%;
+}
+section.main .content .markdown {
+  font-size: 1.1em;
+  line-height: 1.75em;
+  color: #313537;
+  font-family: serif;
+  font-weight: 300;
+}
+section.main .content .markdown h1,
+section.main .content .markdown h2,
+section.main .content .markdown h3,
+section.main .content .markdown h4,
+section.main .content .markdown h5,
+section.main .content .markdown h6 {
+  font-size: 22px;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  letter-spacing: -0.005rem;
+  font-weight: 700;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  color: #333333;
+  text-transform: none;
+  margin-top: 1.75rem;
+}
+section.main .content .markdown h1 {
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
+}
+section.main .content .markdown h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+section.main .content .markdown h3 {
+  font-size: 1em;
+  margin-bottom: 1rem;
+}
+section.main .content .markdown h4,
+section.main .content .markdown h5,
+section.main .content .markdown h6 {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  letter-spacing: none;
+}
+section.main .content .markdown code,
+section.main .content .markdown pre {
+  font-family: 'Menlo', monospace;
+  font-size: 0.98rem;
+  background-color: #f7f7f7;
+}
+section.main .content .markdown code {
+  /* enclosed by single backtick (`) */
+  padding: .15em .5em;
+  border-radius: 2px;
+}
+section.main .content .markdown pre {
+  /* Hugo specific: consider using the 'highlight' shortcode */
+  display: block;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  line-height: 1.5em;
+  white-space: pre;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+@media (min-width: 769px) {
+  section.main .content .markdown pre {
+    width: 110%;
+    margin-left: -4%;
+  }
+}
+section.main .content .markdown pre code {
+  /* enclosed by 4 backticks (````) */
+  padding: 0;
+  font-size: 0.9rem;
+}
+section.main .content .markdown a code {
+  color: #428bca !important;
+}
+section.main .content .markdown a code:hover {
+  text-decoration: underline;
+}
+section.main .content .markdown p {
+  text-align: justify;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+section.main .content .markdown ul,
+section.main .content .markdown ol,
+section.main .content .markdown dl {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+section.main .content .markdown dt {
+  font-weight: bold;
+}
+section.main .content .markdown dd {
+  margin-bottom: .5rem;
+}
+section.main .content .markdown ul {
+  list-style-type: disc;
+  list-style-position: outside;
+  margin-bottom: 1.25rem;
+}
+section.main .content .markdown ol {
+  list-style-type: decimal;
+  margin-bottom: 1.25rem;
+}
+section.main .content .markdown li {
+  margin-left: 2em;
+}
+section.main .content .markdown em {
+  font-style: italic;
+}
+section.main .content .markdown strong {
+  font-weight: 700;
+}
+section.main .content .markdown hr {
+  position: relative;
+  margin: 1.75rem 0;
+  border: 0;
+  border-top: 1px solid #808080;
+  border-top: 1px solid #999999;
+}
+section.main .content .markdown abbr {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #666666;
+  text-transform: uppercase;
+}
+section.main .content .markdown abbr[title] {
+  cursor: help;
+  border-bottom: 1px dotted #808080;
+}
+section.main .content .markdown blockquote {
+  padding: .5rem 1rem;
+  margin: .8rem 0;
+  color: #7a7a7a;
+  border-left: .25rem solid #e5e5e5;
+}
+section.main .content .markdown blockquote p:last-child {
+  margin-bottom: 0;
+}
+section.main .content .markdown figure {
+  width: 100%;
+  background: #fff;
+  margin-bottom: 1em;
+}
+section.main .content .markdown figure img {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  display: block;
+  position: static;
+  margin: auto;
+}
+section.main .content .markdown table {
+  margin-bottom: 1rem;
+  width: 100%;
+  border: 1px solid #e5e5e5;
+  border-collapse: collapse;
+}
+section.main .content .markdown td,
+section.main .content .markdown th {
+  padding: .25rem .5rem;
+  border: 1px solid #e5e5e5;
+}
+section.main .content .markdown tbody tr:nth-child(odd) td,
+section.main .content .markdown tbody tr:nth-child(odd) th {
+  background-color: #f7f7f7;
+}
+section.main .content .markdown .footnotes ol {
+  list-style-type: decimal;
+  margin-left: 16px;
+}
+section.main .content .markdown .footnotes li {
+  list-style-type: unset;
+}
+section.main .content .markdown .footnote-ref {
+  font-size: 0.7em;
+}
+section.main .content .navigation {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.main .content .navigation div {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  margin-top: 1em;
+}
+section.main .content .navigation .icon {
+  width: 16px;
+  height: 16px;
+}
+section.main .content .navigation a {
+  width: 250px;
+  margin-left: 1em;
+  text-align: center;
+  font-style: italic;
+  color: #313537;
+}
+
+/* Fonts */
+
+.wf-raleway-n4-active body, 
+.wf-raleway-n4-active section.header nav ul li,
+.wf-raleway-n7-active section.main .content .page-heading,
+.wf-raleway-n2-active section.main .container.f04 .content .num,
+.wf-raleway-n7-active section.main .content .markdown h1,
+.wf-raleway-n7-active section.main .content .markdown h2,
+.wf-raleway-n7-active section.main .content .markdown h3,
+.wf-raleway-n7-active section.main .content .markdown h4,
+.wf-raleway-n7-active section.main .content .markdown h5,
+.wf-raleway-n7-active section.main .content .markdown h6 {
+  font-family: 'Raleway';
+}
+
+.wf-merriweather-n3-active section.main .content .markdown {
+  font-family: 'Merriweather';
+}
+
+.wf-ubuntu-mono-n4-active section.main .content .markdown code,
+.wf-ubuntu-mono-n4-active section.main .content .markdown pre {
+  font-family: 'Ubuntu Mono';
+}
+</style>
+<style media="(min-width: 600px)">
+  body {
+-webkit-justify-content: center;
+-moz-justify-content: center;
+-ms-justify-content: center;
+justify-content: center;
+}
+.non-narrow.zero-top-spacing {
+padding-top: 0 !important;
+}
+section {
+padding: 0 16px;
+margin-left: 100px;
+margin-right: 100px;
+max-width: 750px;
+}
+section.header {
+background-color: transparent;
+}
+section.header .container {
+-webkit-justify-content: flex-start;
+-moz-justify-content: flex-start;
+-ms-justify-content: flex-start;
+justify-content: flex-start;
+}
+section.header .container .logo {
+margin: 0;
+}
+section.header-home .container .logo {
+max-width: 180px;
+margin-left: 20px;
+}
+section.header-home .name-home {
+padding-top: 30px;
+font-size: 40px;
+}
+section.header-home nav ul li {
+font-size: 18px;
+}
+section.header .content {
+-webkit-align-items: flex-start;
+-moz-align-items: flex-start;
+-ms-align-items: flex-start;
+align-items: flex-start;
+}
+section.header .name {
+color: #333333;
+}
+section.header nav {
+font-size: 14px;
+margin-bottom: 0;
+}
+section.header nav ul {
+text-align: left;
+}
+section.header nav ul li {
+color: #666666;
+}
+section.header nav ul li:hover {
+color: #333333;
+}
+section.footer {
+background-color: transparent;
+}
+section.footer .container {
+flex-direction: row;
+}
+section.footer .container a {
+margin-left: 3px;
+margin-right: 3px;
+color: #666666;
+}
+section.footer .container a:hover {
+color: #333333;
+}
+section.footer .container a .icon {
+font-size: 18px;
+}
+section.footer .container a .icon.larger {
+font-size: 20px;
+}
+section.main .content .front-matter .date,
+section.main .content .front-matter .author,
+section.main .content .front-matter .tags,
+section.main .content .front-matter .word-count,
+section.main .content .front-matter .reading-time .middot {
+display: initial;
+}
+section.main .container.f04 {
+-webkit-justify-content: flex-start;
+-moz-justify-content: flex-start;
+-ms-justify-content: flex-start;
+justify-content: flex-start;
+}
+section.main .container.f04 .content {
+-webkit-align-items: flex-start;
+-moz-align-items: flex-start;
+-ms-align-items: flex-start;
+align-items: flex-start;
+}
+section.main .container.f04 .content .num {
+margin: 0 0 10px 0;
+font-size: 32px;
+}
+section.main .container.f04 .content .detail {
+margin-bottom: 30px;
+}
+.container {
+padding: 0 30px;
+}
+section.header {
+padding-top: 60px;
+padding-bottom: 60px;
+}
+section.footer {
+padding-top: 30px;
+padding-bottom: 60px;
+}
+section.main {
+padding-top: 0;
+}
+section.main .container .content .post-item {
+display: flex;
+list-style: none;
+padding-left: 1.5em;
+}
+section.main .container .content .post-item .meta {
+display: block;
+}
+section.main.post {
+padding-top: 60px;
+padding-bottom: 60px;
+}
+section.main .content .markdown blockquote {
+padding-right: 5rem;
+padding-left: 1.25rem;
+}
+section.main .content .navigation {
+-webkit-flex-direction: row;
+-moz-flex-direction: row;
+-ms-flex-direction: row;
+flex-direction: row;
+}
+section.main .content .navigation div {
+margin-top: 0em;
+}
+</style>
+<style media="(min-width: 769px)">
+  section.main .content .markdown figure {
+width: 110%;
+margin-left: -4%;
+}
+section.main .content .markdown img {
+max-width: 110%;
+width: 110%;
+margin-left: -4%;
+}
+</style>
+
+<noscript>
+  <link href="https://fonts.googleapis.com/css?family=Raleway:400,600,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Merriweather:300,300i,700,700i" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700" rel="stylesheet">
+</noscript>
+
+
+  <style type="text/css" media="screen">
+    .hljs{display:block;background:white;padding:0.5em;color:#333333;overflow-x:auto}.hljs-comment,.hljs-meta{color:#969896}.hljs-string,.hljs-variable,.hljs-template-variable,.hljs-strong,.hljs-emphasis,.hljs-quote{color:#df5000}.hljs-keyword,.hljs-selector-tag,.hljs-type{color:#a71d5d}.hljs-literal,.hljs-symbol,.hljs-bullet,.hljs-attribute{color:#0086b3}.hljs-section,.hljs-name{color:#63a35c}.hljs-tag{color:#333333}.hljs-title,.hljs-attr,.hljs-selector-id,.hljs-selector-class,.hljs-selector-attr,.hljs-selector-pseudo{color:#795da3}.hljs-addition{color:#55a532;background-color:#eaffea}.hljs-deletion{color:#bd2c00;background-color:#ffecec}.hljs-link{text-decoration:underline}
+  </style>
+
+
+
+  <style type="text/css" media="screen">
+    .progressive{overflow:hidden;position:relative;background:#efefef}.progressive__img{width:100%;height:100%;position:absolute;-webkit-transform:translateZ(0);transform:translateZ(0)}.progressive--not-loaded{filter:blur(30px);-webkit-filter:blur(30px)}.progressive--is-loaded{filter:blur(20px);-webkit-filter:blur(20px);-webkit-animation:sharpen .5s both;animation:sharpen .5s both}@-webkit-keyframes sharpen{from{filter:blur(20px);-webkit-filter:blur(20px)}to{filter:blur(0);-webkit-filter:blur(0)}}@keyframes sharpen{from{filter:blur(20px);-webkit-filter:blur(20px)}to{filter:blur(0);-webkit-filter:blur(0)}}
+  </style>
+
+
+
+
+
+
+
+<link rel="shortcut icon"
+
+    href="/_images/favicon.ico"
+
+>
+
+
+
+
+</head>
+
+
+<body>
+
+
+<section class="header">
+
+    <div class="container">
+        <a href="/"><img class="logo" src="/_images/avatar_green.png" alt="logo" /></a>
+        <div class="content">
+            <a href="/"><div class="name"><h1>Julia Silge</h1></div></a>
+            <nav>
+                <ul>
+                    
+                        <a href="/blog/"><li>Blog</li></a>
+                    
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                    
+                        
+                            <a href="/about/"><li>about</li></a>
+                        
+                    
+                        
+                            <a href="/resume/"><li>resume</li></a>
+                        
+                    
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+
+<section class="main post non-narrow zero-top-spacing">
+    <div class="container">
+        <div class="content">
+            <div class="front-matter">
+                <div class="title-container">
+                    <div class="page-heading">
+
+    Joy to the World, and also Anticipation, Disgust, Surprise...
+
+</div>
+
+                </div>
+                <div class="meta">
+                    <div class="date" title="Tue Dec 22 2015 00:00:00 UTC">Dec 22, 2015</div>
+                    
+                        
+                    
+                    <div class="reading-time"><div class="middot"></div>13 minute read</div>
+                    <div class="tags">
+                        <ul>
+                          
+                            <div class="middot"></div>
+                            <li><a href="/tags/rstats">rstats</a> </li>
+                          
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="markdown">
+                
+    
+    
+
+<p>In my <a href="http://juliasilge.com/blog/Ten-Thousand-Tweets/">previous blog post</a>, I analyzed my Twitter archive and explored some aspects of my tweeting behavior. When do I tweet, how much do retweet people, do I use hashtags? These are examples of one kind of question, but what about the actual verbal content of my tweets, the text itself? What kinds of questions can we ask and answer about the text in some programmatic way? This is what is called natural language processing, and I&rsquo;ll give a first shot at it here. First, let&rsquo;s load some libraries I&rsquo;ll use in this analysis and open up my Twitter archive.</p>
+
+<pre><code class="language-r">library(tm)
+library(stringr)
+library(wordcloud)
+
+tweets &lt;- read.csv(&quot;./tweets.csv&quot;, stringsAsFactors = FALSE)
+</code></pre>
+
+<h2 id="cloudy-with-a-chance-of-lots-of-words">Cloudy With a Chance of Lots of Words</h2>
+
+<p>Perhaps the simplest question we might want to ask is about the frequency of words used in text. What words do I use a lot in my tweets? Let&rsquo;s find out, and make a common visualization of term frequency called a word cloud.</p>
+
+<p>First, let&rsquo;s remove the Twitter handles (i.e., <code>@juliasilge</code> or similar) from the tweet texts so we can just have the real English words.</p>
+
+<pre><code class="language-r">nohandles &lt;- str_replace_all(tweets$text, &quot;@\\w+&quot;, &quot;&quot;)
+</code></pre>
+
+<p>Now, let&rsquo;s go through and clean up the remaining text. We will turn this into a &ldquo;corpus&rdquo;, a collection of documents containing natural language text that the <code>tm</code> text mining package knows how to deal with. After that, we&rsquo;ll go through and apply specific mappings to the documents (i.e., tweet texts). These can actually be done all in one call to <code>tm_map</code> but I have them separated here to show clearly what is going on.</p>
+
+<pre><code class="language-r">wordCorpus &lt;- Corpus(VectorSource(nohandles))
+wordCorpus &lt;- tm_map(wordCorpus, removePunctuation)
+wordCorpus &lt;- tm_map(wordCorpus, content_transformer(tolower))
+wordCorpus &lt;- tm_map(wordCorpus, removeWords, stopwords(&quot;english&quot;))
+wordCorpus &lt;- tm_map(wordCorpus, removeWords, c(&quot;amp&quot;, &quot;2yo&quot;, &quot;3yo&quot;, &quot;4yo&quot;))
+wordCorpus &lt;- tm_map(wordCorpus, stripWhitespace)
+</code></pre>
+
+<p>The mappings do pretty much what they sound like they do. First, we remove all punctuation, then we change everything to all lower case. The next line removes English stop words; these are very common words that aren&rsquo;t super meaningful. If we didn&rsquo;t remove stop words, then most people&rsquo;s text will look pretty much the same and my word cloud would just be an enormous <em>the</em> with various prepositions and conjunctions and such around it. In the next line, let&rsquo;s remove some &ldquo;words&rdquo; that were leftover from how special characters were treated in the Twitter archive. The last line strips whitespace from before and after each word so that now the corpus holds nice, neat, cleaned-up words.</p>
+
+<p>A common transformation or mapping to do when examining term frequency is called stemming; this means to take words like <em>cleaning</em> and <em>cleaned</em> and <em>cleaner</em> and remove the endings of the words to keep just <em>clean</em> for all of these examples. Then we can count all of them together instead of separately, which sounds like it would be an excellent thing to do. The stemming algorithm in <code>tm</code> did not work very well for my purposes for my tweet texts, however. It turned some common words in my tweet texts into misspellings; it changed <em>baby</em> to <em>babi</em>, <em>morning</em> to <em>morn</em>, <em>little</em> to <em>littl</em>, etc.</p>
+
+<pre><code class="language-r"># did not do this stemming
+wordCorpus &lt;- tm_map(wordCorpus, stemDocument)
+</code></pre>
+
+<p>This might actually be a sensible, great thing to do if my ultimate goal was to algorithmically compare my corpus to another corpus. It wouldn&rsquo;t much matter if the words being counted were correctly spelled English words, and it would make more difference pay attention to stemming. However, I want to make a word cloud for us all to look at, so I don&rsquo;t want to have anything nonsensical or incorrectly spelled; I will leave out stemming. It did not make a big difference in my results here when I did and did not include stemming. That&rsquo;s actually pretty interesting; it must be related to the tense and inflection that I use in tweets.</p>
+
+<p>So now let&rsquo;s make the word cloud. The <code>wordcloud</code> function takes either a corpus like we have here, or a vector of words and their frequencies, or even a bunch of text, and then plots a word cloud. We can tinker with the scale of the sizes of the words to be plotted, the colors used, and how many words to plot. For what it&rsquo;s worth, I could not get <code>wordcloud</code> to play nicely with <code>svglite</code>, so I am using the default PNG format from <code>knitr</code> here.</p>
+
+<pre><code class="language-r">pal &lt;- brewer.pal(9,&quot;YlGnBu&quot;)
+pal &lt;- pal[-(1:4)]
+set.seed(123)
+wordcloud(words = wordCorpus, scale=c(5,0.1), max.words=100, random.order=FALSE, 
+          rot.per=0.35, use.r.layout=FALSE, colors=pal)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2015-12-22-Joy-to-the-World/unnamed-chunk-6-1.png" src="/figs/2015-12-22-Joy-to-the-World/low/unnamed-chunk-6-1.png" alt="center" /></p></figure>
+
+<p>I just&hellip; Like, really?</p>
+
+<p>You can see that there are a few examples where stemming would have made sense, <em>thing</em> and <em>things</em>, for example. Also, we can definitely see here that I have been a social, personal user of Twitter since I joined in 2008. These words all look conversational, personal, and informal. We would see a very different word cloud for someone who has used Twitter for professional purposes over her whole Twitter career. Another way to quantify the information shown in the word cloud is called a term-document matrix; this is a matrix of numbers (0 and 1) that keeps track of which documents in a corpus use which terms. Let&rsquo;s see this for the corpus of my tweets.</p>
+
+<pre><code class="language-r">tdm &lt;- TermDocumentMatrix(wordCorpus)
+tdm
+</code></pre>
+
+<pre><code>## &lt;&lt;TermDocumentMatrix (terms: 14712, documents: 10202)&gt;&gt;
+## Non-/sparse entries: 82638/150009186
+## Sparsity           : 100%
+## Maximal term length: 78
+## Weighting          : term frequency (tf)
+</code></pre>
+
+<p>So this term-document matrix contains information on 14712 terms (i.e, words) and 10202 documents (i.e., tweets). We could also make a document-term matrix, which has the rows and columns the other way around. Let&rsquo;s look at part of this matrix.</p>
+
+<pre><code class="language-r">inspect(tdm[12880:12890, 270:280])
+</code></pre>
+
+<pre><code>## &lt;&lt;TermDocumentMatrix (terms: 11, documents: 11)&gt;&gt;
+## Non-/sparse entries: 1/120
+## Sparsity           : 99%
+## Maximal term length: 11
+## Weighting          : term frequency (tf)
+## 
+##              Docs
+## Terms         270 271 272 273 274 275 276 277 278 279 280
+##   sudafed       0   0   0   0   0   0   0   0   0   0   0
+##   sudden        0   0   0   0   0   0   0   0   0   0   0
+##   suddenacute   0   0   0   0   0   0   0   0   0   0   0
+##   suddenly      0   0   0   0   0   0   0   0   0   0   0
+##   sued          0   0   0   0   0   0   0   0   0   0   0
+##   suffer        0   0   0   0   0   0   0   0   0   0   0
+##   suffering     0   0   0   0   0   0   0   0   0   0   0
+##   sufjan        0   0   0   0   0   0   0   0   0   0   0
+##   sugar         0   0   1   0   0   0   0   0   0   0   0
+##   sugarcrash    0   0   0   0   0   0   0   0   0   0   0
+##   sugarhouse    0   0   0   0   0   0   0   0   0   0   0
+</code></pre>
+
+<p>This is how the term-document matrix keeps track of which documents (tweets, in this example) contains which terms. Notice that document 272 contains the word sugar and so has a 1 in that row/column. (And also Sufjan shows up in my term-document matrix! So seasonally appropriate. <a href="https://youtu.be/OYQFeZFLyM4">Best Christmas album ever</a>? Or <a href="https://youtu.be/TW1AgX-Fv3M">absolutely Christmas album ever</a>?) We can see we might want to use stemming; do we really want to keep <em>suffer</em> and <em>suffering</em> separate in this matrix? That would depend on what we want to do with it. We might want to calculate the similarity of this corpus as compared to another corpus and use the term-document matrices, or we might want to do some linear algebra like a principal component analysis on the matrix. Whatever step we might want to take next, notice what a sparse matrix this is &ndash; LOTS of zeroes and only a very few ones. This can be a good thing because we could use special numerical techniques for doing linear algebra with sparse matrices that are faster and more efficient.</p>
+
+<h2 id="my-twitter-bffs">My Twitter BFFs</h2>
+
+<p>We made the first word cloud by getting the English words from the tweet texts, after removing the Twitter handles from them, but now let&rsquo;s look at a word cloud of just the Twitter handles from my tweet texts, my Twitter friends and acquaintances, as it were.</p>
+
+<pre><code class="language-r">friends &lt;- str_extract_all(tweets$text, &quot;@\\w+&quot;)
+namesCorpus &lt;- Corpus(VectorSource(friends))
+</code></pre>
+
+<p>Now we have a new corpus made up of all the twitter handles extracted from all the tweet texts. These have been extracted directly from the text of the tweets, so these will include everyone who I retweet and reply to, including both more famous-type people and also personal friends.</p>
+
+<pre><code class="language-r">set.seed(146)
+wordcloud(words = namesCorpus, scale=c(3,0.5), max.words=40, random.order=FALSE, 
+          rot.per=0.10, use.r.layout=FALSE, colors=pal)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2015-12-22-Joy-to-the-World/unnamed-chunk-10-1.png" src="/figs/2015-12-22-Joy-to-the-World/low/unnamed-chunk-10-1.png" alt="center" /></p></figure>
+
+<p>As I look at this word cloud, I also see the evidence that I have used Twitter in a social, personal way; these are almost all personal friends, not professional contacts or the like.</p>
+
+<h2 id="all-the-feels">All the Feels</h2>
+
+<p>We can use an algorithm to evaluate and categorize the feelings expressed in text; this is called sentiment analysis and it can be, as you might imagine, tricky. For example, sentiment analysis algorithms are built in such a way that they are <a href="http://www.meetup.com/Data-Science-DC/events/226358392/">more sensitive to expressions typical of men than women</a>. And how good will computers <a href="https://gate.ac.uk/sale/lrec2014/arcomem/sarcasm.pdf">ever be at identifying sarcasm</a>? Most of these concerns won&rsquo;t have a big effect on my analysis here because I am looking at text produced by only one person (me) but it is always a good idea to keep in mind the limitations and problems in the tools we are using. Let&rsquo;s load some libraries and get sentimental.</p>
+
+<pre><code class="language-r">library(syuzhet)
+library(lubridate)
+library(ggplot2)
+library(scales)
+library(reshape2)
+library(dplyr )
+mySentiment &lt;- get_nrc_sentiment(tweets$text)
+</code></pre>
+
+<p>The sentiment analysis algorithm used here is based on the <a href="http://saifmohammad.com/WebPages/NRC-Emotion-Lexicon.htm">NRC Word-Emotion Association Lexicon</a> of Saif Mohammad and Peter Turney. The idea here is that these researchers have built a dictionary/lexicon containing lots of words with associated scores for eight different emotions and two sentiments (positive/negative). Each individual word in the lexicon will have a &ldquo;yes&rdquo; (one) or &ldquo;no&rdquo; (zero) for the emotions and sentiments, and we can calculate the total sentiment of a sentence by adding up the individual sentiments for each word in the sentence. Not every English word is in the lexicon because many English words are pretty neutral.</p>
+
+<pre><code class="language-r">get_nrc_sentiment(&quot;O holy night, the stars are brightly shining&quot;)
+</code></pre>
+
+<pre><code>##   anger anticipation disgust fear joy sadness surprise trust negative positive
+## 1     0            1       0    0   1       0        0     0        0        2
+</code></pre>
+
+<p>All the words in that sentence have entries that are all zeroes except for &ldquo;holy&rdquo; and &ldquo;shining&rdquo;; add up the sentiment scores for those two words and you get the sentiment for the sentence.</p>
+
+<pre><code class="language-r">get_nrc_sentiment(&quot;Oh, the weather outside is frightful&quot;)
+</code></pre>
+
+<pre><code>##   anger anticipation disgust fear joy sadness surprise trust negative positive
+## 1     1            0       0    1   0       1        0     0        1        0
+</code></pre>
+
+<p>The only word in that sentence with any non-zero sentiment score is &ldquo;frightful&rdquo;, so the sentiment score for the whole sentence is the same as the sentiment score for that one word.</p>
+
+<p>Let&rsquo;s look at a few of the sentiment scores for my tweets and then bind them to the data frame containing all the rest of the tweet information.</p>
+
+<pre><code class="language-r">head(mySentiment)
+</code></pre>
+
+<pre><code>##   anger anticipation disgust fear joy sadness surprise trust negative positive
+## 1     0            1       0    0   1       0        0     1        0        1
+## 2     0            0       0    0   0       0        0     0        0        0
+## 3     0            0       0    0   0       0        0     0        0        0
+## 4     0            1       1    0   1       1        0     2        1        2
+## 5     0            1       0    0   1       0        1     2        0        2
+## 6     0            0       0    0   0       0        0     0        0        0
+</code></pre>
+
+<pre><code class="language-r">tweets &lt;- cbind(tweets, mySentiment)
+</code></pre>
+
+<p>What would some examples look like?</p>
+
+<p><blockquote class="twitter-tweet" lang="en"><p lang="en" dir="ltr">Celebrating Rob&#39;s birthday today, and about to try to get a flourless chocolate cake out of a springform pan. Wish me luck.</p>&mdash; Julia Silge (@juliasilge) <a href="https://twitter.com/juliasilge/status/546811325993586688">December 21, 2014</a></blockquote>
+<script async src="http://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+<p>This tweet has anticipation and joy scores of 4, a surprise score of 2, a trust score of 1, and zero for all the other sentiments.</p>
+
+<p><blockquote class="twitter-tweet" lang="en"><p lang="en" dir="ltr">Stomach bug thoughts: cholera would be a terrible way to die.</p>&mdash; Julia Silge (@juliasilge) <a href="https://twitter.com/juliasilge/status/286200639174868992">January 1, 2013</a></blockquote>
+<script async src="http://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+<p>This tweet, in contrast, has disgust and fear scores of 4, a sadness score of 3, an anger score of 1, and zeroes for all the other sentiments.</p>
+
+<p>Let&rsquo;s look at the sentiment scores for the eight emotions from the NRC lexicon in aggregate for all my tweets. What are the most common emotions in my tweets, as measured by this sentiment analysis algorithm?</p>
+
+<pre><code class="language-r">sentimentTotals &lt;- data.frame(colSums(tweets[,c(11:18)]))
+names(sentimentTotals) &lt;- &quot;count&quot;
+sentimentTotals &lt;- cbind(&quot;sentiment&quot; = rownames(sentimentTotals), sentimentTotals)
+rownames(sentimentTotals) &lt;- NULL
+ggplot(data = sentimentTotals, aes(x = sentiment, y = count)) +
+        geom_bar(aes(fill = sentiment), stat = &quot;identity&quot;) +
+        theme(legend.position = &quot;none&quot;) +
+        xlab(&quot;Sentiment&quot;) + ylab(&quot;Total Count&quot;) + ggtitle(&quot;Total Sentiment Score for All Tweets&quot;)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2015-12-22-Joy-to-the-World/unnamed-chunk-15-1.png" src="/figs/2015-12-22-Joy-to-the-World/low/unnamed-chunk-15-1.png" alt="center" /></p></figure>
+
+<p>I am a positive person on Twitter, apparently, with joy, anticipation, and trust far outweighing the other emotions. Now let&rsquo;s see if the sentiment of my tweets has changed over time. We can use <code>dplyr</code> and <code>cut</code> to group the tweets into time intervals for analysis.</p>
+
+<pre><code class="language-r">tweets$timestamp &lt;- with_tz(ymd_hms(tweets$timestamp), &quot;America/Chicago&quot;)
+posnegtime &lt;- tweets %&gt;% 
+        group_by(timestamp = cut(timestamp, breaks=&quot;2 months&quot;)) %&gt;%
+        summarise(negative = mean(negative),
+                  positive = mean(positive)) %&gt;% melt
+names(posnegtime) &lt;- c(&quot;timestamp&quot;, &quot;sentiment&quot;, &quot;meanvalue&quot;)
+posnegtime$sentiment = factor(posnegtime$sentiment,levels(posnegtime$sentiment)[c(2,1)])
+
+ggplot(data = posnegtime, aes(x = as.Date(timestamp), y = meanvalue, group = sentiment)) +
+        geom_line(size = 2.5, alpha = 0.7, aes(color = sentiment)) +
+        geom_point(size = 0.5) +
+        ylim(0, NA) + 
+        scale_colour_manual(values = c(&quot;springgreen4&quot;, &quot;firebrick3&quot;)) +
+        theme(legend.title=element_blank(), axis.title.x = element_blank()) +
+        scale_x_date(breaks = date_breaks(&quot;9 months&quot;), 
+                     labels = date_format(&quot;%Y-%b&quot;)) +
+        ylab(&quot;Average sentiment score&quot;) + 
+        ggtitle(&quot;Sentiment Over Time&quot;)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2015-12-22-Joy-to-the-World/unnamed-chunk-16-1.png" src="/figs/2015-12-22-Joy-to-the-World/low/unnamed-chunk-16-1.png" alt="center" /></p></figure>
+
+<p>The positive sentiment scores are always much higher than the negative sentiment scores, but both show some decrease over time. The positive sentiment exhibits a stronger downward trend. Apparently, I am gradually becoming less exuberant in my vocabulary on Twitter?</p>
+
+<p>Now let&rsquo;s see if there are any associations between day of the week and the emotions from the NRC lexicon. Use the <code>wday()</code> function from the <code>lubridate</code> package and <code>dplyr</code> to group the tweets by weekday.</p>
+
+<pre><code class="language-r">tweets$weekday &lt;- wday(tweets$timestamp, label = TRUE)
+weeklysentiment &lt;- tweets %&gt;% group_by(weekday) %&gt;% 
+        summarise(anger = mean(anger), 
+                  anticipation = mean(anticipation), 
+                  disgust = mean(disgust), 
+                  fear = mean(fear), 
+                  joy = mean(joy), 
+                  sadness = mean(sadness), 
+                  surprise = mean(surprise), 
+                  trust = mean(trust)) %&gt;% melt
+names(weeklysentiment) &lt;- c(&quot;weekday&quot;, &quot;sentiment&quot;, &quot;meanvalue&quot;)
+
+ggplot(data = weeklysentiment, aes(x = weekday, y = meanvalue, group = sentiment)) +
+        geom_line(size = 2.5, alpha = 0.7, aes(color = sentiment)) +
+        geom_point(size = 0.5) +
+        ylim(0, 0.6) +
+        theme(legend.title=element_blank(), axis.title.x = element_blank()) +
+        ylab(&quot;Average sentiment score&quot;) + 
+        ggtitle(&quot;Sentiment During the Week&quot;)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2015-12-22-Joy-to-the-World/unnamed-chunk-17-1.png" src="/figs/2015-12-22-Joy-to-the-World/low/unnamed-chunk-17-1.png" alt="center" /></p></figure>
+
+<p>These are mostly consistent with being flat, although it looks like joy and anticipation may be higher on the weekends than on weekdays.</p>
+
+<p>Similarly, let&rsquo;s see if there are associations between the eight emotions and the months of the year.</p>
+
+<pre><code class="language-r">tweets$month &lt;- month(tweets$timestamp, label = TRUE)
+monthlysentiment &lt;- tweets %&gt;% group_by(month) %&gt;% 
+        summarise(anger = mean(anger), 
+                  anticipation = mean(anticipation), 
+                  disgust = mean(disgust), 
+                  fear = mean(fear), 
+                  joy = mean(joy), 
+                  sadness = mean(sadness), 
+                  surprise = mean(surprise), 
+                  trust = mean(trust)) %&gt;% melt
+names(monthlysentiment) &lt;- c(&quot;month&quot;, &quot;sentiment&quot;, &quot;meanvalue&quot;)
+
+ggplot(data = monthlysentiment, aes(x = month, y = meanvalue, group = sentiment)) +
+        geom_line(size = 2.5, alpha = 0.7, aes(color = sentiment)) +
+        geom_point(size = 0.5) +
+        ylim(0, NA) +
+        theme(legend.title=element_blank(), axis.title.x = element_blank()) +
+        ylab(&quot;Average sentiment score&quot;) + 
+        ggtitle(&quot;Sentiment During the Year&quot;)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2015-12-22-Joy-to-the-World/unnamed-chunk-18-1.png" src="/figs/2015-12-22-Joy-to-the-World/low/unnamed-chunk-18-1.png" alt="center" /></p></figure>
+
+<p>The first thing to notice here is that the variance is much higher for the months of the year than it was for the days of the week. Most (all?) of this must be from our old friend, the Central Limit Theorem. The sample size used to calculate each point is about <sup>12</sup>&frasl;<sub>7</sub> bigger for the plot showing the days of the week compared to the plot showing the months of the year, so we would expect the variance to be <sup>12</sup>&frasl;<sub>7</sub> (or 1.714) times larger in the months-of-the-year plot. Another thing I notice is that joy and anticipation show a distinct increase in December. May your December also be full of joy and anticipation!</p>
+
+<h2 id="the-end">The End</h2>
+
+<p>The R Markdown file used to make this blog post is available <a href="https://github.com/juliasilge/juliasilge.github.io/blob/master/_R/2015-12-22-Joy-to-the-World.Rmd">here</a>. I am happy to hear feedback and suggestions; these are some very powerful packages I used in this analysis and I know I only scratched the surface of the kind of work that can be done with them.</p>
+
+
+                <br>
+            </div>
+            
+                <div class="navigation">
+                    
+                    <div>
+                        <img class="icon" src="/img/back.svg" alt="back" />
+                        <a href="/blog/ten-thousand-tweets/">Ten Thousand Tweets</a>
+                    </div>
+                    
+                    <div style="width: 100%;"></div>
+                    
+                    <div>
+                        <a href="/blog/this-is-the-place/">This Is the Place, Apparently</a>
+                        <img class="icon" src="/img/next.svg" alt="next" />
+                    </div>
+                    
+                </div>
+            
+            <br>
+            <div class="disqus">
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'datascienceish';
+    var disqus_identifier = '\/blog\/joy-to-the-world\/';
+    var disqus_title = 'Joy to the World, and also Anticipation, Disgust, Surprise...';
+    var disqus_url = '\/blog\/joy-to-the-world\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="footer">
+    <div class="container">
+        <div class="copyright">
+
+        
+            <a href="/license">Copyright © 2017 Julia Silge</a>
+        
+
+        </div>
+        <div class="icons">
+
+        
+            <a href="https://github.com/juliasilge" target="_blank">
+                <img class="icon" src="/img/github.svg" alt="github" />
+            </a>
+        
+
+        
+            <a href="https://twitter.com/juliasilge" target="_blank">
+                <img class="icon" src="/img/twitter.svg" alt="twitter" />
+            </a>
+        
+
+        
+            <a href="https://www.linkedin.com/in/juliasilge" target="_blank">
+                <img class="icon" src="/img/linkedin.svg" alt="linkedin" />
+            </a>
+        
+
+        
+
+        
+            <a href="/index.xml">
+                <img class="icon" src="/img/rss.svg" alt="rss" />
+            </a>
+        
+
+        </div>
+    </div>
+</section>
+
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+<script>
+  WebFont.load({
+    google: {
+      families: ['Raleway:400,600,700', 'Merriweather:300,300i,700,700i', 'Ubuntu+Mono:400,700']
+    }
+  });
+</script>
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?...">
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+
+
+  <script src="/js/highlight.min.js" defer></script>
+  
+
+
+
+  <script src="/js/progressively.min.js" defer></script>
+
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-68765210-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+<script>
+  window.onload = function() {
+    
+      hljs.initHighlighting();
+    
+    
+      progressively.init({delay: 30, throttle: 50});
+    
+  };
+</script>
+
+
+</body>
+</html>
+

@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "# TODO: CNAME, Disqus?\n# disqusshortname     = \"datascienceish\" \n# googleAnalytics     = \"UA-68765210-1\"\n# ignoreFiles         = [\"\\\\.Rmd$\", \"_files$\", \"_cache$\"]\n# blog                = \"/blog/:year/:month/:day/:slug/\"\n# avatar              = \"_images/profile_painterly.jpg\"\n\n# options for highlight.js (version, additional languages, and theme)\n# highlightjsVersion = \"9.11.0\"\n# highlightjsCDN = \"//cdn.bootcss.com\"\n# highlightjsLang = [\"r\", \"yaml\"]\n# highlightjsTheme = \"github\"\n# MathJaxCDN = \"//cdn.bootcss.com\"\n# MathJaxVersion = \"2.7.1\"\n\n\nbaseurl = \"/\"\nlanguageCode = \"en-us\"\ntitle = \"Julia Silge\"\ntheme = \"cocoa-eh-hugo-theme\"\nbuilddrafts = true\ncanonifyurls = true\ncontentdir = \"content\"\nlayoutdir = \"layouts\"\npublishdir = \"public\"\nauthor = \"Julia Silge\"\ndisqusshortname = \"datascienceish\"\ngoogleAnalytics = \"UA-68765210-1\"\npluralizelisttitles = false\nignoreFiles = [\"\\\\.Rmd$\", \"_files$\", \"_cache$\"]\nMathJaxCDN = \"https://cdn.bootcss.com\"\nMathJaxVersion = \"2.7.1\"\n\n\n[permalinks]\nblog = \"/blog/:slug/\"\n\n[params]\ndateform = \"Jan 2, 2006\"\ndateformfull = \"Mon Jan 2 2006 15:04:05 MST\"\ndescription = \"Example blog\"\ncopyright = \"Copyright © 2017 Julia Silge\"\nlogofile = \"_images/avatar_green.png\"\nfaviconfile = \"_images/favicon.ico\"\nhighlightjs = true\n# options for highlight.js (version, additional languages, and theme)\nhighlightjsVersion = \"9.11.0\"\nhighlightjsCDN = \"https://cdn.bootcss.com\"\nhighlightjsLang = [\"r\", \"yaml\"]\nhighlightjsTheme = \"github\"\nMathJaxCDN = \"https://cdn.bootcss.com\"\nMathJaxVersion = \"2.7.1\"\nprogressively = true\nlatestpostcount = 5\ngithub = \"juliasilge\"\n#email = \"you@example.com\"\nlinkedin = \"juliasilge\"\ntwitter = \"juliasilge\"\nsocial_banner = \"img/banner.png\"\nposts_navigation = true\n\n",
+    "created" : 1494095261068.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "658621270",
+    "id" : "DD3ACD07",
+    "lastKnownWriteTime" : 1496109948,
+    "last_content_update" : 1496109948463,
+    "path" : "~/Google Drive/data_science/blog/new_blog/config.toml",
+    "project_path" : "config.toml",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "text"
+}

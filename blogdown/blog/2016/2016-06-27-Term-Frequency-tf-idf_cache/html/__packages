@@ -1,0 +1,12 @@
+base
+knitr
+dplyr
+janeaustenr
+tidytext
+ggplot2
+viridisLite
+viridis
+ggstance
+ggthemes
+bindrcpp
+gutenbergr

@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Example blog">
+
+
+    <meta property="twitter:site" content="@juliasilge">
+
+<meta property="twitter:title" content="Measuring Gobbledygook">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:image" content="/img/banner.png">
+
+<meta property="twitter:description" content="">
+
+<title>
+
+
+     Julia Silge - Measuring Gobbledygook 
+
+</title>
+<link rel="canonical" href="/blog/gobbledygook/">
+
+
+<style media="screen">
+  @font-face {
+  font-family: 'Nexa Bold';
+  src: url('/fonts/Nexa Bold.otf');
+}
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+a,
+a:visited,
+a:focus,
+a:active {
+  text-decoration: none;
+}
+html {
+  height: 100%;
+  font-size: 16px;
+}
+body {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  -ms-justify-content: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 100%;
+  font-weight: 400;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  color: #111111;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility !important;
+}
+.icon {
+  text-rendering: geometricPrecision !important;
+}
+section {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  width: 100%;
+}
+.container {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  width: 100%;
+}
+section.header .container {
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+}
+section.header .content {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.header .container .logo {
+  max-width: 100px;
+  margin-left: -2em;
+}
+section.header .name {
+  padding-top: 20px;
+  font-size: 28px;
+  font-family: 'Nexa Bold', 'Helvetica Neue', 'Arial', sans-serif;
+  letter-spacing: -0.005rem;
+  text-transform: uppercase;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  color: #333333;
+  color: #555555;
+}
+section.header nav {
+  margin-bottom: 16px;
+}
+section.header nav ul {
+  list-style: none;
+  text-align: center;
+  display: -webkit-inline-flex;
+  display: -moz-inline-flex;
+  display: -ms-inline-flexbox;
+  display: -ms-inline-flex;
+  display: inline-flex;
+}
+section.header nav ul a {
+  margin-left: 6px;
+  margin-right: 6px;
+}
+section.header nav ul a:first-child {
+  margin-left: 0;
+}
+section.header nav ul a:last-child {
+  margin-right: 0;
+}
+section.header nav ul li {
+  color: #555555;
+  font-weight: 400;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  -webkit-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+section.header nav ul li:hover {
+  color: #111111;
+}
+section.footer .container {
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+  flex-direction: column-reverse;
+  width: 100%;
+  text-align: center;
+}
+section.footer .container a {
+  font-size: 14px;
+  margin-left: 6px;
+  margin-right: 6px;
+  opacity: 0.6;
+  -webkit-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+section.footer .container a:first-child {
+  margin-left: 0;
+}
+section.footer .container a:last-child {
+  margin-right: 0;
+}
+section.footer .container a:hover {
+  opacity: 0.8;
+}
+section.footer .container a .icon {
+  width: 16px;
+  height: 16px;
+}
+section.footer .container .copyright {
+  flex-grow: 0.5;
+  text-align: start;
+}
+section.footer .container .icons {
+  flex-grow: 0.5;
+  text-align: end;
+}
+section.main .container {
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  -ms-justify-content: flex-start;
+  justify-content: flex-start;
+}
+section.main .content {
+  color: #111111;
+  font-size: 16px;
+}
+section.main .content .title-container {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  justify-content: space-between;
+}
+section.main .content .posts {
+  margin-bottom: 4em;
+}
+section.main .content .page-heading {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  letter-spacing: -0.005rem;
+  text-transform: uppercase;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  color: #333333;
+  margin-bottom: 16px;
+}
+section.main .content .front-matter .page-heading {
+  margin-bottom: 0;
+}
+section.main .content .front-matter .meta {
+  font-size: 14px;
+  color: #666666;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  margin-bottom: 32px;
+}
+section.main .content .front-matter .date,
+section.main .content .front-matter .author,
+section.main .content .front-matter .tags,
+section.main .content .front-matter .word-count,
+section.main .content .front-matter .reading-time .middot {
+  display: none;
+}
+section.main .content .front-matter .middot {
+  font-size: 6px;
+  margin: 0 6px;
+  display: inline;
+  vertical-align: middle;
+}
+section.main .content .front-matter .middot:before {
+  content: "•";
+}
+section.main .content .front-matter .tags ul {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.main .content .front-matter .tags ul li {
+  -webkit-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+section.main .content .front-matter .tags ul li:hover {
+  opacity: 0.7;
+}
+section.main .content .front-matter .tags ul li a {
+  color: #666666;
+}
+section.main .container.f04 {
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+}
+section.main .container.f04 .content {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.main .container.f04 .content .num {
+  margin: 30px 0px 30px 0;
+  font-weight: 400;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  font-size: 50px;
+}
+section.main .container.f04 .content .detail {
+  margin-bottom: 40px;
+}
+section.main .container .content .groupby {
+  margin-top: 1em;
+  padding-left: 0.5em;
+}
+section.main .container .content .post-item {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  display: list-item;
+  list-style: disc inside;
+}
+section.main .container .content .post-item .meta {
+  font-size: 14px;
+  color: #666666;
+  display: none;
+  min-width: 100px;
+}
+section.main .container .content .see-more {
+  font-style: italic;
+  float: right;
+  font-size: 0.9em;
+  margin-top: 2em;
+  color: #313537;
+}
+section.main .container .content .see-more:hover {
+  color: #666;
+}
+section {
+  padding: 0 16px;
+}
+section.header {
+  padding-top: 10px;
+}
+section.header-home {
+  padding-top: 36px;
+}
+section.main {
+  padding-top: 32px;
+}
+section.main .container .content .post-item .meta {
+    display: block;
+}
+section.main .container .content .post-item {
+    display: flex;
+    list-style: none;
+}
+a {
+  color: #428bca;
+  -webkit-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+a:hover {
+  color: #2a6496;
+}
+img {
+  max-width: 100%;
+}
+section.main .content {
+    width: 100%;
+}
+section.main .content .markdown {
+  font-size: 1.1em;
+  line-height: 1.75em;
+  color: #313537;
+  font-family: serif;
+  font-weight: 300;
+}
+section.main .content .markdown h1,
+section.main .content .markdown h2,
+section.main .content .markdown h3,
+section.main .content .markdown h4,
+section.main .content .markdown h5,
+section.main .content .markdown h6 {
+  font-size: 22px;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  letter-spacing: -0.005rem;
+  font-weight: 700;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  color: #333333;
+  text-transform: none;
+  margin-top: 1.75rem;
+}
+section.main .content .markdown h1 {
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
+}
+section.main .content .markdown h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+section.main .content .markdown h3 {
+  font-size: 1em;
+  margin-bottom: 1rem;
+}
+section.main .content .markdown h4,
+section.main .content .markdown h5,
+section.main .content .markdown h6 {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  letter-spacing: none;
+}
+section.main .content .markdown code,
+section.main .content .markdown pre {
+  font-family: 'Menlo', monospace;
+  font-size: 0.98rem;
+  background-color: #f7f7f7;
+}
+section.main .content .markdown code {
+  /* enclosed by single backtick (`) */
+  padding: .15em .5em;
+  border-radius: 2px;
+}
+section.main .content .markdown pre {
+  /* Hugo specific: consider using the 'highlight' shortcode */
+  display: block;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  line-height: 1.5em;
+  white-space: pre;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+@media (min-width: 769px) {
+  section.main .content .markdown pre {
+    width: 110%;
+    margin-left: -4%;
+  }
+}
+section.main .content .markdown pre code {
+  /* enclosed by 4 backticks (````) */
+  padding: 0;
+  font-size: 0.9rem;
+}
+section.main .content .markdown a code {
+  color: #428bca !important;
+}
+section.main .content .markdown a code:hover {
+  text-decoration: underline;
+}
+section.main .content .markdown p {
+  text-align: justify;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+section.main .content .markdown ul,
+section.main .content .markdown ol,
+section.main .content .markdown dl {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+section.main .content .markdown dt {
+  font-weight: bold;
+}
+section.main .content .markdown dd {
+  margin-bottom: .5rem;
+}
+section.main .content .markdown ul {
+  list-style-type: disc;
+  list-style-position: outside;
+  margin-bottom: 1.25rem;
+}
+section.main .content .markdown ol {
+  list-style-type: decimal;
+  margin-bottom: 1.25rem;
+}
+section.main .content .markdown li {
+  margin-left: 2em;
+}
+section.main .content .markdown em {
+  font-style: italic;
+}
+section.main .content .markdown strong {
+  font-weight: 700;
+}
+section.main .content .markdown hr {
+  position: relative;
+  margin: 1.75rem 0;
+  border: 0;
+  border-top: 1px solid #808080;
+  border-top: 1px solid #999999;
+}
+section.main .content .markdown abbr {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #666666;
+  text-transform: uppercase;
+}
+section.main .content .markdown abbr[title] {
+  cursor: help;
+  border-bottom: 1px dotted #808080;
+}
+section.main .content .markdown blockquote {
+  padding: .5rem 1rem;
+  margin: .8rem 0;
+  color: #7a7a7a;
+  border-left: .25rem solid #e5e5e5;
+}
+section.main .content .markdown blockquote p:last-child {
+  margin-bottom: 0;
+}
+section.main .content .markdown figure {
+  width: 100%;
+  background: #fff;
+  margin-bottom: 1em;
+}
+section.main .content .markdown figure img {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  display: block;
+  position: static;
+  margin: auto;
+}
+section.main .content .markdown table {
+  margin-bottom: 1rem;
+  width: 100%;
+  border: 1px solid #e5e5e5;
+  border-collapse: collapse;
+}
+section.main .content .markdown td,
+section.main .content .markdown th {
+  padding: .25rem .5rem;
+  border: 1px solid #e5e5e5;
+}
+section.main .content .markdown tbody tr:nth-child(odd) td,
+section.main .content .markdown tbody tr:nth-child(odd) th {
+  background-color: #f7f7f7;
+}
+section.main .content .markdown .footnotes ol {
+  list-style-type: decimal;
+  margin-left: 16px;
+}
+section.main .content .markdown .footnotes li {
+  list-style-type: unset;
+}
+section.main .content .markdown .footnote-ref {
+  font-size: 0.7em;
+}
+section.main .content .navigation {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.main .content .navigation div {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  margin-top: 1em;
+}
+section.main .content .navigation .icon {
+  width: 16px;
+  height: 16px;
+}
+section.main .content .navigation a {
+  width: 250px;
+  margin-left: 1em;
+  text-align: center;
+  font-style: italic;
+  color: #313537;
+}
+
+/* Fonts */
+
+.wf-raleway-n4-active body, 
+.wf-raleway-n4-active section.header nav ul li,
+.wf-raleway-n7-active section.main .content .page-heading,
+.wf-raleway-n2-active section.main .container.f04 .content .num,
+.wf-raleway-n7-active section.main .content .markdown h1,
+.wf-raleway-n7-active section.main .content .markdown h2,
+.wf-raleway-n7-active section.main .content .markdown h3,
+.wf-raleway-n7-active section.main .content .markdown h4,
+.wf-raleway-n7-active section.main .content .markdown h5,
+.wf-raleway-n7-active section.main .content .markdown h6 {
+  font-family: 'Raleway';
+}
+
+.wf-merriweather-n3-active section.main .content .markdown {
+  font-family: 'Merriweather';
+}
+
+.wf-ubuntu-mono-n4-active section.main .content .markdown code,
+.wf-ubuntu-mono-n4-active section.main .content .markdown pre {
+  font-family: 'Ubuntu Mono';
+}
+</style>
+<style media="(min-width: 600px)">
+  body {
+-webkit-justify-content: center;
+-moz-justify-content: center;
+-ms-justify-content: center;
+justify-content: center;
+}
+.non-narrow.zero-top-spacing {
+padding-top: 0 !important;
+}
+section {
+padding: 0 16px;
+margin-left: 100px;
+margin-right: 100px;
+max-width: 750px;
+}
+section.header {
+background-color: transparent;
+}
+section.header .container {
+-webkit-justify-content: flex-start;
+-moz-justify-content: flex-start;
+-ms-justify-content: flex-start;
+justify-content: flex-start;
+}
+section.header .container .logo {
+margin: 0;
+}
+section.header-home .container .logo {
+max-width: 180px;
+margin-left: 20px;
+}
+section.header-home .name-home {
+padding-top: 30px;
+font-size: 40px;
+}
+section.header-home nav ul li {
+font-size: 18px;
+}
+section.header .content {
+-webkit-align-items: flex-start;
+-moz-align-items: flex-start;
+-ms-align-items: flex-start;
+align-items: flex-start;
+}
+section.header .name {
+color: #333333;
+}
+section.header nav {
+font-size: 14px;
+margin-bottom: 0;
+}
+section.header nav ul {
+text-align: left;
+}
+section.header nav ul li {
+color: #666666;
+}
+section.header nav ul li:hover {
+color: #333333;
+}
+section.footer {
+background-color: transparent;
+}
+section.footer .container {
+flex-direction: row;
+}
+section.footer .container a {
+margin-left: 3px;
+margin-right: 3px;
+color: #666666;
+}
+section.footer .container a:hover {
+color: #333333;
+}
+section.footer .container a .icon {
+font-size: 18px;
+}
+section.footer .container a .icon.larger {
+font-size: 20px;
+}
+section.main .content .front-matter .date,
+section.main .content .front-matter .author,
+section.main .content .front-matter .tags,
+section.main .content .front-matter .word-count,
+section.main .content .front-matter .reading-time .middot {
+display: initial;
+}
+section.main .container.f04 {
+-webkit-justify-content: flex-start;
+-moz-justify-content: flex-start;
+-ms-justify-content: flex-start;
+justify-content: flex-start;
+}
+section.main .container.f04 .content {
+-webkit-align-items: flex-start;
+-moz-align-items: flex-start;
+-ms-align-items: flex-start;
+align-items: flex-start;
+}
+section.main .container.f04 .content .num {
+margin: 0 0 10px 0;
+font-size: 32px;
+}
+section.main .container.f04 .content .detail {
+margin-bottom: 30px;
+}
+.container {
+padding: 0 30px;
+}
+section.header {
+padding-top: 60px;
+padding-bottom: 60px;
+}
+section.footer {
+padding-top: 30px;
+padding-bottom: 60px;
+}
+section.main {
+padding-top: 0;
+}
+section.main .container .content .post-item {
+display: flex;
+list-style: none;
+padding-left: 1.5em;
+}
+section.main .container .content .post-item .meta {
+display: block;
+}
+section.main.post {
+padding-top: 60px;
+padding-bottom: 60px;
+}
+section.main .content .markdown blockquote {
+padding-right: 5rem;
+padding-left: 1.25rem;
+}
+section.main .content .navigation {
+-webkit-flex-direction: row;
+-moz-flex-direction: row;
+-ms-flex-direction: row;
+flex-direction: row;
+}
+section.main .content .navigation div {
+margin-top: 0em;
+}
+</style>
+<style media="(min-width: 769px)">
+  section.main .content .markdown figure {
+width: 110%;
+margin-left: -4%;
+}
+section.main .content .markdown img {
+max-width: 110%;
+width: 110%;
+margin-left: -4%;
+}
+</style>
+
+<noscript>
+  <link href="https://fonts.googleapis.com/css?family=Raleway:400,600,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Merriweather:300,300i,700,700i" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700" rel="stylesheet">
+</noscript>
+
+
+  <style type="text/css" media="screen">
+    .hljs{display:block;background:white;padding:0.5em;color:#333333;overflow-x:auto}.hljs-comment,.hljs-meta{color:#969896}.hljs-string,.hljs-variable,.hljs-template-variable,.hljs-strong,.hljs-emphasis,.hljs-quote{color:#df5000}.hljs-keyword,.hljs-selector-tag,.hljs-type{color:#a71d5d}.hljs-literal,.hljs-symbol,.hljs-bullet,.hljs-attribute{color:#0086b3}.hljs-section,.hljs-name{color:#63a35c}.hljs-tag{color:#333333}.hljs-title,.hljs-attr,.hljs-selector-id,.hljs-selector-class,.hljs-selector-attr,.hljs-selector-pseudo{color:#795da3}.hljs-addition{color:#55a532;background-color:#eaffea}.hljs-deletion{color:#bd2c00;background-color:#ffecec}.hljs-link{text-decoration:underline}
+  </style>
+
+
+
+  <style type="text/css" media="screen">
+    .progressive{overflow:hidden;position:relative;background:#efefef}.progressive__img{width:100%;height:100%;position:absolute;-webkit-transform:translateZ(0);transform:translateZ(0)}.progressive--not-loaded{filter:blur(30px);-webkit-filter:blur(30px)}.progressive--is-loaded{filter:blur(20px);-webkit-filter:blur(20px);-webkit-animation:sharpen .5s both;animation:sharpen .5s both}@-webkit-keyframes sharpen{from{filter:blur(20px);-webkit-filter:blur(20px)}to{filter:blur(0);-webkit-filter:blur(0)}}@keyframes sharpen{from{filter:blur(20px);-webkit-filter:blur(20px)}to{filter:blur(0);-webkit-filter:blur(0)}}
+  </style>
+
+
+
+
+
+
+
+<link rel="shortcut icon"
+
+    href="/_images/favicon.ico"
+
+>
+
+
+
+
+</head>
+
+
+<body>
+
+
+<section class="header">
+
+    <div class="container">
+        <a href="/"><img class="logo" src="/_images/avatar_green.png" alt="logo" /></a>
+        <div class="content">
+            <a href="/"><div class="name"><h1>Julia Silge</h1></div></a>
+            <nav>
+                <ul>
+                    
+                        <a href="/blog/"><li>Blog</li></a>
+                    
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                    
+                        
+                            <a href="/about/"><li>about</li></a>
+                        
+                    
+                        
+                            <a href="/resume/"><li>resume</li></a>
+                        
+                    
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+
+<section class="main post non-narrow zero-top-spacing">
+    <div class="container">
+        <div class="content">
+            <div class="front-matter">
+                <div class="title-container">
+                    <div class="page-heading">
+
+    Measuring Gobbledygook
+
+</div>
+
+                </div>
+                <div class="meta">
+                    <div class="date" title="Fri Nov 25 2016 00:00:00 UTC">Nov 25, 2016</div>
+                    
+                        
+                    
+                    <div class="reading-time"><div class="middot"></div>9 minute read</div>
+                    <div class="tags">
+                        <ul>
+                          
+                            <div class="middot"></div>
+                            <li><a href="/tags/rstats">rstats</a> </li>
+                          
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="markdown">
+                
+    
+    
+
+<p>In learning more about <a href="http://tidytextmining.com/">text mining</a> over the past several months, one aspect of text that I&rsquo;ve been interested in is readability. A text&rsquo;s readability measures how hard or easy it is for a reader to read and understand what a text is saying; it depends on how sentences are written, what words are chosen, and so forth. I first became really aware of readability scores of books through my kids&rsquo; reading tracking websites for school, but it turns out there are <a href="https://en.wikipedia.org/wiki/Readability#Popular_readability_formulas">lots of frameworks for measuring readability</a>.</p>
+
+<p>One of the most commonly used ways to measure readability is a <a href="https://en.wikipedia.org/wiki/SMOG">SMOG</a> grade, which stands for &ldquo;Simple Measure of Gobbledygook&rdquo;. It may have a silly (SILLY WONDERFUL) name, but it is often considered the gold standard of readability formulas and performs well in many contexts. We calculate a SMOG score using the formula</p>
+
+<p>$$\text{SMOG} = 1.0430\sqrt{\frac{30n<em>{\text{polysyllables}}}{n</em>{\text{sentences}}}} + 3.1291$$</p>
+
+<p>where the number in the numerator measures the number of words with 3 or more syllables and the number in the denominator measures the number of sentences. You can see that SMOG is going to be higher for texts with a lot of words with many syllables in each sentence. These ratios are typically normalized to use a sample of 30 sentences, and then the SMOG grade is supposed to estimate the years of education needed to understand a text.</p>
+
+<p>This seems like it is perfectly suited to an analysis using tidy data principles, so let&rsquo;s use the <a href="https://github.com/juliasilge/tidytext">tidytext package</a> to compare the readability of several texts.</p>
+
+<h2 id="getting-some-texts-to-analyze">Getting some texts to analyze</h2>
+
+<p>Let&rsquo;s use the <a href="https://github.com/ropenscilabs/gutenbergr">gutenbergr package</a> to obtain some book texts to compare. I want to compare:</p>
+
+<ul>
+<li><a href="https://www.gutenberg.org/ebooks/45"><em>Anne of Green Gables</em> by L. M. Montgomery</a></li>
+<li><a href="https://www.gutenberg.org/ebooks/514"><em>Little Women</em> by Louisa May Alcott</a></li>
+<li><a href="https://www.gutenberg.org/ebooks/42671"><em>Pride and Prejudice</em> by Jane Austen</a> (I mean, DUH)</li>
+<li><a href="https://www.gutenberg.org/ebooks/4217"><em>A Portrait of the Artist as a Young Man</em> by James Joyce</a></li>
+<li><a href="https://www.gutenberg.org/ebooks/135"><em>Les Misérables</em> by Victor Hugo</a></li>
+</ul>
+
+<pre><code class="language-r">library(gutenbergr)
+books &lt;- gutenberg_download(c(45, 514, 42671, 4217, 135),
+                            meta_fields = &quot;title&quot;)
+</code></pre>
+
+<p>I really wanted to throw some Ernest Hemingway in there, but none of his works are on Project Gutenberg; I guess they are not public domain.</p>
+
+<h2 id="tidying-the-text">Tidying the text</h2>
+
+<p>Now we have our texts in hand, and we need to do some data wrangling to get it in the form that we need. We are interested in counting two things here:</p>
+
+<ul>
+<li>the number of sentences</li>
+<li>the number of words with 3 or more syllables</li>
+</ul>
+
+<p>Let&rsquo;s start by working with the sentences. The <code>unnest_tokens</code> function in tidytext has an option to tokenize by sentences, but it can have trouble with UTF-8 encoded text, lots of dialogue, etc. We need to use <code>iconv</code> first on the UTF-8 text from Project Gutenberg before trying to tokenize by sentences. Also, we have three different books in this dataframe, so we need to <code>nest</code> and <code>map</code> so that we count sentences separately for each book; <code>unnest_tokens</code> will collapse all the text in a dataframe together before tokenizing by something like sentences, n-grams, etc.</p>
+
+<pre><code class="language-r">library(dplyr)
+library(tidytext)
+library(tidyr)
+library(purrr)
+
+tidybooks &lt;- books %&gt;%
+    mutate(text = iconv(text, to = 'latin1')) %&gt;%
+    nest(-title) %&gt;%
+    mutate(tidied = map(data, unnest_tokens, 'sentence', 'text', token = 'sentences'))
+</code></pre>
+
+<p>It still takes me a bit of thinking and experimenting every time I need to <code>nest</code> and <code>map</code>, but what a great way to do what I need! How did this work out?</p>
+
+<pre><code class="language-r">tidybooks
+</code></pre>
+
+<pre><code>## # A tibble: 5 × 3
+##                                     title                  data
+##                                     &lt;chr&gt;                &lt;list&gt;
+## 1                    Anne of Green Gables &lt;tibble [10,779 × 2]&gt;
+## 2                          Les Misérables &lt;tibble [67,273 × 2]&gt;
+## 3                            Little Women &lt;tibble [20,627 × 2]&gt;
+## 4 A Portrait of the Artist as a Young Man  &lt;tibble [9,938 × 2]&gt;
+## 5                     Pride and Prejudice &lt;tibble [13,311 × 2]&gt;
+##                  tidied
+##                  &lt;list&gt;
+## 1  &lt;tibble [7,383 × 2]&gt;
+## 2 &lt;tibble [35,682 × 2]&gt;
+## 3 &lt;tibble [10,117 × 2]&gt;
+## 4  &lt;tibble [4,583 × 2]&gt;
+## 5  &lt;tibble [6,951 × 2]&gt;
+</code></pre>
+
+<p>The <code>data</code> column contains the original untidied text and the <code>tidied</code> column contains the tidied text, organized with each sentence on its own row; both are list-columns. Now let&rsquo;s unnest this so we get rid of the list-columns and have sentences in their own rows.</p>
+
+<pre><code class="language-r">tidybooks &lt;- tidybooks %&gt;%
+    unnest(tidied)
+
+tidybooks
+</code></pre>
+
+<pre><code>## # A tibble: 64,716 × 3
+##                   title gutenberg_id
+##                   &lt;chr&gt;        &lt;int&gt;
+## 1  Anne of Green Gables           45
+## 2  Anne of Green Gables           45
+## 3  Anne of Green Gables           45
+## 4  Anne of Green Gables           45
+## 5  Anne of Green Gables           45
+## 6  Anne of Green Gables           45
+## 7  Anne of Green Gables           45
+## 8  Anne of Green Gables           45
+## 9  Anne of Green Gables           45
+## 10 Anne of Green Gables           45
+## # ... with 64,706 more rows, and 1 more variables: sentence &lt;chr&gt;
+</code></pre>
+
+<p>How did the sentence tokenizing do?</p>
+
+<pre><code class="language-r">tidybooks %&gt;% 
+    sample_n(5) %&gt;% 
+    select(sentence)
+</code></pre>
+
+<pre><code>## # A tibble: 5 × 1
+##                                                                                                                                              sentence
+##                                                                                                                                                 &lt;chr&gt;
+## 1 marius was struck with the beauty of this white hair, and scrutinized the man, who was walking slowly and as though absorbed in painful meditation.
+## 2                                                           she removed one hand from his arm, and with the other made him a sign to look behind him.
+## 3                                                                                                                     by you, i was properly humbled.
+## 4                                                                                   only he says we must first make sure that it is a worthy purpose.
+## 5                                                                                            no, she could not take the responsibility of doing that!
+</code></pre>
+
+<p>Pretty well! Especially considering the whole thing errors out without <code>iconv</code>.</p>
+
+<p>Now we know how to count the number of sentences in each book.</p>
+
+<pre><code class="language-r">tidybooks %&gt;%
+    group_by(title) %&gt;%
+    summarise(n_sentences = n_distinct(sentence))
+</code></pre>
+
+<pre><code>## # A tibble: 5 × 2
+##                                     title n_sentences
+##                                     &lt;chr&gt;       &lt;int&gt;
+## 1 A Portrait of the Artist as a Young Man        4480
+## 2                    Anne of Green Gables        7176
+## 3                          Les Misérables       34229
+## 4                            Little Women        9888
+## 5                     Pride and Prejudice        6524
+</code></pre>
+
+<p>There we go! An estimate of the number of sentences in each book.</p>
+
+<h2 id="counting-syllables">Counting syllables</h2>
+
+<p>The next thing we need to do here is count the syllables in each word so that we can find how many words in each book have more than 3 syllables. I did a bit of background checking on how this is done, and found <a href="http://lingtools.uoregon.edu/scripts/english_syllable_counter-102.R">this implementation of syllable counting</a> by <a href="http://pages.uoregon.edu/tsk/">Tyler Kendall</a> at the University of Oregon. It is actually an implementation in R of an algorithm originally written in PHP by Greg Fast, and it seems like a standard way people do this. It is estimated to have an error rate of ~15%, and is usually off by only one syllable when it is wrong.</p>
+
+<p>I&rsquo;m including this function in a code chunk with <code>echo = FALSE</code> because it is really long and I didn&rsquo;t write it, but you can check out the <a href="https://github.com/juliasilge/juliasilge.github.io/blob/master/_R/2016-11-25-Gobbledygook.Rmd">R Markdown file</a> that made this blog post to see the details.</p>
+
+<p>Let&rsquo;s check out how it works!</p>
+
+<pre><code class="language-r">count_syllables(&quot;dog&quot;)
+</code></pre>
+
+<pre><code>## [1] 1
+</code></pre>
+
+<pre><code class="language-r">count_syllables(&quot;science&quot;)
+</code></pre>
+
+<pre><code>## [1] 2
+</code></pre>
+
+<pre><code class="language-r">count_syllables(&quot;couldn't&quot;)
+</code></pre>
+
+<pre><code>## [1] 2
+</code></pre>
+
+<pre><code class="language-r">count_syllables(&quot;My name is Julia Silge.&quot;)
+</code></pre>
+
+<pre><code>## [1] 7
+</code></pre>
+
+<p>Well, my last name is actually two syllables, but most human beings get that wrong too, so there we go.</p>
+
+<p>Now let&rsquo;s start counting the syllables in all the words in our books. Let&rsquo;s use <code>unnest_tokens</code> again to extract all the single words from the sentences; this time we will set <code>drop = FALSE</code> so we keep the sentences for counting purposes. Let&rsquo;s add a new column that will count the syllables for each word. (This takes a bit to run on my fairly speedy/new desktop; that function for counting syllables is not built for speed.)</p>
+
+<pre><code class="language-r">tidybooks &lt;- tidybooks %&gt;%
+    unnest_tokens(word, sentence, drop = FALSE) %&gt;%
+    rowwise() %&gt;%
+    mutate(n_syllables = count_syllables(word)) %&gt;%
+    ungroup()
+
+tidybooks %&gt;%
+    select(word, n_syllables)
+</code></pre>
+
+<pre><code>## # A tibble: 1,070,066 × 2
+##          word n_syllables
+##         &lt;chr&gt;       &lt;dbl&gt;
+## 1        anne           1
+## 2          of           1
+## 3       green           1
+## 4      gables           2
+## 5          by           1
+## 6        lucy           2
+## 7        maud           1
+## 8  montgomery           4
+## 9       table           2
+## 10         of           1
+## # ... with 1,070,056 more rows
+</code></pre>
+
+<p>Let&rsquo;s check out the distributions of syllables for the three titles.</p>
+
+<pre><code class="language-r">library(ggplot2)
+ggplot(tidybooks, aes(n_syllables, fill = title, color = title)) +
+    geom_density(alpha = 0.1, size = 1.1, adjust = 9) +
+    theme_minimal(base_family = &quot;RobotoCondensed-Regular&quot;) +
+    theme(plot.title=element_text(family=&quot;Roboto-Bold&quot;)) +
+    theme(legend.title=element_blank()) +
+    theme(legend.position = c(0.8, 0.8)) +
+    labs(x = &quot;Number of syllables per word&quot;,
+         y = &quot;Density&quot;,
+         title = &quot;Comparing syllables per word across novels&quot;,
+         subtitle = &quot;Jane Austen uses the lowest proportion of words with one syllable&quot;)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-11-25-Gobbledygook/unnamed-chunk-11-1.png" src="/figs/2016-11-25-Gobbledygook/low/unnamed-chunk-11-1.png" alt="center" /></p></figure>
+
+<p>These distributions are pretty similar, but there are some moderate differences. <em>Little Women</em> and <em>Les Misérables</em> have the highest proportion of words with only one syllable, while <em>Pride and Prejudice</em> has the lowest proportion. This makes some sense, since Louisa May Alcott was writing for young readers while Jane Austen was not. <em>Les Misérables</em> was originally written in French and we are analyzing a translation here, so that is a complicating factor. James Joyce, with his moocows or whatever, is in the middle here.</p>
+
+<h2 id="calculating-smog">Calculating SMOG</h2>
+
+<p>Now we know both the number of sentences and the number of syllables in these books, so we can calculate&hellip; the gobbledygook! This will just end up being a bunch of dplyr operations.</p>
+
+<pre><code class="language-r">results &lt;- left_join(tidybooks %&gt;%
+                         group_by(title) %&gt;%
+                         summarise(n_sentences = n_distinct(sentence)),
+                     tidybooks %&gt;% 
+                         group_by(title) %&gt;% 
+                         filter(n_syllables &gt;= 3) %&gt;% 
+                         summarise(n_polysyllables = n())) %&gt;%
+    mutate(SMOG = 1.0430 * sqrt(30 * n_polysyllables/n_sentences) + 3.1291)
+
+results
+</code></pre>
+
+<pre><code>## # A tibble: 5 × 4
+##                                     title n_sentences n_polysyllables
+##                                     &lt;chr&gt;       &lt;int&gt;           &lt;int&gt;
+## 1 A Portrait of the Artist as a Young Man        4480            5648
+## 2                    Anne of Green Gables        7176            7664
+## 3                          Les Misérables       34228           55114
+## 4                            Little Women        9888           11590
+## 5                     Pride and Prejudice        6524           13180
+##        SMOG
+##       &lt;dbl&gt;
+## 1  9.543459
+## 2  9.032898
+## 3 10.378218
+## 4  9.313996
+## 5 11.248906
+</code></pre>
+
+<p>L.M. Montgomery, writing here for an audience of young girls, has the lowest SMOG grade at around 9 (i.e., approximately beginning 9th grade level). <em>Pride and Prejudice</em> has the highest SMOG grade at 11.2, more than two years of education higher. I will say that throwing <em>A Portrait of the Artist as a Young Man</em> in here turned out to be an interesting choice; in reality, I find it to be practically unreadable but it has a readability score close to the same as <em>Little Women</em>. This measure of prose readability based only on number of sentences and number of words with lots of syllables doesn&rsquo;t measure what we might expect when applied to extremely stylized text.</p>
+
+<p>Let&rsquo;s visualize the readability scores for these five novels.</p>
+
+<pre><code class="language-r">library(ggstance)
+library(ggthemes)
+library(forcats)
+ggplot(results, aes(SMOG, fct_reorder(title, SMOG), fill = SMOG)) +
+    geom_barh(stat = &quot;identity&quot;, alpha = 0.8) +
+    theme_tufte(base_family = &quot;RobotoCondensed-Regular&quot;) +
+    geom_text(aes(x = 0.3, y = title, label = title), color=&quot;white&quot;,
+                  family=&quot;Roboto-Italic&quot;, size=3.5, hjust = 0) +
+    theme(plot.title=element_text(family=&quot;Roboto-Bold&quot;)) +
+    scale_fill_gradient(low = &quot;darkslategray3&quot;, high = &quot;turquoise4&quot;) +
+    theme(legend.position=&quot;none&quot;) +
+    theme(axis.ticks=element_blank()) +
+    scale_x_continuous(expand=c(0,0)) +
+    theme(axis.text.y=element_blank()) +
+    labs(y = NULL, x = &quot;SMOG Grade&quot;,
+         title = &quot;Comparing readability scores across novels&quot;,
+         subtitle = &quot;Jane Austen's SMOG grade is highest, while L.M. Montgomery's is lowest&quot;)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-11-25-Gobbledygook/unnamed-chunk-13-1.png" src="/figs/2016-11-25-Gobbledygook/low/unnamed-chunk-13-1.png" alt="center" /></p></figure>
+
+<h2 id="the-end">The End</h2>
+
+<p>I would like to thank <a href="https://benheubl.github.io/">Ben Heubl</a>, a data journalist at <em>The Economist</em>, for interesting discussions that motivated this blog post. The R Markdown file used to make this blog post is available <a href="https://github.com/juliasilge/juliasilge.github.io/blob/master/_R/2016-11-25-Gobbledygook.Rmd">here</a>. I am very happy to hear feedback or questions!</p>
+
+
+                <br>
+            </div>
+            
+                <div class="navigation">
+                    
+                    <div>
+                        <img class="icon" src="/img/back.svg" alt="back" />
+                        <a href="/blog/election-mapping/">Mapping Election Results in Utah</a>
+                    </div>
+                    
+                    <div style="width: 100%;"></div>
+                    
+                    <div>
+                        <a href="/blog/reddit-responds/">Reddit Responds to the Election</a>
+                        <img class="icon" src="/img/next.svg" alt="next" />
+                    </div>
+                    
+                </div>
+            
+            <br>
+            <div class="disqus">
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'datascienceish';
+    var disqus_identifier = '\/blog\/gobbledygook\/';
+    var disqus_title = 'Measuring Gobbledygook';
+    var disqus_url = '\/blog\/gobbledygook\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="footer">
+    <div class="container">
+        <div class="copyright">
+
+        
+            <a href="/license">Copyright © 2017 Julia Silge</a>
+        
+
+        </div>
+        <div class="icons">
+
+        
+            <a href="https://github.com/juliasilge" target="_blank">
+                <img class="icon" src="/img/github.svg" alt="github" />
+            </a>
+        
+
+        
+            <a href="https://twitter.com/juliasilge" target="_blank">
+                <img class="icon" src="/img/twitter.svg" alt="twitter" />
+            </a>
+        
+
+        
+            <a href="https://www.linkedin.com/in/juliasilge" target="_blank">
+                <img class="icon" src="/img/linkedin.svg" alt="linkedin" />
+            </a>
+        
+
+        
+
+        
+            <a href="/index.xml">
+                <img class="icon" src="/img/rss.svg" alt="rss" />
+            </a>
+        
+
+        </div>
+    </div>
+</section>
+
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+<script>
+  WebFont.load({
+    google: {
+      families: ['Raleway:400,600,700', 'Merriweather:300,300i,700,700i', 'Ubuntu+Mono:400,700']
+    }
+  });
+</script>
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?...">
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+
+
+  <script src="/js/highlight.min.js" defer></script>
+  
+
+
+
+  <script src="/js/progressively.min.js" defer></script>
+
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-68765210-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+<script>
+  window.onload = function() {
+    
+      hljs.initHighlighting();
+    
+    
+      progressively.init({delay: 30, throttle: 50});
+    
+  };
+</script>
+
+
+</body>
+</html>
+

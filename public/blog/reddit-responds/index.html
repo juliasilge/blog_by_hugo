@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Example blog">
+
+
+    <meta property="twitter:site" content="@juliasilge">
+
+<meta property="twitter:title" content="Reddit Responds to the Election">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:image" content="/img/banner.png">
+
+<meta property="twitter:description" content="">
+
+<title>
+
+
+     Julia Silge - Reddit Responds to the Election 
+
+</title>
+<link rel="canonical" href="/blog/reddit-responds/">
+
+
+<style media="screen">
+  @font-face {
+  font-family: 'Nexa Bold';
+  src: url('/fonts/Nexa Bold.otf');
+}
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+a,
+a:visited,
+a:focus,
+a:active {
+  text-decoration: none;
+}
+html {
+  height: 100%;
+  font-size: 16px;
+}
+body {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  -ms-justify-content: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 100%;
+  font-weight: 400;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  color: #111111;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility !important;
+}
+.icon {
+  text-rendering: geometricPrecision !important;
+}
+section {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  width: 100%;
+}
+.container {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  width: 100%;
+}
+section.header .container {
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+}
+section.header .content {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.header .container .logo {
+  max-width: 100px;
+  margin-left: -2em;
+}
+section.header .name {
+  padding-top: 20px;
+  font-size: 28px;
+  font-family: 'Nexa Bold', 'Helvetica Neue', 'Arial', sans-serif;
+  letter-spacing: -0.005rem;
+  text-transform: uppercase;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  color: #333333;
+  color: #555555;
+}
+section.header nav {
+  margin-bottom: 16px;
+}
+section.header nav ul {
+  list-style: none;
+  text-align: center;
+  display: -webkit-inline-flex;
+  display: -moz-inline-flex;
+  display: -ms-inline-flexbox;
+  display: -ms-inline-flex;
+  display: inline-flex;
+}
+section.header nav ul a {
+  margin-left: 6px;
+  margin-right: 6px;
+}
+section.header nav ul a:first-child {
+  margin-left: 0;
+}
+section.header nav ul a:last-child {
+  margin-right: 0;
+}
+section.header nav ul li {
+  color: #555555;
+  font-weight: 400;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  -webkit-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+section.header nav ul li:hover {
+  color: #111111;
+}
+section.footer .container {
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+  flex-direction: column-reverse;
+  width: 100%;
+  text-align: center;
+}
+section.footer .container a {
+  font-size: 14px;
+  margin-left: 6px;
+  margin-right: 6px;
+  opacity: 0.6;
+  -webkit-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+section.footer .container a:first-child {
+  margin-left: 0;
+}
+section.footer .container a:last-child {
+  margin-right: 0;
+}
+section.footer .container a:hover {
+  opacity: 0.8;
+}
+section.footer .container a .icon {
+  width: 16px;
+  height: 16px;
+}
+section.footer .container .copyright {
+  flex-grow: 0.5;
+  text-align: start;
+}
+section.footer .container .icons {
+  flex-grow: 0.5;
+  text-align: end;
+}
+section.main .container {
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  -ms-justify-content: flex-start;
+  justify-content: flex-start;
+}
+section.main .content {
+  color: #111111;
+  font-size: 16px;
+}
+section.main .content .title-container {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  justify-content: space-between;
+}
+section.main .content .posts {
+  margin-bottom: 4em;
+}
+section.main .content .page-heading {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  letter-spacing: -0.005rem;
+  text-transform: uppercase;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  color: #333333;
+  margin-bottom: 16px;
+}
+section.main .content .front-matter .page-heading {
+  margin-bottom: 0;
+}
+section.main .content .front-matter .meta {
+  font-size: 14px;
+  color: #666666;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  margin-bottom: 32px;
+}
+section.main .content .front-matter .date,
+section.main .content .front-matter .author,
+section.main .content .front-matter .tags,
+section.main .content .front-matter .word-count,
+section.main .content .front-matter .reading-time .middot {
+  display: none;
+}
+section.main .content .front-matter .middot {
+  font-size: 6px;
+  margin: 0 6px;
+  display: inline;
+  vertical-align: middle;
+}
+section.main .content .front-matter .middot:before {
+  content: "•";
+}
+section.main .content .front-matter .tags ul {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.main .content .front-matter .tags ul li {
+  -webkit-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+section.main .content .front-matter .tags ul li:hover {
+  opacity: 0.7;
+}
+section.main .content .front-matter .tags ul li a {
+  color: #666666;
+}
+section.main .container.f04 {
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+}
+section.main .container.f04 .content {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.main .container.f04 .content .num {
+  margin: 30px 0px 30px 0;
+  font-weight: 400;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  font-size: 50px;
+}
+section.main .container.f04 .content .detail {
+  margin-bottom: 40px;
+}
+section.main .container .content .groupby {
+  margin-top: 1em;
+  padding-left: 0.5em;
+}
+section.main .container .content .post-item {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  display: list-item;
+  list-style: disc inside;
+}
+section.main .container .content .post-item .meta {
+  font-size: 14px;
+  color: #666666;
+  display: none;
+  min-width: 100px;
+}
+section.main .container .content .see-more {
+  font-style: italic;
+  float: right;
+  font-size: 0.9em;
+  margin-top: 2em;
+  color: #313537;
+}
+section.main .container .content .see-more:hover {
+  color: #666;
+}
+section {
+  padding: 0 16px;
+}
+section.header {
+  padding-top: 10px;
+}
+section.header-home {
+  padding-top: 36px;
+}
+section.main {
+  padding-top: 32px;
+}
+section.main .container .content .post-item .meta {
+    display: block;
+}
+section.main .container .content .post-item {
+    display: flex;
+    list-style: none;
+}
+a {
+  color: #428bca;
+  -webkit-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+a:hover {
+  color: #2a6496;
+}
+img {
+  max-width: 100%;
+}
+section.main .content {
+    width: 100%;
+}
+section.main .content .markdown {
+  font-size: 1.1em;
+  line-height: 1.75em;
+  color: #313537;
+  font-family: serif;
+  font-weight: 300;
+}
+section.main .content .markdown h1,
+section.main .content .markdown h2,
+section.main .content .markdown h3,
+section.main .content .markdown h4,
+section.main .content .markdown h5,
+section.main .content .markdown h6 {
+  font-size: 22px;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  letter-spacing: -0.005rem;
+  font-weight: 700;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  color: #333333;
+  text-transform: none;
+  margin-top: 1.75rem;
+}
+section.main .content .markdown h1 {
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
+}
+section.main .content .markdown h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+section.main .content .markdown h3 {
+  font-size: 1em;
+  margin-bottom: 1rem;
+}
+section.main .content .markdown h4,
+section.main .content .markdown h5,
+section.main .content .markdown h6 {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  letter-spacing: none;
+}
+section.main .content .markdown code,
+section.main .content .markdown pre {
+  font-family: 'Menlo', monospace;
+  font-size: 0.98rem;
+  background-color: #f7f7f7;
+}
+section.main .content .markdown code {
+  /* enclosed by single backtick (`) */
+  padding: .15em .5em;
+  border-radius: 2px;
+}
+section.main .content .markdown pre {
+  /* Hugo specific: consider using the 'highlight' shortcode */
+  display: block;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  line-height: 1.5em;
+  white-space: pre;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+@media (min-width: 769px) {
+  section.main .content .markdown pre {
+    width: 110%;
+    margin-left: -4%;
+  }
+}
+section.main .content .markdown pre code {
+  /* enclosed by 4 backticks (````) */
+  padding: 0;
+  font-size: 0.9rem;
+}
+section.main .content .markdown a code {
+  color: #428bca !important;
+}
+section.main .content .markdown a code:hover {
+  text-decoration: underline;
+}
+section.main .content .markdown p {
+  text-align: justify;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+section.main .content .markdown ul,
+section.main .content .markdown ol,
+section.main .content .markdown dl {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+section.main .content .markdown dt {
+  font-weight: bold;
+}
+section.main .content .markdown dd {
+  margin-bottom: .5rem;
+}
+section.main .content .markdown ul {
+  list-style-type: disc;
+  list-style-position: outside;
+  margin-bottom: 1.25rem;
+}
+section.main .content .markdown ol {
+  list-style-type: decimal;
+  margin-bottom: 1.25rem;
+}
+section.main .content .markdown li {
+  margin-left: 2em;
+}
+section.main .content .markdown em {
+  font-style: italic;
+}
+section.main .content .markdown strong {
+  font-weight: 700;
+}
+section.main .content .markdown hr {
+  position: relative;
+  margin: 1.75rem 0;
+  border: 0;
+  border-top: 1px solid #808080;
+  border-top: 1px solid #999999;
+}
+section.main .content .markdown abbr {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #666666;
+  text-transform: uppercase;
+}
+section.main .content .markdown abbr[title] {
+  cursor: help;
+  border-bottom: 1px dotted #808080;
+}
+section.main .content .markdown blockquote {
+  padding: .5rem 1rem;
+  margin: .8rem 0;
+  color: #7a7a7a;
+  border-left: .25rem solid #e5e5e5;
+}
+section.main .content .markdown blockquote p:last-child {
+  margin-bottom: 0;
+}
+section.main .content .markdown figure {
+  width: 100%;
+  background: #fff;
+  margin-bottom: 1em;
+}
+section.main .content .markdown figure img {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  display: block;
+  position: static;
+  margin: auto;
+}
+section.main .content .markdown table {
+  margin-bottom: 1rem;
+  width: 100%;
+  border: 1px solid #e5e5e5;
+  border-collapse: collapse;
+}
+section.main .content .markdown td,
+section.main .content .markdown th {
+  padding: .25rem .5rem;
+  border: 1px solid #e5e5e5;
+}
+section.main .content .markdown tbody tr:nth-child(odd) td,
+section.main .content .markdown tbody tr:nth-child(odd) th {
+  background-color: #f7f7f7;
+}
+section.main .content .markdown .footnotes ol {
+  list-style-type: decimal;
+  margin-left: 16px;
+}
+section.main .content .markdown .footnotes li {
+  list-style-type: unset;
+}
+section.main .content .markdown .footnote-ref {
+  font-size: 0.7em;
+}
+section.main .content .navigation {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.main .content .navigation div {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  margin-top: 1em;
+}
+section.main .content .navigation .icon {
+  width: 16px;
+  height: 16px;
+}
+section.main .content .navigation a {
+  width: 250px;
+  margin-left: 1em;
+  text-align: center;
+  font-style: italic;
+  color: #313537;
+}
+
+/* Fonts */
+
+.wf-raleway-n4-active body, 
+.wf-raleway-n4-active section.header nav ul li,
+.wf-raleway-n7-active section.main .content .page-heading,
+.wf-raleway-n2-active section.main .container.f04 .content .num,
+.wf-raleway-n7-active section.main .content .markdown h1,
+.wf-raleway-n7-active section.main .content .markdown h2,
+.wf-raleway-n7-active section.main .content .markdown h3,
+.wf-raleway-n7-active section.main .content .markdown h4,
+.wf-raleway-n7-active section.main .content .markdown h5,
+.wf-raleway-n7-active section.main .content .markdown h6 {
+  font-family: 'Raleway';
+}
+
+.wf-merriweather-n3-active section.main .content .markdown {
+  font-family: 'Merriweather';
+}
+
+.wf-ubuntu-mono-n4-active section.main .content .markdown code,
+.wf-ubuntu-mono-n4-active section.main .content .markdown pre {
+  font-family: 'Ubuntu Mono';
+}
+</style>
+<style media="(min-width: 600px)">
+  body {
+-webkit-justify-content: center;
+-moz-justify-content: center;
+-ms-justify-content: center;
+justify-content: center;
+}
+.non-narrow.zero-top-spacing {
+padding-top: 0 !important;
+}
+section {
+padding: 0 16px;
+margin-left: 100px;
+margin-right: 100px;
+max-width: 750px;
+}
+section.header {
+background-color: transparent;
+}
+section.header .container {
+-webkit-justify-content: flex-start;
+-moz-justify-content: flex-start;
+-ms-justify-content: flex-start;
+justify-content: flex-start;
+}
+section.header .container .logo {
+margin: 0;
+}
+section.header-home .container .logo {
+max-width: 180px;
+margin-left: 20px;
+}
+section.header-home .name-home {
+padding-top: 30px;
+font-size: 40px;
+}
+section.header-home nav ul li {
+font-size: 18px;
+}
+section.header .content {
+-webkit-align-items: flex-start;
+-moz-align-items: flex-start;
+-ms-align-items: flex-start;
+align-items: flex-start;
+}
+section.header .name {
+color: #333333;
+}
+section.header nav {
+font-size: 14px;
+margin-bottom: 0;
+}
+section.header nav ul {
+text-align: left;
+}
+section.header nav ul li {
+color: #666666;
+}
+section.header nav ul li:hover {
+color: #333333;
+}
+section.footer {
+background-color: transparent;
+}
+section.footer .container {
+flex-direction: row;
+}
+section.footer .container a {
+margin-left: 3px;
+margin-right: 3px;
+color: #666666;
+}
+section.footer .container a:hover {
+color: #333333;
+}
+section.footer .container a .icon {
+font-size: 18px;
+}
+section.footer .container a .icon.larger {
+font-size: 20px;
+}
+section.main .content .front-matter .date,
+section.main .content .front-matter .author,
+section.main .content .front-matter .tags,
+section.main .content .front-matter .word-count,
+section.main .content .front-matter .reading-time .middot {
+display: initial;
+}
+section.main .container.f04 {
+-webkit-justify-content: flex-start;
+-moz-justify-content: flex-start;
+-ms-justify-content: flex-start;
+justify-content: flex-start;
+}
+section.main .container.f04 .content {
+-webkit-align-items: flex-start;
+-moz-align-items: flex-start;
+-ms-align-items: flex-start;
+align-items: flex-start;
+}
+section.main .container.f04 .content .num {
+margin: 0 0 10px 0;
+font-size: 32px;
+}
+section.main .container.f04 .content .detail {
+margin-bottom: 30px;
+}
+.container {
+padding: 0 30px;
+}
+section.header {
+padding-top: 60px;
+padding-bottom: 60px;
+}
+section.footer {
+padding-top: 30px;
+padding-bottom: 60px;
+}
+section.main {
+padding-top: 0;
+}
+section.main .container .content .post-item {
+display: flex;
+list-style: none;
+padding-left: 1.5em;
+}
+section.main .container .content .post-item .meta {
+display: block;
+}
+section.main.post {
+padding-top: 60px;
+padding-bottom: 60px;
+}
+section.main .content .markdown blockquote {
+padding-right: 5rem;
+padding-left: 1.25rem;
+}
+section.main .content .navigation {
+-webkit-flex-direction: row;
+-moz-flex-direction: row;
+-ms-flex-direction: row;
+flex-direction: row;
+}
+section.main .content .navigation div {
+margin-top: 0em;
+}
+</style>
+<style media="(min-width: 769px)">
+  section.main .content .markdown figure {
+width: 110%;
+margin-left: -4%;
+}
+section.main .content .markdown img {
+max-width: 110%;
+width: 110%;
+margin-left: -4%;
+}
+</style>
+
+<noscript>
+  <link href="https://fonts.googleapis.com/css?family=Raleway:400,600,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Merriweather:300,300i,700,700i" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700" rel="stylesheet">
+</noscript>
+
+
+  <style type="text/css" media="screen">
+    .hljs{display:block;background:white;padding:0.5em;color:#333333;overflow-x:auto}.hljs-comment,.hljs-meta{color:#969896}.hljs-string,.hljs-variable,.hljs-template-variable,.hljs-strong,.hljs-emphasis,.hljs-quote{color:#df5000}.hljs-keyword,.hljs-selector-tag,.hljs-type{color:#a71d5d}.hljs-literal,.hljs-symbol,.hljs-bullet,.hljs-attribute{color:#0086b3}.hljs-section,.hljs-name{color:#63a35c}.hljs-tag{color:#333333}.hljs-title,.hljs-attr,.hljs-selector-id,.hljs-selector-class,.hljs-selector-attr,.hljs-selector-pseudo{color:#795da3}.hljs-addition{color:#55a532;background-color:#eaffea}.hljs-deletion{color:#bd2c00;background-color:#ffecec}.hljs-link{text-decoration:underline}
+  </style>
+
+
+
+  <style type="text/css" media="screen">
+    .progressive{overflow:hidden;position:relative;background:#efefef}.progressive__img{width:100%;height:100%;position:absolute;-webkit-transform:translateZ(0);transform:translateZ(0)}.progressive--not-loaded{filter:blur(30px);-webkit-filter:blur(30px)}.progressive--is-loaded{filter:blur(20px);-webkit-filter:blur(20px);-webkit-animation:sharpen .5s both;animation:sharpen .5s both}@-webkit-keyframes sharpen{from{filter:blur(20px);-webkit-filter:blur(20px)}to{filter:blur(0);-webkit-filter:blur(0)}}@keyframes sharpen{from{filter:blur(20px);-webkit-filter:blur(20px)}to{filter:blur(0);-webkit-filter:blur(0)}}
+  </style>
+
+
+
+
+
+
+
+<link rel="shortcut icon"
+
+    href="/_images/favicon.ico"
+
+>
+
+
+
+
+</head>
+
+
+<body>
+
+
+<section class="header">
+
+    <div class="container">
+        <a href="/"><img class="logo" src="/_images/avatar_green.png" alt="logo" /></a>
+        <div class="content">
+            <a href="/"><div class="name"><h1>Julia Silge</h1></div></a>
+            <nav>
+                <ul>
+                    
+                        <a href="/blog/"><li>Blog</li></a>
+                    
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                    
+                        
+                            <a href="/about/"><li>about</li></a>
+                        
+                    
+                        
+                            <a href="/resume/"><li>resume</li></a>
+                        
+                    
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+
+<section class="main post non-narrow zero-top-spacing">
+    <div class="container">
+        <div class="content">
+            <div class="front-matter">
+                <div class="title-container">
+                    <div class="page-heading">
+
+    Reddit Responds to the Election
+
+</div>
+
+                </div>
+                <div class="meta">
+                    <div class="date" title="Tue Dec 6 2016 00:00:00 UTC">Dec 6, 2016</div>
+                    
+                        
+                    
+                    <div class="reading-time"><div class="middot"></div>12 minute read</div>
+                    <div class="tags">
+                        <ul>
+                          
+                            <div class="middot"></div>
+                            <li><a href="/tags/rstats">rstats</a> </li>
+                          
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="markdown">
+                
+    
+    
+
+<p>It&rsquo;s been about a month since the U.S. presidential election, with Donald Trump&rsquo;s victory over Hillary Clinton coming as a surprise to most. Reddit user Jason Baumgartner collected and published <a href="https://www.reddit.com/r/datasets/comments/5ch2bq/reddit_raw_election_data_comments_and_submissions/">every submission and comment posted to Reddit</a> on the day of (and a bit surrounding) the U.S. election; let&rsquo;s explore this data set and see what kinds of things we can learn.</p>
+
+<h2 id="data-wrangling">Data wrangling</h2>
+
+<p>This first bit was the hardest part of this analysis for me, probably because I am not the most experienced JSON person out there. At first, I took an approach of reading in the lines of each text file and parsing each JSON object separately. I <a href="https://twitter.com/juliasilge/status/805915916961718272">complained about this on Twitter</a> and got several excellent recommendations of much better approaches, including using <code>stream_in</code> from the <a href="https://github.com/jeroenooms/jsonlite">jsonlite</a> package. This works way better and faster than what I was doing before, and now it is easy!</p>
+
+<pre><code class="language-r">library(jsonlite)
+library(dplyr)
+
+nov8_posts &lt;- stream_in(file(&quot;RS_2016-11-08&quot;),
+                        verbose = FALSE) %&gt;%
+    select(-preview, -secure_media_embed, 
+           -media, -secure_media, -media_embed)
+
+nov9_posts &lt;- stream_in(file(&quot;RS_2016-11-09&quot;),
+                        verbose = FALSE) %&gt;%
+    select(-preview, -secure_media_embed, 
+           -media, -secure_media, -media_embed)
+
+posts &lt;- bind_rows(nov8_posts, nov9_posts) %&gt;%
+    mutate(created_utc = as.POSIXct(created_utc, 
+                                    origin = &quot;1970-01-01&quot;, 
+                                    tz = &quot;UTC&quot;)) %&gt;%
+    filter(created_utc &gt; as.POSIXct(&quot;2016-11-08 18:00:00&quot;, tz = &quot;UTC&quot;))
+</code></pre>
+
+<p>Notice here that I am using files from November 8 and 9 in UTC time and I&rsquo;m filtering out some of the earlier posts. This will end up leaving me with 30 hours of Reddit posts starting at noon on Election Day in the Central Time Zone. Also notice that I am not using the files that include Reddit comments, only the parent submissions. I tried most of the following analysis with both submissions and comments, but the comments dominated the results and included lots of repeated words/phrases that obscured what we would like to see. For the approach I am taking here, it worked better to just use submissions.</p>
+
+<h2 id="finding-the-words">Finding the words</h2>
+
+<p>The submissions include a title and sometimes also some text; sometimes Reddit posts are just the title. Let&rsquo;s use <code>unnest_tokens</code> from the <a href="https://github.com/juliasilge/tidytext">tidytext</a> package to identify all the words in the title and text fields of the submissions and organize them into a tidy data structure.</p>
+
+<pre><code class="language-r">library(tidytext)
+
+posts &lt;- bind_rows(
+    posts %&gt;% 
+        unnest_tokens(word, title),
+    posts %&gt;% 
+        unnest_tokens(word, selftext)) %&gt;%
+    select(created_utc, subreddit, url, word)
+
+head(posts)
+</code></pre>
+
+<pre><code>##           created_utc  subreddit
+## 1 2016-11-08 18:00:01 Ebay_deals
+## 2 2016-11-08 18:00:01 Ebay_deals
+## 3 2016-11-08 18:00:01 Ebay_deals
+## 4 2016-11-08 18:00:01 Ebay_deals
+## 5 2016-11-08 18:00:01 Ebay_deals
+## 6 2016-11-08 18:00:01 Ebay_deals
+##                                                 url   word
+## 1 https://www.pinterest.com/pin/724587027517110980/ marble
+## 2 https://www.pinterest.com/pin/724587027517110980/   grey
+## 3 https://www.pinterest.com/pin/724587027517110980/ single
+## 4 https://www.pinterest.com/pin/724587027517110980/ double
+## 5 https://www.pinterest.com/pin/724587027517110980/  queen
+## 6 https://www.pinterest.com/pin/724587027517110980/   king
+</code></pre>
+
+<pre><code class="language-r">dim(posts)
+</code></pre>
+
+<pre><code>## [1] 17652591        4
+</code></pre>
+
+<p>That&rsquo;s&hellip; almost 18 million rows. People on Reddit are busy.</p>
+
+<h2 id="which-words-changed-in-frequency-the-fastest">Which words changed in frequency the fastest?</h2>
+
+<p>Right now we have a data frame that has each word on its own row, with an id (url), the time when it was posted, and the subreddit it came from. Let&rsquo;s use dplyr operations to calculate how many times each word was mentioned in a particular unit of time, so we can model the change with time. We will calculate <code>minute_total</code>, the total words posted in that time unit so we can compare across times of day when people post different amounts, and <code>word_total</code>, the number of times that word was posted so we can filter out words that are not used much.</p>
+
+<pre><code class="language-r">library(lubridate)
+library(stringr)
+
+words_by_minute &lt;- posts %&gt;%
+    filter(str_detect(word, &quot;[a-z]&quot;)) %&gt;%
+    anti_join(data_frame(word = c(&quot;ref&quot;))) %&gt;%
+    mutate(created = floor_date(created_utc, unit = &quot;30 minutes&quot;)) %&gt;%
+    distinct(url, word, .keep_all = TRUE) %&gt;%
+    count(created, word) %&gt;%
+    ungroup() %&gt;%
+    group_by(created) %&gt;%
+    mutate(minute_total = sum(n)) %&gt;%
+    group_by(word) %&gt;%
+    mutate(word_total = sum(n)) %&gt;%
+    ungroup() %&gt;%
+    rename(count = n) %&gt;%
+    filter(word_total &gt; 500)
+
+head(words_by_minute)
+</code></pre>
+
+<pre><code>## # A tibble: 6 × 5
+##               created  word count minute_total word_total
+##                &lt;dttm&gt; &lt;chr&gt; &lt;int&gt;        &lt;int&gt;      &lt;int&gt;
+## 1 2016-11-08 18:00:00 1080p    20       231072        652
+## 2 2016-11-08 18:00:00  16gb    11       231072        559
+## 3 2016-11-08 18:00:00   1st    20       231072        758
+## 4 2016-11-08 18:00:00   2nd    21       231072        893
+## 5 2016-11-08 18:00:00    2x    14       231072        722
+## 6 2016-11-08 18:00:00    3d    12       231072        546
+</code></pre>
+
+<p>This is the data frame we can use for modeling. We can use <code>nest</code> from tidyr to make a data frame with a list column that contains the little miniature data frames for each word and then <code>map</code> from purrr to apply our modeling procedure to each of those little data frames inside our big data frame. Jenny Bryan has put together <a href="https://jennybc.github.io/purrr-tutorial/">some resources</a> on using purrr with list columns this way. This is count data (how many words were posted?) so let&rsquo;s use <code>glm</code> for modeling.</p>
+
+<pre><code class="language-r">library(tidyr)
+library(purrr)
+
+nested_models &lt;- words_by_minute %&gt;%
+    nest(-word) %&gt;%
+    mutate(models = map(data, ~ glm(cbind(count, minute_total) ~ created, ., 
+                                    family = &quot;binomial&quot;)))
+</code></pre>
+
+<p>Now we can use <code>tidy</code> from broom to pull out the slopes for each of these models and find the important ones.</p>
+
+<pre><code class="language-r">library(broom)
+
+slopes &lt;- nested_models %&gt;%
+  unnest(map(models, tidy)) %&gt;%
+  filter(term == &quot;created&quot;)
+</code></pre>
+
+<p>Which words decreased in frequency of use the fastest during Election Day? Which words increased in use the fastest?</p>
+
+<pre><code class="language-r">slopes %&gt;% 
+    arrange(estimate)
+</code></pre>
+
+<pre><code>## # A tibble: 891 × 6
+##        word    term      estimate    std.error statistic       p.value
+##       &lt;chr&gt;   &lt;chr&gt;         &lt;dbl&gt;        &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;
+## 1   polling created -2.195136e-05 1.059199e-06 -20.72449  2.083382e-95
+## 2     fraud created -2.022229e-05 1.335022e-06 -15.14753  7.866753e-52
+## 3    voting created -1.788212e-05 5.644046e-07 -31.68316 2.651017e-220
+## 4    ballot created -1.745250e-05 1.114699e-06 -15.65670  2.990299e-55
+## 5        fl created -1.743009e-05 1.211878e-06 -14.38271  6.644389e-47
+## 6   florida created -1.712721e-05 6.055286e-07 -28.28472 5.327752e-176
+## 7      poll created -1.688132e-05 1.039083e-06 -16.24637  2.369894e-59
+## 8     voter created -1.675932e-05 9.359359e-07 -17.90649  1.049562e-71
+## 9     polls created -1.615500e-05 7.058145e-07 -22.88845 6.054992e-116
+## 10 virginia created -1.493344e-05 1.435504e-06 -10.40293  2.404218e-25
+## # ... with 881 more rows
+</code></pre>
+
+<pre><code class="language-r">slopes %&gt;% 
+    arrange(desc(estimate))
+</code></pre>
+
+<pre><code>## # A tibble: 891 × 6
+##        word    term     estimate    std.error statistic       p.value
+##       &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt;        &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;
+## 1   trump’s created 1.758326e-05 1.430901e-06 12.288244  1.047563e-34
+## 2      flex created 1.416875e-05 1.290926e-06 10.975647  5.004609e-28
+## 3     elect created 1.390813e-05 8.378822e-07 16.599146  7.068929e-62
+## 4        da created 1.281702e-05 1.037396e-06 12.354986  4.578350e-35
+## 5  congress created 1.225188e-05 1.280413e-06  9.568696  1.082627e-21
+## 6   trump's created 1.200055e-05 5.499216e-07 21.822297 1.425196e-105
+## 7  policies created 1.156944e-05 1.276465e-06  9.063655  1.261512e-19
+## 8  liberals created 1.151984e-05 1.151751e-06 10.002020  1.493199e-23
+## 9   climate created 1.092999e-05 1.269681e-06  8.608452  7.405384e-18
+## 10   policy created 9.879997e-06 1.038524e-06  9.513494  1.843631e-21
+## # ... with 881 more rows
+</code></pre>
+
+<p>Let&rsquo;s plot these words.</p>
+
+<pre><code class="language-r">top_slopes &lt;- slopes %&gt;%
+    top_n(10, estimate)
+
+words_by_minute %&gt;%
+    inner_join(top_slopes, by = &quot;word&quot;) %&gt;%
+    mutate(created = with_tz(created, tz = &quot;America/Chicago&quot;)) %&gt;%
+    ggplot(aes(created, count/minute_total, color = word)) +
+    geom_line(alpha = 0.8, size = 1.3) +
+    labs(x = &quot;Time (Central Time Zone)&quot;, y = &quot;Word frequency&quot;,
+         subtitle = &quot;Words associated with Trump and policies increased in frequency&quot;,
+         title = &quot;Trending words on Reddit on Election Day&quot;)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-12-06-Reddit-Responds/unnamed-chunk-8-1.png" src="/figs/2016-12-06-Reddit-Responds/low/unnamed-chunk-8-1.png" alt="center" /></p></figure>
+
+<p>There are lots of election-related words here, like &ldquo;elect&rdquo;, &ldquo;liberals&rdquo;, and &ldquo;policies&rdquo;. In fact, I think all of these words are conceivably related to the election with the exception of &ldquo;flex&rdquo;. I looked at some of the posts with &ldquo;flex&rdquo; in them and they were in fact not election-related. I had a hard time deciphering what they <em>were</em> about, but my best guess is either a) fantasy football or b) some kind of gaming. Why do we see &ldquo;Trump&rsquo;s&rdquo; on this plot twice? It is because there is more than one way of encoding an apostrophe. You can see it on the legend if you look closely.</p>
+
+<p>We don&rsquo;t see Trump&rsquo;s name by itself on this plot. How far off from being a top word, by my definition here, was it?</p>
+
+<pre><code class="language-r">slopes %&gt;%
+    filter(word == &quot;trump&quot;)
+</code></pre>
+
+<pre><code>## # A tibble: 1 × 6
+##    word    term     estimate    std.error statistic      p.value
+##   &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt;        &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;
+## 1 trump created 2.328675e-06 1.512196e-07   15.3993 1.654546e-53
+</code></pre>
+
+<p>Trump must have been being discussed at a high level already, so the change was not as big as for the word &ldquo;Trump&rsquo;s&rdquo;.</p>
+
+<p>What about the words that dropped in use the most during this day?</p>
+
+<pre><code class="language-r">low_slopes &lt;- slopes %&gt;%
+    top_n(-10, estimate)
+
+words_by_minute %&gt;%
+    inner_join(low_slopes, by = &quot;word&quot;) %&gt;%
+    mutate(created = with_tz(created, tz = &quot;America/Chicago&quot;)) %&gt;%
+    ggplot(aes(created, count/minute_total, color = word)) +
+    geom_line(alpha = 0.8, size = 1.3) +
+    labs(x = &quot;Time (Central Time Zone)&quot;, y = &quot;Word frequency&quot;,
+         subtitle = &quot;Word associated with voting and polls decreased in frequency&quot;,
+         title = &quot;Trending words on Reddit on Election Day&quot;)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-12-06-Reddit-Responds/unnamed-chunk-10-1.png" src="/figs/2016-12-06-Reddit-Responds/low/unnamed-chunk-10-1.png" alt="center" /></p></figure>
+
+<p>These are maybe even <em>more</em> interesting to me. Look at that spike for Florida the night of November 8 when it seemed like there might be flashbacks to 2000 or something. And people&rsquo;s interest in discussing voters/voting, polls/polling, and fraud dropped off precipitously as Trump&rsquo;s victory became obvious.</p>
+
+<h2 id="which-subreddits-demonstrated-the-most-change-in-sentiment">Which subreddits demonstrated the most change in sentiment?</h2>
+
+<p>We have looked at which words changed most quickly in use on Election Day; now let&rsquo;s take a look at changes in sentiment. Are there subreddits that exhibited changes in sentiment over the course of this time period? To look at this, we&rsquo;ll take a bigger time period (2 hours instead of 30 minutes) since the words with measured sentiment are only a subset of all words. Much of the rest of these dplyr operations are similar. We can use <code>inner_join</code> to do the sentiment analysis, and then calculate the sentiment content of each board in each time period.</p>
+
+<pre><code class="language-r">sentiment_by_minute &lt;- posts %&gt;%
+    mutate(created = floor_date(created_utc, unit = &quot;2 hours&quot;)) %&gt;%
+    distinct(url, word, .keep_all = TRUE) %&gt;%
+    ungroup() %&gt;%
+    count(subreddit, created, word) %&gt;%
+    group_by(created, subreddit) %&gt;%
+    mutate(minute_total = sum(n)) %&gt;%
+    group_by(subreddit) %&gt;%
+    mutate(subreddit_total = sum(n)) %&gt;%
+    ungroup() %&gt;%
+    filter(subreddit_total &gt; 1000) %&gt;%
+    inner_join(get_sentiments(&quot;afinn&quot;)) %&gt;%
+    group_by(subreddit, created, minute_total) %&gt;%
+    summarize(score = sum(n * score)) %&gt;%
+    ungroup()
+
+head(sentiment_by_minute)
+</code></pre>
+
+<pre><code>## # A tibble: 6 × 4
+##   subreddit             created minute_total score
+##       &lt;chr&gt;              &lt;dttm&gt;        &lt;int&gt; &lt;int&gt;
+## 1     1liga 2016-11-08 20:00:00           20     2
+## 2     1liga 2016-11-09 02:00:00          135    -7
+## 3     1liga 2016-11-09 06:00:00          187    -9
+## 4     1liga 2016-11-09 08:00:00          233    -8
+## 5     1liga 2016-11-09 10:00:00          155    -2
+## 6     1liga 2016-11-09 12:00:00          110    -6
+</code></pre>
+
+<p>Let&rsquo;s again use <code>nest</code>, but this time we&rsquo;ll <code>nest</code> by subreddit instead of word. This sentiment score is not really count data (since it can be negative) so we&rsquo;ll use regular old <code>lm</code> here.</p>
+
+<pre><code class="language-r">nested_models &lt;- sentiment_by_minute %&gt;%
+    nest(-subreddit) %&gt;%
+    mutate(models = map(data, ~ lm(score/minute_total ~ created, .)))
+</code></pre>
+
+<p>Let&rsquo;s again use <code>unnest</code>, <code>map</code>, and <code>tidy</code> to extract out the slopes from the linear models.</p>
+
+<pre><code class="language-r">slopes &lt;- nested_models %&gt;%
+  unnest(map(models, tidy)) %&gt;%
+  filter(term == &quot;created&quot;)
+</code></pre>
+
+<p>Which subreddits exhibited the biggest changes in sentiment, in either direction?</p>
+
+<pre><code class="language-r">slopes %&gt;% 
+    arrange(estimate)
+</code></pre>
+
+<pre><code>## # A tibble: 64 × 6
+##            subreddit    term      estimate    std.error statistic     p.value
+##                &lt;chr&gt;   &lt;chr&gt;         &lt;dbl&gt;        &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
+## 1        aznidentity created -2.941746e-06 1.129234e-06 -2.605081 0.040386018
+## 2             ainbow created -2.576480e-06 8.841939e-07 -2.913932 0.017200835
+## 3        TheBluePill created -2.233135e-06 6.868578e-07 -3.251233 0.009977663
+## 4    muacjdiscussion created -2.165141e-06 4.838494e-07 -4.474823 0.020801581
+## 5            parrots created -2.105393e-06 7.592753e-07 -2.772898 0.024188248
+## 6         needadvice created -1.610350e-06 5.277117e-07 -3.051572 0.018542125
+## 7        sweepstakes created -1.458346e-06 5.576759e-07 -2.615042 0.022590562
+## 8  RandomActsofCards created -1.421334e-06 5.556567e-07 -2.557935 0.026616327
+## 9       csgogambling created -1.397576e-06 5.619925e-07 -2.486823 0.027257440
+## 10             1liga created -1.305359e-06 4.842398e-07 -2.695688 0.027255456
+## # ... with 54 more rows
+</code></pre>
+
+<pre><code class="language-r">slopes %&gt;% 
+    arrange(desc(estimate))
+</code></pre>
+
+<pre><code>## # A tibble: 64 × 6
+##            subreddit    term     estimate    std.error statistic     p.value
+##                &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt;        &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
+## 1  shoudvebeenbernie created 2.792205e-06 7.339321e-07  3.804446 0.008921294
+## 2        TheDickShow created 2.189643e-06 7.900087e-07  2.771670 0.019730686
+## 3            orlando created 1.860757e-06 7.313366e-07  2.544324 0.034477936
+## 4    DoesAnybodyElse created 1.846480e-06 5.773406e-07  3.198251 0.007657351
+## 5    playrustservers created 1.553049e-06 5.623340e-07  2.761791 0.032776294
+## 6    GoogleCardboard created 1.449634e-06 5.215326e-07  2.779565 0.032015397
+## 7    morbidquestions created 1.423202e-06 4.865300e-07  2.925208 0.019138028
+## 8          TrueDoTA2 created 1.388537e-06 3.592288e-07  3.865329 0.011816017
+## 9        JapanTravel created 1.365982e-06 3.702370e-07  3.689479 0.005001422
+## 10           editors created 1.253335e-06 4.080638e-07  3.071420 0.011812188
+## # ... with 54 more rows
+</code></pre>
+
+<p>Let&rsquo;s plot these!</p>
+
+<pre><code class="language-r">top_slopes &lt;- slopes %&gt;%
+    top_n(10, estimate)
+
+sentiment_by_minute %&gt;%
+    inner_join(top_slopes, by = &quot;subreddit&quot;) %&gt;%
+    mutate(created = with_tz(created, tz = &quot;America/Chicago&quot;)) %&gt;%
+    ggplot(aes(created, score/minute_total, color = subreddit)) +
+    geom_line(alpha = 0.8, size = 1.3) +
+    labs(x = &quot;Time (Central Time Zone)&quot;, y = &quot;Sentiment score&quot;,
+         subtitle = &quot;These subreddits increased in sentiment the most&quot;,
+         title = &quot;Sentiment on Subreddits on Election Day&quot;)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-12-06-Reddit-Responds/unnamed-chunk-15-1.png" src="/figs/2016-12-06-Reddit-Responds/low/unnamed-chunk-15-1.png" alt="center" /></p></figure>
+
+<p>These relationships are much noisier than the relationships with words were, and you might notice that some p-values are getting kind of high (no adjustment for multiple comparisons has been performed). Also, these subreddits are less related to the election than the quickly changing words were. Really only the shouldvebeenbernie subreddit is that political here.</p>
+
+<pre><code class="language-r">low_slopes &lt;- slopes %&gt;%
+    top_n(-10, estimate)
+
+sentiment_by_minute %&gt;%
+    inner_join(low_slopes, by = &quot;subreddit&quot;) %&gt;%
+    mutate(created = with_tz(created, tz = &quot;America/Chicago&quot;)) %&gt;%
+    ggplot(aes(created, score/minute_total, color = subreddit)) +
+    geom_line(alpha = 0.8, size = 1.3) +
+    labs(x = &quot;Time (Central Time Zone)&quot;, y = &quot;Sentiment score&quot;,
+         subtitle = &quot;These subreddits decreased in sentiment the most&quot;,
+         title = &quot;Sentiment on Subreddits on Election Day&quot;)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-12-06-Reddit-Responds/unnamed-chunk-16-1.png" src="/figs/2016-12-06-Reddit-Responds/low/unnamed-chunk-16-1.png" alt="center" /></p></figure>
+
+<p>Again, we see that not really any of these are specifically political, although I coudld image that the aznidentity subreddit (Asian identity board) and the ainbow subreddit (LGBT board) could have been feeling down after Trump&rsquo;s election. The 1liga board is a German language board and ended up here because it used the word &ldquo;die&rdquo; a lot. In case you are wondering, the parrots subreddit is, in fact, about parrots; hopefully nothing too terrible was happening to the parrots on Election Day.</p>
+
+<h2 id="which-subreddits-have-the-most-dramatic-word-use">Which subreddits have the most dramatic word use?</h2>
+
+<p>Those last plots demonstrated with subreddits were changing in sentiment the fastest around the time of the election, but perhaps we would like to know which subreddits used the largest proportion of high or low sentiment words overall during this time period. To do that, we don&rsquo;t need to keep track of the timestamp of the posts. Instead, we just need to <code>count</code> by subreddit and word, then use <code>inner_join</code> to find a sentiment score.</p>
+
+<pre><code class="language-r">sentiment_by_subreddit &lt;- posts %&gt;%
+    distinct(url, word, .keep_all = TRUE) %&gt;%
+    count(subreddit, word) %&gt;%
+    ungroup() %&gt;%
+    inner_join(get_sentiments(&quot;afinn&quot;)) %&gt;%
+    group_by(subreddit) %&gt;%
+    summarize(score = sum(score * n) / sum(n))
+</code></pre>
+
+<p>I would print some out for you, or plot them or something, but they are almost all extremely NSFW, both the positive and negative sentiment subreddits. I&rsquo;m sure you can use your imagination.</p>
+
+<h2 id="the-end">The End</h2>
+
+<p>This is just one approach to take with this extremely extensive data set. There is still lots and lots more that could be done with it. I first saw this data set via Jeremy Singer-Vine&rsquo;s <a href="https://tinyletter.com/data-is-plural">Data Is Plural newsletter</a>; this newsletter is an excellent resource and I highly recommend it. The R Markdown file used to make this blog post is available <a href="https://github.com/juliasilge/juliasilge.github.io/blob/master/_R/2016-12-06-Reddit-Responds.Rmd">here</a>. I am very happy to hear feedback or questions!</p>
+
+
+                <br>
+            </div>
+            
+                <div class="navigation">
+                    
+                    <div>
+                        <img class="icon" src="/img/back.svg" alt="back" />
+                        <a href="/blog/gobbledygook/">Measuring Gobbledygook</a>
+                    </div>
+                    
+                    <div style="width: 100%;"></div>
+                    
+                    <div>
+                        <a href="/blog/rstudio-conf/">Text Mining in R: A Tidy Approach</a>
+                        <img class="icon" src="/img/next.svg" alt="next" />
+                    </div>
+                    
+                </div>
+            
+            <br>
+            <div class="disqus">
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'datascienceish';
+    var disqus_identifier = '\/blog\/reddit-responds\/';
+    var disqus_title = 'Reddit Responds to the Election';
+    var disqus_url = '\/blog\/reddit-responds\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="footer">
+    <div class="container">
+        <div class="copyright">
+
+        
+            <a href="/license">Copyright © 2017 Julia Silge</a>
+        
+
+        </div>
+        <div class="icons">
+
+        
+            <a href="https://github.com/juliasilge" target="_blank">
+                <img class="icon" src="/img/github.svg" alt="github" />
+            </a>
+        
+
+        
+            <a href="https://twitter.com/juliasilge" target="_blank">
+                <img class="icon" src="/img/twitter.svg" alt="twitter" />
+            </a>
+        
+
+        
+            <a href="https://www.linkedin.com/in/juliasilge" target="_blank">
+                <img class="icon" src="/img/linkedin.svg" alt="linkedin" />
+            </a>
+        
+
+        
+
+        
+            <a href="/index.xml">
+                <img class="icon" src="/img/rss.svg" alt="rss" />
+            </a>
+        
+
+        </div>
+    </div>
+</section>
+
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+<script>
+  WebFont.load({
+    google: {
+      families: ['Raleway:400,600,700', 'Merriweather:300,300i,700,700i', 'Ubuntu+Mono:400,700']
+    }
+  });
+</script>
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?...">
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+
+
+  <script src="/js/highlight.min.js" defer></script>
+  
+
+
+
+  <script src="/js/progressively.min.js" defer></script>
+
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-68765210-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+<script>
+  window.onload = function() {
+    
+      hljs.initHighlighting();
+    
+    
+      progressively.init({delay: 30, throttle: 50});
+    
+  };
+</script>
+
+
+</body>
+</html>
+

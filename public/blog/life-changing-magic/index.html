@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Example blog">
+
+
+    <meta property="twitter:site" content="@juliasilge">
+
+<meta property="twitter:title" content="The Life-Changing Magic of Tidying Text">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:image" content="/img/banner.png">
+
+<meta property="twitter:description" content="">
+
+<title>
+
+
+     Julia Silge - The Life-Changing Magic of Tidying Text 
+
+</title>
+<link rel="canonical" href="/blog/life-changing-magic/">
+
+
+<style media="screen">
+  @font-face {
+  font-family: 'Nexa Bold';
+  src: url('/fonts/Nexa Bold.otf');
+}
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+a,
+a:visited,
+a:focus,
+a:active {
+  text-decoration: none;
+}
+html {
+  height: 100%;
+  font-size: 16px;
+}
+body {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  -ms-justify-content: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 100%;
+  font-weight: 400;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  color: #111111;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility !important;
+}
+.icon {
+  text-rendering: geometricPrecision !important;
+}
+section {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  width: 100%;
+}
+.container {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  width: 100%;
+}
+section.header .container {
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+}
+section.header .content {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.header .container .logo {
+  max-width: 100px;
+  margin-left: -2em;
+}
+section.header .name {
+  padding-top: 20px;
+  font-size: 28px;
+  font-family: 'Nexa Bold', 'Helvetica Neue', 'Arial', sans-serif;
+  letter-spacing: -0.005rem;
+  text-transform: uppercase;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  color: #333333;
+  color: #555555;
+}
+section.header nav {
+  margin-bottom: 16px;
+}
+section.header nav ul {
+  list-style: none;
+  text-align: center;
+  display: -webkit-inline-flex;
+  display: -moz-inline-flex;
+  display: -ms-inline-flexbox;
+  display: -ms-inline-flex;
+  display: inline-flex;
+}
+section.header nav ul a {
+  margin-left: 6px;
+  margin-right: 6px;
+}
+section.header nav ul a:first-child {
+  margin-left: 0;
+}
+section.header nav ul a:last-child {
+  margin-right: 0;
+}
+section.header nav ul li {
+  color: #555555;
+  font-weight: 400;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  -webkit-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+section.header nav ul li:hover {
+  color: #111111;
+}
+section.footer .container {
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+  flex-direction: column-reverse;
+  width: 100%;
+  text-align: center;
+}
+section.footer .container a {
+  font-size: 14px;
+  margin-left: 6px;
+  margin-right: 6px;
+  opacity: 0.6;
+  -webkit-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+section.footer .container a:first-child {
+  margin-left: 0;
+}
+section.footer .container a:last-child {
+  margin-right: 0;
+}
+section.footer .container a:hover {
+  opacity: 0.8;
+}
+section.footer .container a .icon {
+  width: 16px;
+  height: 16px;
+}
+section.footer .container .copyright {
+  flex-grow: 0.5;
+  text-align: start;
+}
+section.footer .container .icons {
+  flex-grow: 0.5;
+  text-align: end;
+}
+section.main .container {
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  -ms-justify-content: flex-start;
+  justify-content: flex-start;
+}
+section.main .content {
+  color: #111111;
+  font-size: 16px;
+}
+section.main .content .title-container {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  justify-content: space-between;
+}
+section.main .content .posts {
+  margin-bottom: 4em;
+}
+section.main .content .page-heading {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  letter-spacing: -0.005rem;
+  text-transform: uppercase;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  color: #333333;
+  margin-bottom: 16px;
+}
+section.main .content .front-matter .page-heading {
+  margin-bottom: 0;
+}
+section.main .content .front-matter .meta {
+  font-size: 14px;
+  color: #666666;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  margin-bottom: 32px;
+}
+section.main .content .front-matter .date,
+section.main .content .front-matter .author,
+section.main .content .front-matter .tags,
+section.main .content .front-matter .word-count,
+section.main .content .front-matter .reading-time .middot {
+  display: none;
+}
+section.main .content .front-matter .middot {
+  font-size: 6px;
+  margin: 0 6px;
+  display: inline;
+  vertical-align: middle;
+}
+section.main .content .front-matter .middot:before {
+  content: "•";
+}
+section.main .content .front-matter .tags ul {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.main .content .front-matter .tags ul li {
+  -webkit-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: opacity 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+section.main .content .front-matter .tags ul li:hover {
+  opacity: 0.7;
+}
+section.main .content .front-matter .tags ul li a {
+  color: #666666;
+}
+section.main .container.f04 {
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+}
+section.main .container.f04 .content {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.main .container.f04 .content .num {
+  margin: 30px 0px 30px 0;
+  font-weight: 400;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  font-size: 50px;
+}
+section.main .container.f04 .content .detail {
+  margin-bottom: 40px;
+}
+section.main .container .content .groupby {
+  margin-top: 1em;
+  padding-left: 0.5em;
+}
+section.main .container .content .post-item {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  display: list-item;
+  list-style: disc inside;
+}
+section.main .container .content .post-item .meta {
+  font-size: 14px;
+  color: #666666;
+  display: none;
+  min-width: 100px;
+}
+section.main .container .content .see-more {
+  font-style: italic;
+  float: right;
+  font-size: 0.9em;
+  margin-top: 2em;
+  color: #313537;
+}
+section.main .container .content .see-more:hover {
+  color: #666;
+}
+section {
+  padding: 0 16px;
+}
+section.header {
+  padding-top: 10px;
+}
+section.header-home {
+  padding-top: 36px;
+}
+section.main {
+  padding-top: 32px;
+}
+section.main .container .content .post-item .meta {
+    display: block;
+}
+section.main .container .content .post-item {
+    display: flex;
+    list-style: none;
+}
+a {
+  color: #428bca;
+  -webkit-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -moz-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -ms-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+  -o-transition: color 0.1s cubic-bezier(0.47, 0, 0.75, 0.72);
+}
+a:hover {
+  color: #2a6496;
+}
+img {
+  max-width: 100%;
+}
+section.main .content {
+    width: 100%;
+}
+section.main .content .markdown {
+  font-size: 1.1em;
+  line-height: 1.75em;
+  color: #313537;
+  font-family: serif;
+  font-weight: 300;
+}
+section.main .content .markdown h1,
+section.main .content .markdown h2,
+section.main .content .markdown h3,
+section.main .content .markdown h4,
+section.main .content .markdown h5,
+section.main .content .markdown h6 {
+  font-size: 22px;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  letter-spacing: -0.005rem;
+  font-weight: 700;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  color: #333333;
+  text-transform: none;
+  margin-top: 1.75rem;
+}
+section.main .content .markdown h1 {
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
+}
+section.main .content .markdown h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+section.main .content .markdown h3 {
+  font-size: 1em;
+  margin-bottom: 1rem;
+}
+section.main .content .markdown h4,
+section.main .content .markdown h5,
+section.main .content .markdown h6 {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  letter-spacing: none;
+}
+section.main .content .markdown code,
+section.main .content .markdown pre {
+  font-family: 'Menlo', monospace;
+  font-size: 0.98rem;
+  background-color: #f7f7f7;
+}
+section.main .content .markdown code {
+  /* enclosed by single backtick (`) */
+  padding: .15em .5em;
+  border-radius: 2px;
+}
+section.main .content .markdown pre {
+  /* Hugo specific: consider using the 'highlight' shortcode */
+  display: block;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  line-height: 1.5em;
+  white-space: pre;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+@media (min-width: 769px) {
+  section.main .content .markdown pre {
+    width: 110%;
+    margin-left: -4%;
+  }
+}
+section.main .content .markdown pre code {
+  /* enclosed by 4 backticks (````) */
+  padding: 0;
+  font-size: 0.9rem;
+}
+section.main .content .markdown a code {
+  color: #428bca !important;
+}
+section.main .content .markdown a code:hover {
+  text-decoration: underline;
+}
+section.main .content .markdown p {
+  text-align: justify;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+section.main .content .markdown ul,
+section.main .content .markdown ol,
+section.main .content .markdown dl {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+section.main .content .markdown dt {
+  font-weight: bold;
+}
+section.main .content .markdown dd {
+  margin-bottom: .5rem;
+}
+section.main .content .markdown ul {
+  list-style-type: disc;
+  list-style-position: outside;
+  margin-bottom: 1.25rem;
+}
+section.main .content .markdown ol {
+  list-style-type: decimal;
+  margin-bottom: 1.25rem;
+}
+section.main .content .markdown li {
+  margin-left: 2em;
+}
+section.main .content .markdown em {
+  font-style: italic;
+}
+section.main .content .markdown strong {
+  font-weight: 700;
+}
+section.main .content .markdown hr {
+  position: relative;
+  margin: 1.75rem 0;
+  border: 0;
+  border-top: 1px solid #808080;
+  border-top: 1px solid #999999;
+}
+section.main .content .markdown abbr {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #666666;
+  text-transform: uppercase;
+}
+section.main .content .markdown abbr[title] {
+  cursor: help;
+  border-bottom: 1px dotted #808080;
+}
+section.main .content .markdown blockquote {
+  padding: .5rem 1rem;
+  margin: .8rem 0;
+  color: #7a7a7a;
+  border-left: .25rem solid #e5e5e5;
+}
+section.main .content .markdown blockquote p:last-child {
+  margin-bottom: 0;
+}
+section.main .content .markdown figure {
+  width: 100%;
+  background: #fff;
+  margin-bottom: 1em;
+}
+section.main .content .markdown figure img {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  display: block;
+  position: static;
+  margin: auto;
+}
+section.main .content .markdown table {
+  margin-bottom: 1rem;
+  width: 100%;
+  border: 1px solid #e5e5e5;
+  border-collapse: collapse;
+}
+section.main .content .markdown td,
+section.main .content .markdown th {
+  padding: .25rem .5rem;
+  border: 1px solid #e5e5e5;
+}
+section.main .content .markdown tbody tr:nth-child(odd) td,
+section.main .content .markdown tbody tr:nth-child(odd) th {
+  background-color: #f7f7f7;
+}
+section.main .content .markdown .footnotes ol {
+  list-style-type: decimal;
+  margin-left: 16px;
+}
+section.main .content .markdown .footnotes li {
+  list-style-type: unset;
+}
+section.main .content .markdown .footnote-ref {
+  font-size: 0.7em;
+}
+section.main .content .navigation {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+section.main .content .navigation div {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  margin-top: 1em;
+}
+section.main .content .navigation .icon {
+  width: 16px;
+  height: 16px;
+}
+section.main .content .navigation a {
+  width: 250px;
+  margin-left: 1em;
+  text-align: center;
+  font-style: italic;
+  color: #313537;
+}
+
+/* Fonts */
+
+.wf-raleway-n4-active body, 
+.wf-raleway-n4-active section.header nav ul li,
+.wf-raleway-n7-active section.main .content .page-heading,
+.wf-raleway-n2-active section.main .container.f04 .content .num,
+.wf-raleway-n7-active section.main .content .markdown h1,
+.wf-raleway-n7-active section.main .content .markdown h2,
+.wf-raleway-n7-active section.main .content .markdown h3,
+.wf-raleway-n7-active section.main .content .markdown h4,
+.wf-raleway-n7-active section.main .content .markdown h5,
+.wf-raleway-n7-active section.main .content .markdown h6 {
+  font-family: 'Raleway';
+}
+
+.wf-merriweather-n3-active section.main .content .markdown {
+  font-family: 'Merriweather';
+}
+
+.wf-ubuntu-mono-n4-active section.main .content .markdown code,
+.wf-ubuntu-mono-n4-active section.main .content .markdown pre {
+  font-family: 'Ubuntu Mono';
+}
+</style>
+<style media="(min-width: 600px)">
+  body {
+-webkit-justify-content: center;
+-moz-justify-content: center;
+-ms-justify-content: center;
+justify-content: center;
+}
+.non-narrow.zero-top-spacing {
+padding-top: 0 !important;
+}
+section {
+padding: 0 16px;
+margin-left: 100px;
+margin-right: 100px;
+max-width: 750px;
+}
+section.header {
+background-color: transparent;
+}
+section.header .container {
+-webkit-justify-content: flex-start;
+-moz-justify-content: flex-start;
+-ms-justify-content: flex-start;
+justify-content: flex-start;
+}
+section.header .container .logo {
+margin: 0;
+}
+section.header-home .container .logo {
+max-width: 180px;
+margin-left: 20px;
+}
+section.header-home .name-home {
+padding-top: 30px;
+font-size: 40px;
+}
+section.header-home nav ul li {
+font-size: 18px;
+}
+section.header .content {
+-webkit-align-items: flex-start;
+-moz-align-items: flex-start;
+-ms-align-items: flex-start;
+align-items: flex-start;
+}
+section.header .name {
+color: #333333;
+}
+section.header nav {
+font-size: 14px;
+margin-bottom: 0;
+}
+section.header nav ul {
+text-align: left;
+}
+section.header nav ul li {
+color: #666666;
+}
+section.header nav ul li:hover {
+color: #333333;
+}
+section.footer {
+background-color: transparent;
+}
+section.footer .container {
+flex-direction: row;
+}
+section.footer .container a {
+margin-left: 3px;
+margin-right: 3px;
+color: #666666;
+}
+section.footer .container a:hover {
+color: #333333;
+}
+section.footer .container a .icon {
+font-size: 18px;
+}
+section.footer .container a .icon.larger {
+font-size: 20px;
+}
+section.main .content .front-matter .date,
+section.main .content .front-matter .author,
+section.main .content .front-matter .tags,
+section.main .content .front-matter .word-count,
+section.main .content .front-matter .reading-time .middot {
+display: initial;
+}
+section.main .container.f04 {
+-webkit-justify-content: flex-start;
+-moz-justify-content: flex-start;
+-ms-justify-content: flex-start;
+justify-content: flex-start;
+}
+section.main .container.f04 .content {
+-webkit-align-items: flex-start;
+-moz-align-items: flex-start;
+-ms-align-items: flex-start;
+align-items: flex-start;
+}
+section.main .container.f04 .content .num {
+margin: 0 0 10px 0;
+font-size: 32px;
+}
+section.main .container.f04 .content .detail {
+margin-bottom: 30px;
+}
+.container {
+padding: 0 30px;
+}
+section.header {
+padding-top: 60px;
+padding-bottom: 60px;
+}
+section.footer {
+padding-top: 30px;
+padding-bottom: 60px;
+}
+section.main {
+padding-top: 0;
+}
+section.main .container .content .post-item {
+display: flex;
+list-style: none;
+padding-left: 1.5em;
+}
+section.main .container .content .post-item .meta {
+display: block;
+}
+section.main.post {
+padding-top: 60px;
+padding-bottom: 60px;
+}
+section.main .content .markdown blockquote {
+padding-right: 5rem;
+padding-left: 1.25rem;
+}
+section.main .content .navigation {
+-webkit-flex-direction: row;
+-moz-flex-direction: row;
+-ms-flex-direction: row;
+flex-direction: row;
+}
+section.main .content .navigation div {
+margin-top: 0em;
+}
+</style>
+<style media="(min-width: 769px)">
+  section.main .content .markdown figure {
+width: 110%;
+margin-left: -4%;
+}
+section.main .content .markdown img {
+max-width: 110%;
+width: 110%;
+margin-left: -4%;
+}
+</style>
+
+<noscript>
+  <link href="https://fonts.googleapis.com/css?family=Raleway:400,600,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Merriweather:300,300i,700,700i" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700" rel="stylesheet">
+</noscript>
+
+
+  <style type="text/css" media="screen">
+    .hljs{display:block;background:white;padding:0.5em;color:#333333;overflow-x:auto}.hljs-comment,.hljs-meta{color:#969896}.hljs-string,.hljs-variable,.hljs-template-variable,.hljs-strong,.hljs-emphasis,.hljs-quote{color:#df5000}.hljs-keyword,.hljs-selector-tag,.hljs-type{color:#a71d5d}.hljs-literal,.hljs-symbol,.hljs-bullet,.hljs-attribute{color:#0086b3}.hljs-section,.hljs-name{color:#63a35c}.hljs-tag{color:#333333}.hljs-title,.hljs-attr,.hljs-selector-id,.hljs-selector-class,.hljs-selector-attr,.hljs-selector-pseudo{color:#795da3}.hljs-addition{color:#55a532;background-color:#eaffea}.hljs-deletion{color:#bd2c00;background-color:#ffecec}.hljs-link{text-decoration:underline}
+  </style>
+
+
+
+  <style type="text/css" media="screen">
+    .progressive{overflow:hidden;position:relative;background:#efefef}.progressive__img{width:100%;height:100%;position:absolute;-webkit-transform:translateZ(0);transform:translateZ(0)}.progressive--not-loaded{filter:blur(30px);-webkit-filter:blur(30px)}.progressive--is-loaded{filter:blur(20px);-webkit-filter:blur(20px);-webkit-animation:sharpen .5s both;animation:sharpen .5s both}@-webkit-keyframes sharpen{from{filter:blur(20px);-webkit-filter:blur(20px)}to{filter:blur(0);-webkit-filter:blur(0)}}@keyframes sharpen{from{filter:blur(20px);-webkit-filter:blur(20px)}to{filter:blur(0);-webkit-filter:blur(0)}}
+  </style>
+
+
+
+
+
+
+
+<link rel="shortcut icon"
+
+    href="/_images/favicon.ico"
+
+>
+
+
+
+
+</head>
+
+
+<body>
+
+
+<section class="header">
+
+    <div class="container">
+        <a href="/"><img class="logo" src="/_images/avatar_green.png" alt="logo" /></a>
+        <div class="content">
+            <a href="/"><div class="name"><h1>Julia Silge</h1></div></a>
+            <nav>
+                <ul>
+                    
+                        <a href="/blog/"><li>Blog</li></a>
+                    
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                    
+                        
+                            <a href="/about/"><li>about</li></a>
+                        
+                    
+                        
+                            <a href="/resume/"><li>resume</li></a>
+                        
+                    
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+
+<section class="main post non-narrow zero-top-spacing">
+    <div class="container">
+        <div class="content">
+            <div class="front-matter">
+                <div class="title-container">
+                    <div class="page-heading">
+
+    The Life-Changing Magic of Tidying Text
+
+</div>
+
+                </div>
+                <div class="meta">
+                    <div class="date" title="Fri Apr 29 2016 00:00:00 UTC">Apr 29, 2016</div>
+                    
+                        
+                    
+                    <div class="reading-time"><div class="middot"></div>16 minute read</div>
+                    <div class="tags">
+                        <ul>
+                          
+                            <div class="middot"></div>
+                            <li><a href="/tags/rstats">rstats</a> </li>
+                          
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="markdown">
+                
+    
+    
+
+<p>When I went to the <a href="http://juliasilge.com/blog/I-Went-to-ROpenSci/">rOpenSci unconference</a> about a month ago, I started work with <a href="http://varianceexplained.org/">Dave Robinson</a> on a package for text mining using tidy data principles. What is this tidy data you keep hearing so much about? As <a href="https://www.jstatsoft.org/article/view/v059i10">described by Hadley Wickham</a>, tidy data has a specific structure:</p>
+
+<ul>
+<li>each variable is a column</li>
+<li>each observation is a row</li>
+<li>each type of observational unit is a table</li>
+</ul>
+
+<p>This means we end up with a data set that is in a long, skinny format instead of a wide format. Tidy data sets are easier to work with, and this is no less true when one starts to work with text. Most of the tooling and infrastructure needed for text mining with tidy data frames already exists in packages like <a href="https://cran.r-project.org/package=dplyr">dplyr</a>, <a href="https://cran.r-project.org/package=broom">broom</a>, <a href="https://cran.r-project.org/package=tidyr">tidyr</a>, and <a href="https://cran.r-project.org/package=ggplot2">ggplot2</a>. Our goal in writing the tidytext package is to provide functions and supporting data sets to allow conversion of text to and from tidy formats, and to switch seamlessly between tidy tools and existing text mining packages. We got a great start on our work when we were at the unconference and recently finished getting the first release ready; this week, <a href="https://github.com/juliasilge/tidytext">tidytext</a> was released <a href="https://cran.r-project.org/web/packages/tidytext/index.html">on CRAN</a>!</p>
+
+<h2 id="jane-austen-s-novels-can-be-so-tidy">Jane Austen&rsquo;s Novels Can Be So Tidy</h2>
+
+<p>One of the important functions we knew we needed was something to unnest text by some chosen token. In my <a href="http://juliasilge.com/blog/You-Must-Allow-Me/">previous</a> blog <a href="http://juliasilge.com/blog/If-I-Loved-NLP-Less/">posts</a>, I did this with a <code>for</code> loop first and then with a function that involved several dplyr bits. In the tidytext package, there is a function <code>unnest_tokens</code> which has this functionality; it restructures text into a one-token-per-row format. This function is a way to convert a dataframe with a text column to be one-token-per-row. Let&rsquo;s look at an example using Jane Austen&rsquo;s novels.</p>
+
+<p>(What?! Surely you&rsquo;re not <em>tired</em> of them yet?)</p>
+
+<p><iframe src="http://giphy.com/embed/AmbVLKsrsbdjG" width="480" height="252" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="http://giphy.com/gifs/pride-and-prejudice-mr-darcy-AmbVLKsrsbdjG">via GIPHY</a></p></p>
+
+<p>The janeaustenr package has a function <code>austen_books</code> that returns a tidy dataframe of all of the novels. Let&rsquo;s use that, annotate a <code>linenumber</code> quantity to keep track of lines in the original format, use a regex to find where all the chapters are, and then <code>unnest_tokens</code>.</p>
+
+<pre><code class="language-r">library(janeaustenr)
+library(tidytext)
+library(dplyr)
+library(stringr)
+
+original_books &lt;- austen_books() %&gt;%
+        group_by(book) %&gt;%
+        mutate(linenumber = row_number(),
+               chapter = cumsum(str_detect(text, regex(&quot;^chapter [\\divxlc]&quot;,
+                                                 ignore_case = TRUE)))) %&gt;%
+        ungroup()
+
+original_books
+</code></pre>
+
+<pre><code>## Source: local data frame [70,942 x 4]
+## 
+##                     text                book linenumber chapter
+##                    (chr)              (fctr)      (int)   (int)
+## 1  SENSE AND SENSIBILITY Sense &amp; Sensibility          1       0
+## 2                        Sense &amp; Sensibility          2       0
+## 3         by Jane Austen Sense &amp; Sensibility          3       0
+## 4                        Sense &amp; Sensibility          4       0
+## 5                 (1811) Sense &amp; Sensibility          5       0
+## 6                        Sense &amp; Sensibility          6       0
+## 7                        Sense &amp; Sensibility          7       0
+## 8                        Sense &amp; Sensibility          8       0
+## 9                        Sense &amp; Sensibility          9       0
+## 10             CHAPTER 1 Sense &amp; Sensibility         10       1
+## ..                   ...                 ...        ...     ...
+</code></pre>
+
+<pre><code class="language-r">tidy_books &lt;- original_books %&gt;%
+        unnest_tokens(word, text)
+
+tidy_books
+</code></pre>
+
+<pre><code>## Source: local data frame [724,971 x 4]
+## 
+##                   book linenumber chapter        word
+##                 (fctr)      (int)   (int)       (chr)
+## 1  Sense &amp; Sensibility          1       0       sense
+## 2  Sense &amp; Sensibility          1       0         and
+## 3  Sense &amp; Sensibility          1       0 sensibility
+## 4  Sense &amp; Sensibility          3       0          by
+## 5  Sense &amp; Sensibility          3       0        jane
+## 6  Sense &amp; Sensibility          3       0      austen
+## 7  Sense &amp; Sensibility          5       0        1811
+## 8  Sense &amp; Sensibility         10       1     chapter
+## 9  Sense &amp; Sensibility         10       1           1
+## 10 Sense &amp; Sensibility         13       1         the
+## ..                 ...        ...     ...         ...
+</code></pre>
+
+<p>This function uses the <a href="https://github.com/lmullen/tokenizers">tokenizers package</a> to separate each line into words. The default tokenizing is for words, but other options include characters, sentences, lines, paragraphs, or separation around a regex pattern.</p>
+
+<p>Now that the data is in one-word-per-row format, the TIDY DATA MAGIC can happen and we can manipulate it with tidy tools like dplyr. For example, we can remove stop words (kept in the tidytext dataset <code>stop_words</code>) with an <code>anti_join</code>.</p>
+
+<pre><code class="language-r">data(&quot;stop_words&quot;)
+tidy_books &lt;- tidy_books %&gt;%
+        anti_join(stop_words)
+</code></pre>
+
+<p>Then we can use <code>count</code> to find the most common words in all of Jane Austen&rsquo;s novels as a whole.</p>
+
+<pre><code class="language-r">tidy_books %&gt;%
+        count(word, sort = TRUE)
+</code></pre>
+
+<pre><code>## Source: local data frame [13,896 x 2]
+## 
+##      word     n
+##     (chr) (int)
+## 1    miss  1854
+## 2    time  1337
+## 3   fanny   862
+## 4    dear   822
+## 5    lady   817
+## 6     sir   806
+## 7     day   797
+## 8    emma   787
+## 9  sister   727
+## 10  house   699
+## ..    ...   ...
+</code></pre>
+
+<p>Sentiment analysis can be done as an inner join. Three sentiment lexicons are in the tidytext package in the <code>sentiment</code> dataset. Let&rsquo;s examine how sentiment changes changes during each novel. Let&rsquo;s find a sentiment score for each word using the Bing lexicon, then count the number of positive and negative words in defined sections of each novel.</p>
+
+<pre><code class="language-r">library(tidyr)
+bing &lt;- sentiments %&gt;%
+        filter(lexicon == &quot;bing&quot;) %&gt;%
+        select(-score)
+
+bing
+</code></pre>
+
+<pre><code>## Source: local data frame [6,788 x 3]
+## 
+##           word sentiment lexicon
+##          (chr)     (chr)   (chr)
+## 1      2-faced  negative    bing
+## 2      2-faces  negative    bing
+## 3           a+  positive    bing
+## 4     abnormal  negative    bing
+## 5      abolish  negative    bing
+## 6   abominable  negative    bing
+## 7   abominably  negative    bing
+## 8    abominate  negative    bing
+## 9  abomination  negative    bing
+## 10       abort  negative    bing
+## ..         ...       ...     ...
+</code></pre>
+
+<pre><code class="language-r">janeaustensentiment &lt;- tidy_books %&gt;%
+        inner_join(bing) %&gt;% 
+        count(book, index = linenumber %/% 80, sentiment) %&gt;% 
+        spread(sentiment, n, fill = 0) %&gt;% 
+        mutate(sentiment = positive - negative)
+
+janeaustensentiment
+</code></pre>
+
+<pre><code>## Source: local data frame [891 x 5]
+## Groups: book, index [891]
+## 
+##                   book index negative positive sentiment
+##                 (fctr) (dbl)    (dbl)    (dbl)     (dbl)
+## 1  Sense &amp; Sensibility     0       16       26        10
+## 2  Sense &amp; Sensibility     1       19       44        25
+## 3  Sense &amp; Sensibility     2       12       23        11
+## 4  Sense &amp; Sensibility     3       15       22         7
+## 5  Sense &amp; Sensibility     4       16       29        13
+## 6  Sense &amp; Sensibility     5       16       39        23
+## 7  Sense &amp; Sensibility     6       24       37        13
+## 8  Sense &amp; Sensibility     7       22       39        17
+## 9  Sense &amp; Sensibility     8       30       35         5
+## 10 Sense &amp; Sensibility     9       14       18         4
+## ..                 ...   ...      ...      ...       ...
+</code></pre>
+
+<p>Now we can plot these sentiment scores across the plot trajectory of each novel.</p>
+
+<pre><code class="language-r">library(ggplot2)
+library(viridis)
+ggplot(janeaustensentiment, aes(index, sentiment, fill = book)) +
+        geom_bar(stat = &quot;identity&quot;, show.legend = FALSE) +
+        facet_wrap(~book, ncol = 2, scales = &quot;free_x&quot;) +
+        theme_minimal(base_size = 13) +
+        labs(title = &quot;Sentiment in Jane Austen's Novels&quot;,
+             y = &quot;Sentiment&quot;) +
+        scale_fill_viridis(end = 0.75, discrete=TRUE, direction = -1) +
+        scale_x_discrete(expand=c(0.02,0)) +
+        theme(strip.text=element_text(hjust=0)) +
+        theme(strip.text = element_text(face = &quot;italic&quot;)) +
+        theme(axis.title.x=element_blank()) +
+        theme(axis.ticks.x=element_blank()) +
+        theme(axis.text.x=element_blank())
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-04-29-Life-Changing-Magic/unnamed-chunk-6-1.png" src="/figs/2016-04-29-Life-Changing-Magic/low/unnamed-chunk-6-1.png" alt="center" /></p></figure>
+
+<p>This is similar to some of the plots I have made in previous posts, but the effort and time required to make it is drastically less. More importantly, the <em>thinking</em> required to make it comes much more easily because it all falls so naturally out of joins and other <code>dplyr</code> verbs.</p>
+
+<h2 id="looking-at-units-beyond-words">Looking at Units Beyond Words</h2>
+
+<p>Lots of useful work can be done by tokenizing at the word level, but sometimes it is useful or necessary to look at different units of text. For example, some sentiment analysis algorithms look beyond only unigrams (i.e. single words) to try to understand the sentiment of a sentence as a whole. These algorithms try to understand that</p>
+
+<blockquote>
+<p>I am not having a good day.</p>
+</blockquote>
+
+<p>is a negative sentence, not a positive one, because of negation. The <a href="http://stanfordnlp.github.io/CoreNLP/">Stanford CoreNLP</a> tools and the <a href="https://github.com/trinker/sentimentr">sentimentr R package</a> (currently available on Github but not CRAN) are examples of such sentiment analysis algorithms. For these, we may want to tokenize text into sentences.</p>
+
+<pre><code class="language-r">austen_sentences &lt;- austen_books() %&gt;% 
+        group_by(book) %&gt;% 
+        unnest_tokens(sentence, text, token = &quot;sentences&quot;) %&gt;% 
+        ungroup()
+</code></pre>
+
+<p>Let&rsquo;s look at just one.</p>
+
+<pre><code class="language-r">austen_sentences$sentence[39]
+</code></pre>
+
+<pre><code>## [1] &quot;it would be enough to make them completely easy.&quot;
+</code></pre>
+
+<p>The sentence tokenizing does seem to have a bit of trouble with UTF-8 encoded text, especially with sections of dialogue; it does much better with punctuation in ASCII.</p>
+
+<p>Near the beginning of this vignette, we used a regex to find where all the chapters were in Austen&rsquo;s novels. We can use tidy text analysis to ask questions such as what are the most negative chapters in each of Jane Austen&rsquo;s novels? First, let&rsquo;s get the list of negative words from the Bing lexicon. Second, let&rsquo;s make a dataframe of how many words are in each chapter so we can normalize for the length of chapters. Then, let&rsquo;s find the number of negative words in each chapter and divide by the total words in each chapter. Which chapter has the highest proportion of negative words?</p>
+
+<pre><code class="language-r">bingnegative &lt;- sentiments %&gt;%
+        filter(lexicon == &quot;bing&quot;, sentiment == &quot;negative&quot;)
+
+wordcounts &lt;- tidy_books %&gt;%
+        group_by(book, chapter) %&gt;%
+        summarize(words = n())
+
+tidy_books %&gt;%
+        semi_join(bingnegative) %&gt;%
+        group_by(book, chapter) %&gt;%
+        summarize(negativewords = n()) %&gt;%
+        left_join(wordcounts, by = c(&quot;book&quot;, &quot;chapter&quot;)) %&gt;%
+        mutate(ratio = negativewords/words) %&gt;%
+        filter(chapter != 0) %&gt;%
+        top_n(1)
+</code></pre>
+
+<pre><code>## Source: local data frame [6 x 5]
+## Groups: book [6]
+## 
+##                  book chapter negativewords words     ratio
+##                (fctr)   (int)         (int) (int)     (dbl)
+## 1 Sense &amp; Sensibility      29           172  1135 0.1515419
+## 2   Pride &amp; Prejudice      34           108   646 0.1671827
+## 3      Mansfield Park      45           132   884 0.1493213
+## 4                Emma      15           147  1012 0.1452569
+## 5    Northanger Abbey      27            55   337 0.1632047
+## 6          Persuasion      21           215  1948 0.1103696
+</code></pre>
+
+<p>These are the chapters with the most negative words in each book, normalized for number of words in the chapter. What is happening in these chapters? In Chapter 29 of <em>Sense and Sensibility</em> Marianne finds out what an awful jerk Willoughby is by letter, and in Chapter 34 of <em>Pride and Prejudice</em> Mr. Darcy proposes for the first time (so badly!). Chapter 45 of <em>Mansfield Park</em> is almost the end, when Tom is sick with consumption and Mary is revealed as all greedy and a gold-digger, Chapter 15 of <em>Emma</em> is when horrifying Mr. Elton proposes, and Chapter 27 of <em>Northanger Abbey</em> is a short chapter where Catherine gets a terrible letter from her inconstant friend Isabella. Chapter 21 of <em>Persuasion</em> is when Anne&rsquo;s friend tells her all about Mr. Elliott&rsquo;s immoral past.</p>
+
+<p>Interestingly, many of those chapters are very close to the ends of the novels; things tend to get really bad for Jane Austen&rsquo;s characters before their happy endings, it seems. Also, these chapters largely involve terrible revelations about characters through letters or conversations about past events, rather than some action happening directly in the plot. All that, just with <code>dplyr</code> verbs, because the data is tidy.</p>
+
+<h2 id="networks-of-words">Networks of Words</h2>
+
+<p>Another function in tidytext is <code>pair_count</code>, which counts pairs of items that occur together within a group. Let&rsquo;s count the words that occur together in the lines of <em>Pride and Prejudice</em>.</p>
+
+<pre><code class="language-r">pride_prejudice_words &lt;- tidy_books %&gt;%
+        filter(book == &quot;Pride &amp; Prejudice&quot;)
+word_cooccurences &lt;- pride_prejudice_words %&gt;%
+        pair_count(linenumber, word, sort = TRUE)
+word_cooccurences
+</code></pre>
+
+<pre><code>## Source: local data frame [50,550 x 3]
+## 
+##       value1  value2     n
+##        (chr)   (chr) (dbl)
+## 1  catherine    lady    87
+## 2    bingley    miss    68
+## 3     bennet    miss    65
+## 4      darcy    miss    46
+## 5    william     sir    35
+## 6     bourgh      de    32
+## 7  elizabeth    miss    29
+## 8  elizabeth    jane    27
+## 9  elizabeth   cried    24
+## 10   forster colonel    24
+## ..       ...     ...   ...
+</code></pre>
+
+<p>This can be useful, for example, to plot a network of co-occuring words with the <a href="http://igraph.org/">igraph</a> and <a href="https://github.com/thomasp85/ggraph">ggraph</a> packages.</p>
+
+<pre><code class="language-r">library(igraph)
+library(ggraph)
+
+set.seed(1813)
+word_cooccurences %&gt;%
+        filter(n &gt;= 10) %&gt;%
+        graph_from_data_frame() %&gt;%
+        ggraph(layout = &quot;fr&quot;) +
+        geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
+        geom_node_point(color = &quot;darkslategray4&quot;, size = 5) +
+        geom_node_text(aes(label = name), vjust = 1.8) +
+        ggtitle(expression(paste(&quot;Word Network in Jane Austen's &quot;, 
+                                 italic(&quot;Pride and Prejudice&quot;)))) +
+        theme_void()
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-04-29-Life-Changing-Magic/unnamed-chunk-11-1.png" src="/figs/2016-04-29-Life-Changing-Magic/low/unnamed-chunk-11-1.png" alt="center" /></p></figure>
+
+<p>Ten/five/whatever <a href="http://www.jasna.org/persuasions/printed/number12/heldman.htm">thousand pounds</a> a year!</p>
+
+<p>Let&rsquo;s do another one!</p>
+
+<pre><code class="language-r">pride_prejudice_words &lt;- tidy_books %&gt;%
+        filter(book == &quot;Emma&quot;)
+word_cooccurences &lt;- pride_prejudice_words %&gt;%
+        pair_count(linenumber, word, sort = TRUE)
+set.seed(2016)
+word_cooccurences %&gt;%
+        filter(n &gt;= 10) %&gt;%
+        graph_from_data_frame() %&gt;%
+        ggraph(layout = &quot;fr&quot;) +
+        geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
+        geom_node_point(color = &quot;plum4&quot;, size = 5) +
+        geom_node_text(aes(label = name), vjust = 1.8) +
+        ggtitle(expression(paste(&quot;Word Network in Jane Austen's &quot;, 
+                                 italic(&quot;Emma&quot;)))) +
+        theme_void()
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-04-29-Life-Changing-Magic/unnamed-chunk-12-1.png" src="/figs/2016-04-29-Life-Changing-Magic/low/unnamed-chunk-12-1.png" alt="center" /></p></figure>
+
+<p>Lots of proper nouns are showing up in these network plots (Box Hill, Frank Churchill, Lady Catherine de Bourgh, etc.), and it is easy to pick out the main characters (Elizabeth, Emma). This type of network analysis is mainly showing us the important people and places in a text, and how they are related.</p>
+
+<h2 id="word-frequencies">Word Frequencies</h2>
+
+<p>A common task in text mining is to look at word frequencies and to compare frequencies across different texts. We can do this using tidy data principles pretty smoothly. We already have Jane Austen&rsquo;s works; let&rsquo;s get two more sets of texts to compare to. Dave has just put together a new <a href="https://github.com/dgrtwo/gutenbergr">package to search and download books from Project Gutenberg</a> through R; we&rsquo;re going to use that because this is a better way to follow Project Gutenberg&rsquo;s rules for robot access. And it is SO nice to use! First, let&rsquo;s look at some science fiction and fantasy novels by H.G. Wells, who lived in the late 19th and early 20th centuries. Let&rsquo;s get <a href="https://www.gutenberg.org/ebooks/35"><em>The Time Machine</em></a>, <a href="https://www.gutenberg.org/ebooks/36"><em>The War of the Worlds</em></a>, <a href="https://www.gutenberg.org/ebooks/5230"><em>The Invisible Man</em></a>, and <a href="https://www.gutenberg.org/ebooks/159"><em>The Island of Doctor Moreau</em></a>.</p>
+
+<pre><code class="language-r">library(gutenbergr)
+hgwells &lt;- gutenberg_download(c(35, 36, 5230, 159))
+tidy_hgwells &lt;- hgwells %&gt;%
+        unnest_tokens(word, text) %&gt;%
+        anti_join(stop_words)
+</code></pre>
+
+<p>Just for kicks, what are the most common words in these novels of H.G. Wells?</p>
+
+<pre><code class="language-r">tidy_hgwells %&gt;%
+        count(word, sort = TRUE)
+</code></pre>
+
+<pre><code>## Source: local data frame [11,769 x 2]
+## 
+##      word     n
+##     (chr) (int)
+## 1    time   454
+## 2  people   302
+## 3    door   260
+## 4   heard   249
+## 5   black   232
+## 6   stood   229
+## 7   white   222
+## 8    hand   218
+## 9    kemp   213
+## 10   eyes   210
+## ..    ...   ...
+</code></pre>
+
+<p>Now let&rsquo;s get some well-known works of the Brontë sisters, whose lives overlapped with Jane Austen&rsquo;s somewhat but who wrote in a bit of a different style. Let&rsquo;s get <a href="https://www.gutenberg.org/ebooks/1260"><em>Jane Eyre</em></a>, <a href="https://www.gutenberg.org/ebooks/768"><em>Wuthering Heights</em></a>, <a href="https://www.gutenberg.org/ebooks/969"><em>The Tenant of Wildfell Hall</em></a>, <a href="https://www.gutenberg.org/ebooks/9182"><em>Villette</em></a>, and <a href="https://www.gutenberg.org/ebooks/767"><em>Agnes Grey</em></a>.</p>
+
+<pre><code class="language-r">bronte &lt;- gutenberg_download(c(1260, 768, 969, 9182, 766))
+tidy_bronte &lt;- bronte %&gt;%
+        unnest_tokens(word, text) %&gt;%
+        anti_join(stop_words)
+</code></pre>
+
+<p>What are the most common words in these novels of the Brontë sisters?</p>
+
+<pre><code class="language-r">tidy_bronte %&gt;%
+        count(word, sort = TRUE)
+</code></pre>
+
+<pre><code>## Source: local data frame [25,714 x 2]
+## 
+##      word     n
+##     (chr) (int)
+## 1    time  1586
+## 2    miss  1388
+## 3    hand  1239
+## 4     day  1136
+## 5    eyes  1023
+## 6   night  1011
+## 7   house   960
+## 8    head   957
+## 9  looked   949
+## 10   aunt   896
+## ..    ...   ...
+</code></pre>
+
+<p>Well, Jane Austen is not going around talking about people&rsquo;s HEARTS this much; I can tell you that right now. Those Brontë sisters, SO DRAMATIC. Interesting that &ldquo;time&rdquo; and &ldquo;door&rdquo; are in the top 10 for both H.G. Wells and the Brontë sisters. &ldquo;Door&rdquo;?!</p>
+
+<p>Anyway, let&rsquo;s calculate the frequency for each word for the works of Jane Austen, the Brontë sisters, and H.G. Wells.</p>
+
+<pre><code class="language-r">tidy_both &lt;- bind_rows(
+        mutate(tidy_bronte, author = &quot;Brontë Sisters&quot;),
+        mutate(tidy_hgwells, author = &quot;H.G. Wells&quot;))
+frequency &lt;- tidy_both %&gt;%
+        mutate(word = str_extract(word, &quot;[a-z]+&quot;)) %&gt;%
+        count(author, word) %&gt;%
+        rename(other = n) %&gt;%
+        inner_join(count(tidy_books, word)) %&gt;%
+        rename(Austen = n) %&gt;%
+        mutate(other = other / sum(other),
+               Austen = Austen / sum(Austen)) %&gt;%
+        ungroup()
+</code></pre>
+
+<p>I&rsquo;m using <code>str_extract</code> here because the UTF-8 encoded texts from Project Gutenberg have some examples of words with underscores around them to indicate emphasis (you know, like italics). The tokenizer treated these as words but I don&rsquo;t want to count &ldquo;_any_&rdquo; separately from &ldquo;any&rdquo;. Now let&rsquo;s plot.</p>
+
+<pre><code class="language-r">library(scales)
+ggplot(frequency, aes(x = other, y = Austen, color = abs(Austen - other))) +
+        geom_abline(color = &quot;gray40&quot;) +
+        geom_jitter(alpha = 0.1, size = 2.5, width = 0.4, height = 0.4) +
+        geom_text(aes(label = word), check_overlap = TRUE, vjust = 1.5) +
+        scale_x_log10(labels = percent_format()) +
+        scale_y_log10(labels = percent_format()) +
+        scale_color_gradient(limits = c(0, 0.001), low = &quot;darkslategray4&quot;, high = &quot;gray75&quot;) +
+        facet_wrap(~author, ncol = 2) +
+        theme_minimal(base_size = 14) +
+        theme(legend.position=&quot;none&quot;) +
+        labs(title = &quot;Comparing Word Frequencies&quot;,
+             subtitle = &quot;Word frequencies in Jane Austen's texts are closer to the Brontë sisters' than to H.G. Wells'&quot;,
+             y = &quot;Jane Austen&quot;, x = NULL)
+</code></pre>
+
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="/figs/2016-04-29-Life-Changing-Magic/unnamed-chunk-18-1.png" src="/figs/2016-04-29-Life-Changing-Magic/low/unnamed-chunk-18-1.png" alt="center" /></p></figure>
+
+<p>Words that are close to the line in these plots have similar frequencies in both sets of texts, for example, in both Austen and Brontë texts (&ldquo;miss&rdquo;, &ldquo;time&rdquo;, &ldquo;lady&rdquo;, &ldquo;day&rdquo; at the upper frequency end) or in both Austen and Wells texts (&ldquo;time&rdquo;, &ldquo;day&rdquo;, &ldquo;mind&rdquo;, &ldquo;brother&rdquo; at the high frequency end). Words that are far from the line are words that are found more in one set of texts than another. For example, in the Austen-Brontë plot, words like &ldquo;elizabeth&rdquo;, &ldquo;emma&rdquo;, &ldquo;captain&rdquo;, and &ldquo;bath&rdquo; (all proper nouns) are found in Austen&rsquo;s texts but not much in the Brontë texts, while words like &ldquo;arthur&rdquo;, &ldquo;dark&rdquo;, &ldquo;dog&rdquo;, and &ldquo;doctor&rdquo; are found in the Brontë texts but not the Austen texts. In comparing H.G. Wells with Jane Austen, Wells uses words like &ldquo;beast&rdquo;, &ldquo;guns&rdquo;, &ldquo;brute&rdquo;, and &ldquo;animal&rdquo; that Austen does not, while Austen uses words like &ldquo;family&rdquo;, &ldquo;friend&rdquo;, &ldquo;letter&rdquo;, and &ldquo;agreeable&rdquo; that Wells does not.</p>
+
+<p>Overall, notice that the words in the Austen-Brontë plot are closer to the zero-slope line than in the Austen-Wells plot and also extend to lower frequencies; Austen and the Brontë sisters use more similar words than Austen and H.G. Wells. Also, you might notice the percent frequencies for individual words are different in one plot when compared to another because of the inner join; not all the words are found in all three sets of texts so the percent frequency is a different quantity.</p>
+
+<p>Let&rsquo;s quantify how similar and different these sets of word frequencies are using a correlation test. How correlated are the word frequencies between Austen and the Brontë sisters, and between Austen and Wells?</p>
+
+<pre><code class="language-r">cor.test(data = frequency[frequency$author == &quot;Brontë Sisters&quot;,], ~ other + Austen)
+</code></pre>
+
+<pre><code>## 
+## 	Pearson's product-moment correlation
+## 
+## data:  other and Austen
+## t = 122.45, df = 10611, p-value &lt; 2.2e-16
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.7572399 0.7730119
+## sample estimates:
+##       cor 
+## 0.7652408
+</code></pre>
+
+<pre><code class="language-r">cor.test(data = frequency[frequency$author == &quot;H.G. Wells&quot;,], ~ other + Austen)
+</code></pre>
+
+<pre><code>## 
+## 	Pearson's product-moment correlation
+## 
+## data:  other and Austen
+## t = 36.043, df = 5958, p-value &lt; 2.2e-16
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.4020291 0.4437216
+## sample estimates:
+##       cor 
+## 0.4230993
+</code></pre>
+
+<p>The relationship between the word frequencies is different between these sets of texts, as it appears in the plots.</p>
+
+<h2 id="the-end">The End</h2>
+
+<p>There is another whole set of functions in tidytext for converting to and from document-term matrices. Many existing text mining data sets are in document-term matrices, or you might want such a matrix for a specific machine learning application. The tidytext package has <code>tidy</code> functions for objects from the tm and quanteda packages so you can convert back and forth. (For more on the <code>tidy</code> verb, see the <a href="https://github.com/dgrtwo/broom">broom package</a>). This allows, for example, a workflow with easy reading, filtering, and processing to be done using dplyr and other tidy tools, after which the data can be converted into a document-term matrix for machine learning applications. For examples of working with objects from other text mining packages using tidy data principles, see the tidytext vignette on converting to and from document-term matrices.</p>
+
+<p>Many thanks to <a href="https://ropensci.org/">rOpenSci</a> for hosting the unconference where we started work on the tidytext package, and to <a href="http://gdequeiroz.github.io/">Gabriela de Queiroz</a>, who contributed to the package while we were at the unconference. I am super happy to have collaborated with Dave; it has been a delightful experience. The R Markdown file used to make this blog post is available <a href="https://github.com/juliasilge/juliasilge.github.io/blob/master/_R/2016-04-29-Life-Changing-Magic.Rmd">here</a>. I am very happy to hear feedback or questions!</p>
+
+
+                <br>
+            </div>
+            
+                <div class="navigation">
+                    
+                    <div>
+                        <img class="icon" src="/img/back.svg" alt="back" />
+                        <a href="/blog/how-i-stopped/">How I Learned to Stop Worrying and Love R CMD Check</a>
+                    </div>
+                    
+                    <div style="width: 100%;"></div>
+                    
+                    <div>
+                        <a href="/blog/beginners-guide-to-travis/">A Beginner&#39;s Guide to Travis-CI for R</a>
+                        <img class="icon" src="/img/next.svg" alt="next" />
+                    </div>
+                    
+                </div>
+            
+            <br>
+            <div class="disqus">
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'datascienceish';
+    var disqus_identifier = '\/blog\/life-changing-magic\/';
+    var disqus_title = 'The Life-Changing Magic of Tidying Text';
+    var disqus_url = '\/blog\/life-changing-magic\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="footer">
+    <div class="container">
+        <div class="copyright">
+
+        
+            <a href="/license">Copyright © 2017 Julia Silge</a>
+        
+
+        </div>
+        <div class="icons">
+
+        
+            <a href="https://github.com/juliasilge" target="_blank">
+                <img class="icon" src="/img/github.svg" alt="github" />
+            </a>
+        
+
+        
+            <a href="https://twitter.com/juliasilge" target="_blank">
+                <img class="icon" src="/img/twitter.svg" alt="twitter" />
+            </a>
+        
+
+        
+            <a href="https://www.linkedin.com/in/juliasilge" target="_blank">
+                <img class="icon" src="/img/linkedin.svg" alt="linkedin" />
+            </a>
+        
+
+        
+
+        
+            <a href="/index.xml">
+                <img class="icon" src="/img/rss.svg" alt="rss" />
+            </a>
+        
+
+        </div>
+    </div>
+</section>
+
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+<script>
+  WebFont.load({
+    google: {
+      families: ['Raleway:400,600,700', 'Merriweather:300,300i,700,700i', 'Ubuntu+Mono:400,700']
+    }
+  });
+</script>
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?...">
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+
+
+  <script src="/js/highlight.min.js" defer></script>
+  
+
+
+
+  <script src="/js/progressively.min.js" defer></script>
+
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-68765210-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+<script>
+  window.onload = function() {
+    
+      hljs.initHighlighting();
+    
+    
+      progressively.init({delay: 30, throttle: 50});
+    
+  };
+</script>
+
+
+</body>
+</html>
+

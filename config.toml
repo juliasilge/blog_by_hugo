@@ -1,0 +1,61 @@
+# TODO: CNAME, Disqus?
+# disqusshortname     = "datascienceish" 
+# googleAnalytics     = "UA-68765210-1"
+# ignoreFiles         = ["\\.Rmd$", "_files$", "_cache$"]
+# blog                = "/blog/:year/:month/:day/:slug/"
+# avatar              = "_images/profile_painterly.jpg"
+
+# options for highlight.js (version, additional languages, and theme)
+# highlightjsVersion = "9.11.0"
+# highlightjsCDN = "//cdn.bootcss.com"
+# highlightjsLang = ["r", "yaml"]
+# highlightjsTheme = "github"
+# MathJaxCDN = "//cdn.bootcss.com"
+# MathJaxVersion = "2.7.1"
+
+
+baseurl = "/"
+languageCode = "en-us"
+title = "Julia Silge"
+theme = "cocoa-eh-hugo-theme"
+builddrafts = true
+canonifyurls = true
+contentdir = "content"
+layoutdir = "layouts"
+publishdir = "public"
+author = "Julia Silge"
+disqusshortname = "datascienceish"
+googleAnalytics = "UA-68765210-1"
+pluralizelisttitles = false
+ignoreFiles = ["\\.Rmd$", "_files$", "_cache$"]
+MathJaxCDN = "https://cdn.bootcss.com"
+MathJaxVersion = "2.7.1"
+
+
+[permalinks]
+blog = "/blog/:slug/"
+
+[params]
+dateform = "Jan 2, 2006"
+dateformfull = "Mon Jan 2 2006 15:04:05 MST"
+description = "Example blog"
+copyright = "Copyright © 2017 Julia Silge"
+logofile = "_images/avatar_green.png"
+faviconfile = "_images/favicon.ico"
+highlightjs = true
+# options for highlight.js (version, additional languages, and theme)
+highlightjsVersion = "9.11.0"
+highlightjsCDN = "https://cdn.bootcss.com"
+highlightjsLang = ["r", "yaml"]
+highlightjsTheme = "github"
+MathJaxCDN = "https://cdn.bootcss.com"
+MathJaxVersion = "2.7.1"
+progressively = true
+latestpostcount = 5
+github = "juliasilge"
+#email = "you@example.com"
+linkedin = "juliasilge"
+twitter = "juliasilge"
+social_banner = "img/banner.png"
+posts_navigation = true
+
