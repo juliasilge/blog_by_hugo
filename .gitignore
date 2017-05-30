@@ -1,4 +1,5 @@
-.Rproj.user
 .Rhistory
+.Rproj.user
 .RData
 .Ruserdata
+/public/*
