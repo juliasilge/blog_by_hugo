@@ -1,6 +1,6 @@
 # TODO: Disqus?
 
-baseurl = "/"
+baseurl = "https://juliasilge.com/"
 languageCode = "en-us"
 title = "Julia Silge"
 theme = "cocoa-eh-hugo-theme"
