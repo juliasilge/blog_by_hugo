@@ -1,5 +1,6 @@
 ---
 title: "If I Loved Natural Language Processing Less, I Might Be Able to Talk About It More"
+slug: "if-i-loved-nlp-less"
 date: 2016-03-18
 excerpt: "An R Package for Jane Austen's Complete Novels"
 tags: [rstats]
