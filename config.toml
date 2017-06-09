@@ -1,10 +1,11 @@
-# TODO: MathJax, Disqus?
+# TODO: Disqus
 
 #library(tidyverse)
 #library(stringr)
-#comments <- read_csv("~/Downloads/datascienceish-2017-05-30T18-15-29.749318-links.csv", col_names = "url1") %>%
+#comments <- read_csv("~/Downloads/datascienceish-2017-06-09T22-20-06.652937-links.csv", col_names = "url1") %>%
 #    filter(str_detect(url1, "\\/$")) %>%
-#    mutate(url2 = str_to_lower(url1))
+#    mutate(url2 = str_to_lower(url1),
+#           url2 = str_replace_all(url2, "http://julia", "https://julia"))
 #write_csv(comments, "~/Desktop/url_mapping.csv")
 
 baseurl = "https://juliasilge.com/"
