@@ -1,5 +1,4 @@
-# TODO: Disqus
-
+# converting Disqus:
 #library(tidyverse)
 #library(stringr)
 #comments <- read_csv("~/Downloads/datascienceish-2017-06-09T22-20-06.652937-links.csv", col_names = "url1") %>%
