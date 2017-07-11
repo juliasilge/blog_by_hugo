@@ -46,15 +46,15 @@ Remember that topic 5 was the one that corresponded to English words where users
 
 Let's look at a few real examples from this dataset so you can see how this worked out. Each of the following questions is part of the [StackSample](https://www.kaggle.com/stackoverflow/stacksample/) dataset and this particular topic model.
 
-![ios](/figs/2017-07-06-text-mining-stack-overflow/ios_question.png)
+![ios](/figs/2017-07-06-text-mining-stack-overflow/screen1.jpg)
 
 This [first example question](https://stackoverflow.com/questions/24049020/nsnotificationcenter-addobserver-in-swift) is relatively short, and the topic model estimates that is 91% topic 12 and 6% topic 3. Looks good! I don't see many of the top 10 terms from the first plot in this blog post for topic 12 here, but the topic model has classified it into the topic that is dominated by iOS, Objective-C, iPhone, and Swift.
 
-![python](/figs/2017-07-06-text-mining-stack-overflow/python_question.png)
+![python](/figs/2017-07-06-text-mining-stack-overflow/screen2.jpg)
 
 Our [second example question](https://stackoverflow.com/questions/30216000/why-is-faster-than-list) is longer, and the topic model estimates that it is 82% topic 5 and 18% topic 7. This question has a lot of English text and not much code, and that is reflected by the modeling. The model has chosen topic 7, dominated by Python and Django, for this question.
 
-![haskell](/figs/2017-07-06-text-mining-stack-overflow/haskell_question.png)
+![haskell](/figs/2017-07-06-text-mining-stack-overflow/screen3.jpg)
 
 Last, let's look at this [Haskell question](https://stackoverflow.com/questions/17247880/getting-associated-type-synonyms-with-template-haskell). Haskell is a sparsely used tag, and did not show up in the plot of top tags for topics at all. Where did this question land? The model estimates that this question is 63% topic 5 and 36% topic 10, with a tiny smidge of topic 7. I actually really like that the model has done this, putting Haskell in with low-level tags like C++/C, arrays, and pointers.
 
