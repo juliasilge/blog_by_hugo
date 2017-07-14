@@ -19,7 +19,7 @@ Experienced in using statistical techniques and numerical modeling with real-wor
 
 ## Skills and Tools
 
-* R, SQL, a bit of Python and C
+* R, SQL (also rusty bits of Python and C)
 * Github, Markdown, shell scripting, Linux
 * writing and speaking for technical and general audiences
 
