@@ -28,12 +28,16 @@ Experienced in using statistical techniques and numerical modeling with real-wor
 #### Data Scientist, Stack Overflow
 2016-present
 
+* Analyze large datasets and build models to understand developers and the software industry, from tech ecosystems to how programmers search for jobs
+* Collaborate with data engineers, web developers, and product managers to implement models in production
+* Communicate the results of analyses, modeling, and tests through data visualization, interactive apps, and writing
+
 #### Data Scientist, Datassist
 2016
 
-* Develop statistical survey weighting tools (implemented in R) for nonprofits, local governments, social service agencies, and others.
-* Analyze complex data sets from clients to create clear and compelling reports, visualizations, and interactive apps.
-* Write educational materials for online courses to develop the data literacy of our clients around the world.
+* Developed statistical survey weighting tools (implemented in R) for nonprofits, local governments, social service agencies, and others.
+* Analyzed complex data sets from clients to create clear and compelling reports, visualizations, and interactive apps.
+* Wrote educational materials for online courses to develop the data literacy of our clients around the world.
 
 #### Content Developer & Support Representative, Sapling Learning
 2012—2016
