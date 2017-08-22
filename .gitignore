@@ -5,3 +5,5 @@
 *.zip
 /public/*
 /blogdown/*
+*_cache*
+*_files*
