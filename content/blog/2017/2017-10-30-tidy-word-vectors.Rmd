@@ -57,10 +57,11 @@ hacker_news_text <- hacker_news_raw %>%
     mutate(title = na_if(title, ""),
            text = coalesce(title, text)) %>%
     select(-title) %>%
-    mutate(text = str_replace_all(text, "&#x27;|&quot;|&#x2F;", "'"),   ## weird encoding
-           text = str_replace_all(text, "<a(.*?)>", " "),               ## links 
-           text = str_replace_all(text, "&gt;|&lt;", " "),              ## html yuck
-           text = str_replace_all(text, "<[^>]*>", " "),                ## mmmmm, more html yuck
+    mutate(text = str_replace_all(text, "&quot;|&#x2F;", "'"),    ## hex encoding
+           text = str_replace_all(text, "&#x2F;", "/"),           ## more hex
+           text = str_replace_all(text, "<a(.*?)>", " "),         ## links 
+           text = str_replace_all(text, "&gt;|&lt;", " "),        ## html yuck
+           text = str_replace_all(text, "<[^>]*>", " "),          ## mmmmm, more html yuck
            postID = row_number())
 ```
 
@@ -243,14 +244,14 @@ mystery_product <- word_vectors["iphone",] - word_vectors["apple",] + word_vecto
 search_synonyms(word_vectors, mystery_product)
 ```
 
-Google itself is at the top of the list, which is something that often happens to me when I try this word vector arithmetic no matter how I train them (usually one of the positive vectors in the "equation"). Does anyone know what that means? Anyway, "search", "app", "phone" and "engine" are next on the list. 
+Google itself is at the top of the list, which is something that often happens to me when I try this word vector arithmetic no matter how I train them (usually one of the positive vectors in the "equation"). Does anyone know what that means? Anyway, "search", is next on the list. 
 
 ```{r dependson="word_vectors"}
 mystery_product <- word_vectors["iphone",] - word_vectors["apple",] + word_vectors["amazon",]
 search_synonyms(word_vectors, mystery_product)
 ```
 
-For Amazon, we get AWS, S3, cloud, and EC2. Nice!
+For Amazon, we get AWS, S3, and EC2, as well as book. Nice!
 
 ## The End
 

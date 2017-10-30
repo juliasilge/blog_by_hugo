@@ -43,10 +43,11 @@ hacker_news_text &lt;- hacker_news_raw %&gt;%
     mutate(title = na_if(title, &quot;&quot;),
            text = coalesce(title, text)) %&gt;%
     select(-title) %&gt;%
-    mutate(text = str_replace_all(text, &quot;&amp;#x27;|&amp;quot;|&amp;#x2F;&quot;, &quot;&#39;&quot;),   ## weird encoding
-           text = str_replace_all(text, &quot;&lt;a(.*?)&gt;&quot;, &quot; &quot;),               ## links 
-           text = str_replace_all(text, &quot;&amp;gt;|&amp;lt;&quot;, &quot; &quot;),              ## html yuck
-           text = str_replace_all(text, &quot;&lt;[^&gt;]*&gt;&quot;, &quot; &quot;),                ## mmmmm, more html yuck
+    mutate(text = str_replace_all(text, &quot;&amp;quot;|&amp;#x2F;&quot;, &quot;&#39;&quot;),    ## hex encoding
+           text = str_replace_all(text, &quot;&amp;#x2F;&quot;, &quot;/&quot;),           ## more hex
+           text = str_replace_all(text, &quot;&lt;a(.*?)&gt;&quot;, &quot; &quot;),         ## links 
+           text = str_replace_all(text, &quot;&amp;gt;|&amp;lt;&quot;, &quot; &quot;),        ## html yuck
+           text = str_replace_all(text, &quot;&lt;[^&gt;]*&gt;&quot;, &quot; &quot;),          ## mmmmm, more html yuck
            postID = row_number())</code></pre>
 </div>
 <div id="unigram-probabilities" class="section level2">
@@ -60,20 +61,20 @@ unigram_probs &lt;- hacker_news_text %&gt;%
     mutate(p = n / sum(n))
 
 unigram_probs</code></pre>
-<pre><code>## # A tibble: 318,503 x 3
+<pre><code>## # A tibble: 314,615 x 3
 ##     word       n          p
 ##    &lt;chr&gt;   &lt;int&gt;      &lt;dbl&gt;
-##  1   the 1101045 0.04190098
-##  2    to  761658 0.02898539
-##  3     a  669067 0.02546178
-##  4    of  541937 0.02062376
-##  5   and  532592 0.02026813
-##  6    is  431841 0.01643399
-##  7  that  406506 0.01546985
-##  8     i  401545 0.01528105
-##  9    in  368045 0.01400619
-## 10    it  333441 0.01268931
-## # ... with 318,493 more rows</code></pre>
+##  1   the 1101051 0.04059959
+##  2    to  761660 0.02808506
+##  3     a  669142 0.02467360
+##  4    of  541939 0.01998318
+##  5   and  532594 0.01963860
+##  6     i  464917 0.01714311
+##  7   x27  437330 0.01612588
+##  8    is  431849 0.01592378
+##  9  that  429755 0.01584657
+## 10    it  402667 0.01484774
+## # ... with 314,605 more rows</code></pre>
 </div>
 <div id="skipgram-probabilities" class="section level2">
 <h2>Skipgram probabilities</h2>
@@ -89,7 +90,7 @@ tidy_skipgrams &lt;- hacker_news_text %&gt;%
     unnest_tokens(word, ngram)
 
 tidy_skipgrams</code></pre>
-<pre><code>## # A tibble: 183,434,296 x 2
+<pre><code>## # A tibble: 190,151,488 x 2
 ##    skipgramID   word
 ##         &lt;chr&gt;  &lt;chr&gt;
 ##  1        1_1      i
@@ -102,7 +103,7 @@ tidy_skipgrams</code></pre>
 ##  8        1_1   from
 ##  9        1_2    bet
 ## 10        1_2 taking
-## # ... with 183,434,286 more rows</code></pre>
+## # ... with 190,151,478 more rows</code></pre>
 <pre class="r"><code>skipgram_probs &lt;- tidy_skipgrams %&gt;%
     pairwise_count(word, skipgramID, diag = TRUE, sort = TRUE) %&gt;%
     mutate(p = n / sum(n))</code></pre>
@@ -124,38 +125,38 @@ tidy_skipgrams</code></pre>
 <pre class="r"><code>normalized_prob %&gt;% 
     filter(word1 == &quot;facebook&quot;) %&gt;%
     arrange(-p_together)</code></pre>
-<pre><code>## # A tibble: 1,746 x 7
-##       word1        word2     n            p           p1           p2 p_together
-##       &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-##  1 facebook     facebook 52883 3.757919e-05 0.0003340144 3.340144e-04  336.83488
-##  2 facebook    messenger   348 2.472923e-07 0.0003340144 1.122642e-05   65.94840
-##  3 facebook   zuckerburg    23 1.634403e-08 0.0003340144 8.752799e-07   55.90454
-##  4 facebook     statuses    40 2.842440e-08 0.0003340144 1.522226e-06   55.90454
-##  5 facebook      myspace   330 2.345013e-07 0.0003340144 1.331948e-05   52.70999
-##  6 facebook     newsfeed    32 2.273952e-08 0.0003340144 1.370003e-06   49.69292
-##  7 facebook       hiphop    29 2.060769e-08 0.0003340144 1.484170e-06   41.57004
-##  8 facebook mashable.com    24 1.705464e-08 0.0003340144 1.293892e-06   39.46203
-##  9 facebook   friendster    30 2.131830e-08 0.0003340144 1.636393e-06   39.00317
-## 10 facebook        gtalk    22 1.563342e-08 0.0003340144 1.217781e-06   38.43437
-## # ... with 1,736 more rows</code></pre>
+<pre><code>## # A tibble: 1,767 x 7
+##       word1            word2     n            p           p1           p2 p_together
+##       &lt;chr&gt;            &lt;chr&gt; &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
+##  1 facebook         facebook 54505 3.737944e-05 0.0003310502 3.310502e-04  341.07126
+##  2 facebook        messenger   364 2.496306e-07 0.0003310502 1.098830e-05   68.62360
+##  3 facebook         statuses    40 2.743194e-08 0.0003310502 1.474940e-06   56.18086
+##  4 facebook       zuckerburg    23 1.577336e-08 0.0003310502 8.480903e-07   56.18086
+##  5 facebook          myspace   327 2.242561e-07 0.0003310502 1.290572e-05   52.48898
+##  6 facebook         newsfeed    32 2.194555e-08 0.0003310502 1.327446e-06   49.93854
+##  7 facebook           hiphop    29 1.988815e-08 0.0003310502 1.438066e-06   41.77551
+##  8 facebook     mashable.com    25 1.714496e-08 0.0003310502 1.253699e-06   41.30946
+##  9 facebook            gtalk    22 1.508757e-08 0.0003310502 1.216825e-06   37.45391
+## 10 facebook www.facebook.com    47 3.223253e-08 0.0003310502 2.765512e-06   35.20667
+## # ... with 1,757 more rows</code></pre>
 <p>What about the programming language Scala?</p>
 <pre class="r"><code>normalized_prob %&gt;% 
     filter(word1 == &quot;scala&quot;) %&gt;%
     arrange(-p_together)</code></pre>
-<pre><code>## # A tibble: 445 x 7
+<pre><code>## # A tibble: 453 x 7
 ##    word1        word2     n            p           p1           p2 p_together
 ##    &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-##  1 scala        scala  9159 6.508478e-06 5.449568e-05 5.449568e-05 2191.56919
-##  2 scala      odersky    47 3.339867e-08 5.449568e-05 1.103614e-06  555.32856
-##  3 scala         akka    74 5.258514e-08 5.449568e-05 3.006396e-06  320.96285
-##  4 scala          sbt    31 2.202891e-08 5.449568e-05 1.446115e-06  279.52988
-##  5 scala       groovy    88 6.253369e-08 5.449568e-05 5.594180e-06  205.12353
-##  6 scala           mu    23 1.634403e-08 5.449568e-05 1.826671e-06  164.18624
-##  7 scala       kotlin    92 6.537613e-08 5.449568e-05 7.382795e-06  162.49359
-##  8 scala      clojure   472 3.354080e-07 5.449568e-05 5.719764e-05  107.60518
-##  9 scala constructors    23 1.634403e-08 5.449568e-05 2.816118e-06  106.49918
-## 10 scala    idiomatic    54 3.837294e-08 5.449568e-05 7.573073e-06   92.98028
-## # ... with 435 more rows</code></pre>
+##  1 scala        scala  9418 6.458850e-06 5.394592e-05 5.394592e-05 2219.41246
+##  2 scala      odersky    54 3.703312e-08 5.394592e-05 1.216825e-06  564.16154
+##  3 scala          sbt    36 2.468874e-08 5.394592e-05 1.401193e-06  326.61984
+##  4 scala         akka    74 5.074908e-08 5.394592e-05 2.913006e-06  322.94479
+##  5 scala       groovy    88 6.035026e-08 5.394592e-05 5.494150e-06  203.61983
+##  6 scala           mu    23 1.577336e-08 5.394592e-05 1.769928e-06  165.20008
+##  7 scala       kotlin    88 6.035026e-08 5.394592e-05 7.448445e-06  150.19482
+##  8 scala constructors    23 1.577336e-08 5.394592e-05 2.728638e-06  107.15681
+##  9 scala      clojure   475 3.257543e-07 5.394592e-05 5.678518e-05  106.33997
+## 10 scala    idiomatic    53 3.634732e-08 5.394592e-05 7.337825e-06   91.82194
+## # ... with 443 more rows</code></pre>
 <p>Looks good!</p>
 </div>
 <div id="cast-to-a-sparse-matrix" class="section level2">
@@ -198,36 +199,36 @@ search_synonyms &lt;- function(word_vectors, selected_vector) {
 
 facebook &lt;- search_synonyms(word_vectors, word_vectors[&quot;facebook&quot;,])
 facebook</code></pre>
-<pre><code>## # A tibble: 69,411 x 2
+<pre><code>## # A tibble: 68,664 x 2
 ##        token similarity
 ##        &lt;chr&gt;      &lt;dbl&gt;
-##  1  facebook 0.07732632
-##  2   twitter 0.05418014
-##  3    google 0.05011162
-##  4    social 0.04259758
-##  5        fb 0.03549460
-##  6   account 0.03347402
-##  7 instagram 0.02990053
-##  8    photos 0.02680315
-##  9     users 0.02601248
-## 10   friends 0.02547189
-## # ... with 69,401 more rows</code></pre>
+##  1  facebook 0.07622816
+##  2   twitter 0.05477529
+##  3    google 0.04833987
+##  4    social 0.04367801
+##  5        fb 0.03597795
+##  6   account 0.03304327
+##  7 instagram 0.02955428
+##  8     users 0.02581671
+##  9    photos 0.02502522
+## 10   friends 0.02412458
+## # ... with 68,654 more rows</code></pre>
 <pre class="r"><code>haskell &lt;- search_synonyms(word_vectors, word_vectors[&quot;haskell&quot;,])
 haskell</code></pre>
-<pre><code>## # A tibble: 69,411 x 2
+<pre><code>## # A tibble: 68,664 x 2
 ##          token similarity
 ##          &lt;chr&gt;      &lt;dbl&gt;
-##  1     haskell 0.03949794
-##  2        lisp 0.03634116
-##  3   languages 0.03591368
-##  4    language 0.03128933
-##  5  functional 0.02969273
-##  6 programming 0.02685119
-##  7     clojure 0.02609575
-##  8       scala 0.02604054
-##  9      python 0.02541462
-## 10      erlang 0.02382765
-## # ... with 69,401 more rows</code></pre>
+##  1     haskell 0.04100067
+##  2        lisp 0.03796378
+##  3   languages 0.03710574
+##  4    language 0.03176253
+##  5  functional 0.03022514
+##  6 programming 0.02743172
+##  7       scala 0.02667198
+##  8     clojure 0.02652761
+##  9      python 0.02462822
+## 10      erlang 0.02452040
+## # ... with 68,654 more rows</code></pre>
 <p>That’s… pretty darn amazing. Let’s visualize the most similar words vector to Facebook and Haskell from this dataset of Hacker News posts.</p>
 <pre class="r"><code>facebook %&gt;%
     mutate(selected = &quot;facebook&quot;) %&gt;%
@@ -250,56 +251,56 @@ haskell</code></pre>
 <p>If the iPhone is an important product associated with Apple, as discussed on Hacker News, what is an important product associated with Microsoft?</p>
 <pre class="r"><code>mystery_product &lt;- word_vectors[&quot;iphone&quot;,] - word_vectors[&quot;apple&quot;,] + word_vectors[&quot;microsoft&quot;,]
 search_synonyms(word_vectors, mystery_product)</code></pre>
-<pre><code>## # A tibble: 69,411 x 2
+<pre><code>## # A tibble: 68,664 x 2
 ##        token similarity
 ##        &lt;chr&gt;      &lt;dbl&gt;
-##  1   windows 0.03847298
-##  2     phone 0.02785154
-##  3    iphone 0.02642861
-##  4    mobile 0.02564263
-##  5   android 0.02475795
-##  6       ios 0.02233122
-##  7 microsoft 0.02095453
-##  8         7 0.02093067
-##  9         t 0.02085600
-## 10         8 0.02061549
-## # ... with 69,401 more rows</code></pre>
+##  1   windows 0.03861497
+##  2     phone 0.02818951
+##  3    iphone 0.02444977
+##  4    mobile 0.02427238
+##  5   android 0.02321326
+##  6 microsoft 0.02233597
+##  7       ios 0.02138345
+##  8    office 0.02000720
+##  9         7 0.01997405
+## 10         8 0.01970687
+## # ... with 68,654 more rows</code></pre>
 <p>We even see some mobile phone and Android terms in this list, below Windows.</p>
 <p>What about an important product associated with Google?</p>
 <pre class="r"><code>mystery_product &lt;- word_vectors[&quot;iphone&quot;,] - word_vectors[&quot;apple&quot;,] + word_vectors[&quot;google&quot;,]
 search_synonyms(word_vectors, mystery_product)</code></pre>
-<pre><code>## # A tibble: 69,411 x 2
+<pre><code>## # A tibble: 68,664 x 2
 ##       token similarity
 ##       &lt;chr&gt;      &lt;dbl&gt;
-##  1   google 0.10097056
-##  2   search 0.06054602
-##  3      app 0.04070347
-##  4    phone 0.03854913
-##  5   engine 0.03560017
-##  6 facebook 0.03447097
-##  7  android 0.03273318
-##  8   chrome 0.03020063
-##  9   iphone 0.02991398
-## 10    gmail 0.02895055
-## # ... with 69,401 more rows</code></pre>
-<p>Google itself is at the top of the list, which is something that often happens to me when I try this word vector arithmetic no matter how I train them (usually one of the positive vectors in the “equation”). Does anyone know what that means? Anyway, “search”, “app”, “phone” and “engine” are next on the list.</p>
+##  1   google 0.10194467
+##  2   search 0.05937512
+##  3    phone 0.03947618
+##  4      app 0.03716764
+##  5   engine 0.03590006
+##  6 facebook 0.03513982
+##  7  android 0.03289141
+##  8        q 0.02998453
+##  9    gmail 0.02980005
+## 10    using 0.02944208
+## # ... with 68,654 more rows</code></pre>
+<p>Google itself is at the top of the list, which is something that often happens to me when I try this word vector arithmetic no matter how I train them (usually one of the positive vectors in the “equation”). Does anyone know what that means? Anyway, “search”, is next on the list.</p>
 <pre class="r"><code>mystery_product &lt;- word_vectors[&quot;iphone&quot;,] - word_vectors[&quot;apple&quot;,] + word_vectors[&quot;amazon&quot;,]
 search_synonyms(word_vectors, mystery_product)</code></pre>
-<pre><code>## # A tibble: 69,411 x 2
+<pre><code>## # A tibble: 68,664 x 2
 ##      token similarity
 ##      &lt;chr&gt;      &lt;dbl&gt;
-##  1  amazon 0.04648808
-##  2     aws 0.04216195
-##  3      s3 0.03398973
-##  4   cloud 0.03201470
-##  5     ec2 0.03157737
-##  6    book 0.02970601
-##  7  iphone 0.02736457
-##  8   books 0.02597030
-##  9 storage 0.02410764
-## 10     app 0.02395586
-## # ... with 69,401 more rows</code></pre>
-<p>For Amazon, we get AWS, S3, cloud, and EC2. Nice!</p>
+##  1  amazon 0.04757609
+##  2     aws 0.04389115
+##  3      s3 0.03356846
+##  4    book 0.03273032
+##  5     ec2 0.03151250
+##  6   cloud 0.03083856
+##  7   books 0.03008677
+##  8  iphone 0.02749843
+##  9 storage 0.02549876
+## 10  kindle 0.02505824
+## # ... with 68,654 more rows</code></pre>
+<p>For Amazon, we get AWS, S3, and EC2, as well as book. Nice!</p>
 </div>
 <div id="the-end" class="section level2">
 <h2>The End</h2>
