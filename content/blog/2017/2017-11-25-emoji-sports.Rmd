@@ -33,16 +33,16 @@ emoji_sports <- function(n) {
 This function uses the `jis` dataset from the emo package, sample a few of them, and then prints them out in a R Markdown document, which is what I use to blog.  Let's make some!
 
 
-#### `r emoji_sports(3)`
+## `r emoji_sports(3)`
 
 
 Excellent. This new sport is a head injury formalwear competition; it's judged very strictly.
 
-#### `r emoji_sports(3)`
+## `r emoji_sports(3)`
 
 Here we see the new sport of being thankful for Senegalese culture.
 
-#### `r emoji_sports(3)`
+## `r emoji_sports(3)`
 
 
 This new sport is a scary one, where stars are awarded to the baby chicks with the best knife-throwing skills.
@@ -51,7 +51,7 @@ This new sport is a scary one, where stars are awarded to the baby chicks with t
 Some of the sports in the xkcd comic have only two characters, and we can make those as well.
 
 
-#### `r emoji_sports(2)`
+## `r emoji_sports(2)`
 
 Ah yes, we'll soon all be enjoying the sport of running long distances for no understandable reason. I think some of you probably *already* enjoy this sport.
 
