@@ -12,7 +12,7 @@ tags: [rstats]
 <img src="https://imgs.xkcd.com/comics/emoji_sports.png" />
 
 </div>
-<p>I sat there, enjoying the thought of these new sports like horse hole and multiplayer avocado and I thought, “I can make more of these in just the barest handful of lines of code”. This is largely thanks to the emo package by Hadley Wickham, which if you haven’t installed and started using yet, WHY NOT??? 😱 ser</p>
+<p>I sat there, enjoying the thought of these new sports like horse hole and multiplayer avocado and I thought, “I can make more of these in just the barest handful of lines of code”. This is largely thanks to the emo package by Hadley Wickham, which if you haven’t installed and started using yet, WHY NOT??? 😱</p>
 <pre class="r"><code>emoji_sports &lt;- function(n) {
     data &lt;- dplyr::sample_n(emo::jis, n)
     emo::ji_glue(paste(dplyr::pull(data, emoji),
