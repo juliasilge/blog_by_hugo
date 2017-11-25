@@ -20,7 +20,7 @@ I love emoji `r emo::ji("heart")` and I love xkcd, so [this recent comic](https:
 
 ![](https://imgs.xkcd.com/comics/emoji_sports.png )
 
-I sat there, enjoying the thought of these new sports like horse hole and multiplayer avocado and I thought, "I can make more of these in just the barest handful of lines of code". This is largely thanks to the emo package by Hadley Wickham, which if you haven't installed and started using yet, WHY NOT??? `r emo::ji("scream")`
+I sat there, enjoying the thought of these new sports like horse hole and multiplayer avocado and I thought, "I can make more of these in just the barest handful of lines of code". This is largely thanks to the [emo](https://github.com/hadley/emo) package by Hadley Wickham, which if you haven't installed and started using yet, WHY NOT??? `r emo::ji("scream")`
 
 ```{r}
 emoji_sports <- function(n) {
