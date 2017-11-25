@@ -56,5 +56,15 @@ Some of the sports in the xkcd comic have only two characters, and we can make t
 Ah yes, we'll soon all be enjoying the sport of running long distances for no understandable reason. I think some of you probably *already* enjoy this sport.
 
 
+Or we can generate lots with purrr.
+
+```{r}
+library(purrr)
+
+map(sample(c(2,3), 10, replace = TRUE),
+    emoji_sports)
+```
+
+Some of those emojis aren't printing quite as well, but there are definitely some winners (timed spiderweb fingerknitting and the like).
 
 I could keep going all day, but I'll wrap it up here. `r emo::ji("wave")` Let me know if you have any questions!

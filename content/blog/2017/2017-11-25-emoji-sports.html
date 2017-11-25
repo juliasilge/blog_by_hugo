@@ -35,5 +35,40 @@ tags: [rstats]
 <div id="section-3" class="section level4">
 <h4>🤷🏻🏃🏻‍♂️</h4>
 <p>Ah yes, we’ll soon all be enjoying the sport of running long distances for no understandable reason. I think some of you probably <em>already</em> enjoy this sport.</p>
+<p>Or we can generate lots with purrr.</p>
+<pre class="r"><code>library(purrr)
+
+map(sample(c(2,3), 10, replace = TRUE),
+    emoji_sports)</code></pre>
+<pre><code>## [[1]]
+## 🕝️👷🏼‍♀️ 
+## 
+## [[2]]
+## 🚕🧘🏿‍♀️🧕🏾 
+## 
+## [[3]]
+## ⚾🤞🏾 
+## 
+## [[4]]
+## 👂🏿🔈️🤷🏻‍♂️ 
+## 
+## [[5]]
+## 👳🏿☃✡ 
+## 
+## [[6]]
+## 🕸️🕟️🤚🏻 
+## 
+## [[7]]
+## 🇧🇷🛃 
+## 
+## [[8]]
+## 🧝🏾‍♂️🛌🏽🦅 
+## 
+## [[9]]
+## ☂↘️✋ 
+## 
+## [[10]]
+## 🎖️💂🏿‍♂️</code></pre>
+<p>Some of those emojis aren’t printing quite as well, but there are definitely some winners (timed spiderweb fingerknitting and the like).</p>
 <p>I could keep going all day, but I’ll wrap it up here. 👋 Let me know if you have any questions!</p>
 </div>
