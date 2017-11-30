@@ -29,7 +29,7 @@ blog = "/blog/:slug/"
 [params]
 dateform = "Jan 2, 2006"
 dateformfull = "Mon Jan 2 2006 15:04:05 MST"
-description = "Example blog"
+description = "A blog by Julia Silge"
 copyright = "Copyright © 2017 Julia Silge"
 logofile = "_images/avatar_green.png"
 faviconfile = "_images/favicon.ico"
