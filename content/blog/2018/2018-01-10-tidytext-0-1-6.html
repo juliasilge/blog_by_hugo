@@ -159,7 +159,7 @@ austen_bigrams %&gt;%
     ungroup() %&gt;%
     mutate(word2 = reorder(paste(word2, word1, sep = &quot;__&quot;), contribution)) %&gt;%
     ggplot(aes(word2, contribution, fill = contribution &gt; 0)) +
-    geom_col(show.legend = FALSE) +
+    geom_col(alpha = 0.8, show.legend = FALSE) +
     facet_wrap(~ word1, scales = &quot;free&quot;, nrow = 3) +
     scale_x_discrete(labels = function(x) gsub(&quot;__.+$&quot;, &quot;&quot;, x)) +
     coord_flip() +
