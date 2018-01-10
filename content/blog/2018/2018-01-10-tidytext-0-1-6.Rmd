@@ -50,7 +50,7 @@ tidy_rilke
 ```
 
 
-```{r, fig.width=8, fig.height=8}
+```{r, fig.width=8.5, fig.height=8.5}
 tidy_rilke %>%
     group_by(title) %>%
     top_n(12) %>%
