@@ -122,7 +122,7 @@ tidy_rilke</code></pre>
     scale_y_continuous(expand = c(0,0)) +
     scale_x_discrete(labels = function(x) gsub(&quot;__.+$&quot;, &quot;&quot;, x)) +
     labs(x = NULL, y = &quot;Number of uses in each book&quot;,
-         title = &quot;Word use in the poetry of Rainer Maria Wilke&quot;,
+         title = &quot;Word use in the poetry of Rainer Maria Rilke&quot;,
          subtitle = &quot;The most common words after stopword removal&quot;)</code></pre>
 <p><img src="/blog/2018/2018-01-10-tidytext-0-1-6_files/figure-html/unnamed-chunk-3-1.png" width="1530" /></p>
 <p>The first three works here are poetry (<em>The Book of Hours</em>, <em>The Book of Images</em>, and <em>New Poems</em>) while the last is a book of prose (<em>The Notebooks of Malte Laurids Brigge</em>). We can see the different themes and word use here, even just by counting up word frequencies. Now, if I actually spoke German fluently, I know this would mean more to me, but even to my English-speaking eyes, we can see meaningful trends. These are all still quite common words (the Snowball stopword lists are not terribly large) but some of these works are more religious (God, life) and some more focused on narrating events, and so forth.</p>
