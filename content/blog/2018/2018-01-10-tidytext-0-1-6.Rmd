@@ -73,7 +73,7 @@ tidy_rilke %>%
     scale_y_continuous(expand = c(0,0)) +
     scale_x_discrete(labels = function(x) gsub("__.+$", "", x)) +
     labs(x = NULL, y = "Number of uses in each book",
-         title = "Word use in the poetry of Rainer Maria Wilke",
+         title = "Word use in the poetry of Rainer Maria Rilke",
          subtitle = "The most common words after stopword removal")
 ```
 
