@@ -13,6 +13,7 @@ title = "Julia Silge"
 theme = "cocoa-eh-hugo-theme"
 builddrafts = true
 canonifyurls = true
+enableEmoji = true
 contentdir = "content"
 layoutdir = "layouts"
 publishdir = "public"
