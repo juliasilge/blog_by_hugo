@@ -12,8 +12,7 @@ Almost six months ago (!) I wrote a [blog post about the NEISS data set](http://
 
 Before we get started, it is probably good to be reminded that this data set doesn't necessarily include everything you might think it does. After I published that first post, [Henrik Bengtsson](https://twitter.com/henrikbengtsson) asked about hang gliding injuries reported in this data set. There appeared to be none, and I was befuddled until [Alison Hill](https://twitter.com/apreshill) pointed out that the NEISS coding manual says that they don't include such injuries.
 
-<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr"><a href="https://twitter.com/juliasilge">@juliasilge</a> <a href="https://twitter.com/henrikbengtsson">@henrikbengtsson</a> yup from here <a href="https://t.co/yrDtL27iVx">https://t.co/yrDtL27iVx</a> <a href="https://t.co/5Dj17ciLQl">pic.twitter.com/5Dj17ciLQl</a></p>&mdash; Alison Hill (@apreshill) <a href="https://twitter.com/apreshill/status/700826041116291073">February 19, 2016</a></blockquote>
-<script async src="http://platform.twitter.com/widgets.js" charset="utf-8"></script>
+{{< tweet 700826041116291073 >}}
 
 So there you go.
 
