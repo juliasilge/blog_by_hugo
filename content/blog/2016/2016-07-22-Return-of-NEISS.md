@@ -149,9 +149,9 @@ So that means boxes mainly, apparently.
 
 ## What Should *YOU* Worry About?
 
-Those are the most common injuries for my demographic, but what about the rest of everyone else? I have made a Shiny app where you can explore the NEISS data and see how the most common injuries change with age, sex, and race/ethnicity. Check out [the app itself](https://datassist.shinyapps.io/neiss_demographics/), and the [code to make the app on GitHub](https://github.com/juliasilge/neissapp).
+Those are the most common injuries for my demographic, but what about the rest of everyone else? I have made a Shiny app where you can explore the NEISS data and see how the most common injuries change with age, sex, and race/ethnicity. Check out [the app itself](https://juliasilge.shinyapps.io/neiss_demographics/), and the [code to make the app on GitHub](https://github.com/juliasilge/neissapp).
 
-[![center](/figs/2016-07-22-Return-of-NEISS/NEISSshiny.png)](https://datassist.shinyapps.io/neiss_demographics/)
+[![center](/figs/2016-07-22-Return-of-NEISS/NEISSshiny.png)](https://juliasilge.shinyapps.io/neiss_demographics/)
 
 Race/ethnicity and also sex/gender can be fraught categories for people whose identities are not easily categorizable; I have chosen to just use these demographics as reported. It appears that an age is reported for every injury in the data set (all 2.3 million of them), but there is missing information for sex and race/ethnicity.
 
