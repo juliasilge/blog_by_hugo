@@ -6,3 +6,4 @@
 /public/*
 /blogdown/*
 *_cache*
+.httr-oauth
