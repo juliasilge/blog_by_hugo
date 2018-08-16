@@ -2,20 +2,16 @@
 title: "resume"
 ---
 
-## Professional Profile
-
-I am a PhD data scientist who loves to answer interesting questions with sophisticated analytical tools and techniques. I am a creative problem solver who knows how to ask insightful questions and how to learn quickly. I understand how to think critically, and I have proven writing and speaking abilities. Analyzing and interpreting complex datasets makes me happy, and I am known for being flexible, resourceful, and for achieving goals while maintaining a positive outlook. I work effectively in both independent and collaborative environments, and excel at communicating with diverse collaborators.
-
-## Core Compentencies
+## Core Competencies
 
 #### Communication
-Articulate, insightful, and able to communicate technical procedures and results to expert and non-expert collaborators. Capable of turning a complex analysis into a compelling story so that decision makers can move forward with appropriate strategy.
+Articulate, insightful, and able to communicate technical procedures and results to expert and non-expert collaborators. Capable of turning a complex analysis into a compelling story so that decision makers can move forward with appropriate strategy. Flexible, creative, resourceful, and effective in both independent and collaborative environments.
 
 #### Analytical Thinking
-Passionate about finding insights in data. Experienced in working with large datasets and using advanced data analysis to answer complex questions with accuracy. Proficient in mastering new knowledge and techniques quickly. Able to understand and articulate what questions can and can’t be answered given certain data.
+Focused on gaining interpretable insights from data. Experienced in working with large datasets and using advanced data analysis to answer complex questions with accuracy, applying sophisticated tools and techniques. Proficient in mastering new knowledge and techniques quickly. Able to understand and articulate what questions can and can’t be answered given certain data.
 
 #### Modeling
-Experienced in using statistical techniques and numerical modeling with real-world data. Able to apply sophisticated mathematics to understanding data. Familiar with machine learning, including supervised and unsupervised learning techniques, and how to build predictive models.
+Experienced in using statistical techniques and modeling with real-world, messy data. Able to apply sophisticated mathematics to understanding data. Proficient in the modern machine learning toolkit, including supervised and unsupervised learning techniques, and practically how to build predictive models.
 
 ## Skills and Tools
 
