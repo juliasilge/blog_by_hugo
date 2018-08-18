@@ -55,9 +55,8 @@ tag_percents</code></pre>
 <pre class="r"><code>sparse_tag_matrix &lt;- tag_percents %&gt;%
     tidytext::cast_sparse(User, Tag, Value)</code></pre>
 <p>Several of the implementations for PCA in R are not sparse matrix aware, such as <code>prcomp()</code>; the first thing it will do is coerce the BEAUTIFUL SPARSE MATRIX you just made into a regular matrix, and then you will be sitting there for one zillion years with no RAM left. (That is a precise and accurate estimate from my benchmarking, obviously.) One option that <em>does</em> take advantage of sparse matrices is the <a href="https://bwlewis.github.io/irlba/">irlba</a> package.</p>
-<p>Also, don’t forget to <code>scale()</code> your matrix first; <a href="https://stats.stackexchange.com/questions/53/pca-on-correlation-or-covariance">it’s very important for PCA</a>.</p>
-<pre class="r"><code>tags_scaled &lt;- scale(sparse_tag_matrix)
-tags_pca &lt;- irlba::prcomp_irlba(tags_scaled, n = 64)</code></pre>
+<p>Also, don’t forget to use <code>scale. = TRUE</code> for this matrix; <a href="https://stats.stackexchange.com/questions/53/pca-on-correlation-or-covariance">scaling is very important for PCA</a>.</p>
+<pre class="r"><code>tags_pca &lt;- irlba::prcomp_irlba(sparse_tag_matrix, n = 64, scale. = TRUE)</code></pre>
 <p>The value for <code>n</code> going into <code>prcomp_irlba()</code> is how many components we want the function to fit.</p>
 <p>What is this thing we have created?</p>
 <pre class="r"><code>class(tags_pca)</code></pre>
