@@ -48,7 +48,7 @@ hacker_news_raw <- query_exec(sql, project = project, max_pages = Inf)
 ```
 
 
-After we have the text downloaded, let's clean the text and make a data frame containing only the text, timestamp, plus an ID to identify each "document", i.e., post.
+After we have the text downloaded, let's clean the text and make a data frame containing only the text, plus an ID to identify each "document", i.e., post.
 
 ```{r hacker_news_text, dependson="hacker_news_raw"}
 hacker_news_text <- hacker_news_raw %>%

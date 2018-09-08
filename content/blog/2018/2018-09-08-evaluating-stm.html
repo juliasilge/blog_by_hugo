@@ -32,7 +32,7 @@ LIMIT
   100000&quot;
 
 hacker_news_raw &lt;- query_exec(sql, project = project, max_pages = Inf)</code></pre>
-<p>After we have the text downloaded, let’s clean the text and make a data frame containing only the text, timestamp, plus an ID to identify each “document”, i.e., post.</p>
+<p>After we have the text downloaded, let’s clean the text and make a data frame containing only the text, plus an ID to identify each “document”, i.e., post.</p>
 <pre class="r"><code>hacker_news_text &lt;- hacker_news_raw %&gt;%
   as_tibble() %&gt;%
   mutate(title = na_if(title, &quot;&quot;),
