@@ -84,7 +84,7 @@ hacker_news_sparse <- tidy_hacker_news %>%
 
 ## Train and evaluate topic models
 
-Now it's time to train some topic models! `r emo::ji("strong")` You can check out that [previous blog post on stm](https://juliasilge.com/blog/sherlock-holmes-stm/) for some details on how to get started, but in this post, we're going to go to the next level. We're not going to train just one topic model, but a whole group of them, with different numbers of topics, and then evaluate these models. In topic modeling, like with k-means clustering, we don't know ahead of time how many topics we should use, and research in this area says there is no "right" answer for the number of topics that is appropriate for any given corpus. Here, let's try a number of different values for $K$ (the number of topics) from 20 to 120. 
+Now it's time to train some topic models! `r emo::ji("strong")` You can check out that [previous blog post on stm](https://juliasilge.com/blog/sherlock-holmes-stm/) for some details on how to get started, but in this post, we're going to go to the next level. We're not going to train just one topic model, but a whole group of them, with different numbers of topics, and then evaluate these models. In topic modeling, like with k-means clustering, we don't know ahead of time how many topics we should use, and research in this area says there is no "right" answer for the number of topics that is appropriate for any given corpus. Here, let's try a number of different values for $K$ (the number of topics) from 20 to 100. 
 
 With 100,000 texts this modeling takes a while `r emo::ji("weary")` so I have used I have used the [furrr](https://github.com/DavisVaughan/furrr) package (and [future](https://github.com/HenrikBengtsson/future)) for parallel processing.
 
