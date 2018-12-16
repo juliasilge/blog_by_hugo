@@ -183,7 +183,7 @@ swow_forward %>%
                fill = logratio < 0)) +
     geom_col(alpha = 0.8, show.legend = FALSE) +
     coord_flip() +
-    labs(x = NULL, y  = "log odds ratio (Women/Men)",
+    labs(x = NULL, y  = "log odds ratio (US/UK)",
          title = "What words do Small World of Words' participants associate with love?",
          subtitle = "US participants associate love with hate\nUK participants feel more affectionate") 
 ```
