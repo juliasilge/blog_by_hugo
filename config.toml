@@ -33,7 +33,6 @@ dateformfull = "Mon Jan 2 2006 15:04:05 MST"
 description = "A blog by Julia Silge"
 copyright = "Copyright © 2019 Julia Silge"
 logofile = "_images/illustrated_blog_avatar.png"
-social_banner = "_images/illustrated_blog_avatar.png"
 faviconfile = "_images/favicon.ico"
 highlightjs = true
 # options for highlight.js (version, additional languages, and theme)
@@ -47,6 +46,6 @@ github = "juliasilge"
 #email = "you@example.com"
 linkedin = "juliasilge"
 twitter = "juliasilge"
-social_banner = "img/banner.png"
+social_banner = "_images/illustrated_blog_avatar.png"
 posts_navigation = true
 
