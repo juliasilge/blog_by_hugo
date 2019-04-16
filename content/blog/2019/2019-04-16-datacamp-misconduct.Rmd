@@ -1,6 +1,6 @@
 ---
 title: "Writing a letter to DataCamp"
-date: 2019-04-17
+date: 2019-04-16
 slug: "datacamp-misconduct"
 tags: [rstats]
 description: "Don't take my DataCamp courses"
