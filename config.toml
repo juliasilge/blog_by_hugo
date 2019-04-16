@@ -31,8 +31,9 @@ blog = "/blog/:slug/"
 dateform = "Jan 2, 2006"
 dateformfull = "Mon Jan 2 2006 15:04:05 MST"
 description = "A blog by Julia Silge"
-copyright = "Copyright © 2018 Julia Silge"
+copyright = "Copyright © 2019 Julia Silge"
 logofile = "_images/illustrated_blog_avatar.png"
+social_banner = "_images/illustrated_blog_avatar.png"
 faviconfile = "_images/favicon.ico"
 highlightjs = true
 # options for highlight.js (version, additional languages, and theme)
