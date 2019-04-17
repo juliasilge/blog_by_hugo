@@ -12,6 +12,8 @@ knitr::opts_chunk$set(cache = TRUE, warning = FALSE, message = FALSE,
 options(width=80, dplyr.width = 150)
 ```
 
+## NOTE: Read [more here](https://juliasilge.com/blog/datacamp-misconduct/) about why I no longer recommend taking my courses at DataCamp.
+
 I've been developing a course at [DataCamp](https://www.datacamp.com/) over the past several months, and I am happy to announce that it is now launched!
 
 ![](/figs/2017-08-24-sentiment-datacamp/screenshot.png)
