@@ -21,7 +21,7 @@ Often in data analysis, we want to measure how the usage or frequency of some **
 
 ## Weighty business
 
-Instead, we can use a **weighted log odds**, which tidylo provides an implementation for using tidy data principles. In particular, this package uses the method outlined in [Monroe, Colaresi, and Quinn (2017)](https://doi.org/10.1093/pan/mpn018) to weight the log odds ratio by an uninformative Dirichlet prior.
+Instead, we can use a **weighted log odds**, which tidylo provides an implementation for using tidy data principles. In particular, this package uses the method outlined in [Monroe, Colaresi, and Quinn (2008)](https://doi.org/10.1093/pan/mpn018) to weight the log odds ratio by an uninformative Dirichlet prior.
 
 I started developing this package with [Tyler Schnoebelen](https://www.letslanguage.org/) after he wrote a post which I *highly* recommend that you go read, titled ["I dare say you will never use tf-idf again"](https://medium.com/@TSchnoebelen/i-dare-say-you-will-never-use-tf-idf-again-4918408b2310).
 
