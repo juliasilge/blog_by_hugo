@@ -10,4 +10,4 @@ I live in Salt Lake City, UT, with my husband, three kids, and two cats.
 
 This blog is built with [blogdown](https://github.com/rstudio/blogdown) and [Hugo](https://gohugo.io/), and deployed using [Netlify](https://www.netlify.com/). My blog posts are released under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/). My avatar illustration is by [Emily Griffin](https://www.daybrighten.com/).
 
-[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/U7U4WG9B)
+If my blog has helped you, [you can buy me a coffee on Ko-fi!](https://ko-fi.com/U7U4WG9B) 
