@@ -7,3 +7,5 @@
 /blogdown/*
 *_cache*
 .httr-oauth
+LondonStageFull.json
+LondonStageJSON.zip
