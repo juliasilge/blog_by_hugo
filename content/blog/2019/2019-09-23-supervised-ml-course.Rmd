@@ -45,4 +45,4 @@ One benefit of having more influence on the content of the course now is that I 
 
 ## Try it out
 
-If you want to practice your ML skills, give the course a go. `r emo::ji("rocket")` Contributions and comments on how to improve this course are welcome! Please [file an issue](https://github.com/juliasilge/supervised-ML-case-studies-course/issues) or submit a pull request if you find something that could be fixed or improved.
+If you want to practice your ML skills, [give the course a go](https://supervised-ml-course.netlify.com/). `r emo::ji("rocket")` Contributions and comments on how to improve this course are welcome! Please [file an issue](https://github.com/juliasilge/supervised-ML-case-studies-course/issues) or submit a pull request if you find something that could be fixed or improved.
