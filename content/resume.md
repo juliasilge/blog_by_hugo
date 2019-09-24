@@ -28,6 +28,11 @@ Experienced in using statistical techniques and modeling with real-world, messy 
 * Collaborate with data engineers, web developers, and product managers to implement models in production
 * Communicate the results of analyses, modeling, and tests through data visualization, interactive apps, and writing
 
+#### Technical Advisory Committee Member, Bureau of Labor Statistics
+2019-present
+
+* Advise the Commissioner of Labor Statistics on statistical methodology and other technical matters related to the collection and analysis of BLS data
+
 #### Data Scientist, Datassist
 2016
 
