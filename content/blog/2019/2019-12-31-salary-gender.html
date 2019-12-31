@@ -447,9 +447,10 @@ glance(simple1) %&gt;%
 </table>
 <p>With the diverse set of developer types we have in this dataset, this modeling question is probably a better fit for something like a linear mixed effects model, rather than the basic <code>lm()</code> we started with. Some of my favorite resources for getting started with linear mixed effects models are <a href="https://pagepiccinini.com/r-course/lesson-6-part-1-linear-mixed-effects-models/">Page Piccinini’s tutorials</a> and <a href="https://stats.stackexchange.com/questions/13166/rs-lmer-cheat-sheet">this cheat sheet</a> on Cross Validated. In this case, we want developer type to be a random effect, while education, open source contribution, years of experience, dependents, and gender will be fixed effects (explanatory variables).</p>
 <pre class="r"><code>library(lme4)
-lmer1 &lt;- lmer(ConvertedComp ~ (1 | DevType) + EdLevel +
-  OpenSourcer + YearsCodePro + Dependents + Gender,
-data = modeling_df
+lmer1 &lt;- lmer(
+  ConvertedComp ~ (1 | DevType) + EdLevel +
+    OpenSourcer + YearsCodePro + Dependents + Gender,
+  data = modeling_df
 )
 
 summary(lmer1)</code></pre>
@@ -493,9 +494,10 @@ summary(lmer1)</code></pre>
 ## GenderWoman -0.055 -0.016 -0.050  0.043  0.098  0.056  0.069</code></pre>
 <p>Similar to before we see that more education and more open source contributions are associated with higher salary, and that each additional year of experience increases salary while women earn less. Having dependents does not affect salary.</p>
 <p>You may be wondering how robust this result is to the threshold on years of experience for respondents to be included in the model. What happens if we model only people who have 15 years of experience or less? Or 5 years of experience or less? There are some modest changes to the fixed effects, but the main fixed effect that changes in these cases is gender; there are strong signals that years of experience and gender interact when effecting salary. We can build such an interaction term into a mixed effects model in a similar way that we did before.</p>
-<pre class="r"><code>lmer2 &lt;- lmer(ConvertedComp ~ (1 | DevType) + EdLevel + OpenSourcer +
-  YearsCodePro * Gender + Dependents * Gender,
-data = modeling_df
+<pre class="r"><code>lmer2 &lt;- lmer(
+  ConvertedComp ~ (1 | DevType) + EdLevel + OpenSourcer +
+    YearsCodePro * Gender + Dependents * Gender,
+  data = modeling_df
 )
 
 summary(lmer2)</code></pre>
@@ -587,9 +589,10 @@ glance(lmer1) %&gt;%
 <pre class="r"><code>library(brms)
 options(mc.cores = parallel::detectCores())
 
-fit_bayes1 &lt;- brm(ConvertedComp ~ (1 | DevType) + EdLevel + OpenSourcer +
-  YearsCodePro + Dependents + Gender,
-data = modeling_df
+fit_bayes1 &lt;- brm(
+  ConvertedComp ~ (1 | DevType) + EdLevel + OpenSourcer +
+    YearsCodePro + Dependents + Gender,
+  data = modeling_df
 )
 
 summary(fit_bayes1)</code></pre>
@@ -603,39 +606,40 @@ summary(fit_bayes1)</code></pre>
 ## Group-Level Effects: 
 ## ~DevType (Number of levels: 15) 
 ##               Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## sd(Intercept)     0.08      0.02     0.06     0.12 1.00      646     1085
+## sd(Intercept)     0.08      0.02     0.06     0.13 1.00      626     1056
 ## 
 ## Population-Level Effects: 
 ##                        Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS
-## Intercept                 11.12      0.02    11.07    11.16 1.00      611
-## EdLevelBachelorsdegree     0.13      0.01     0.12     0.14 1.00     3121
-## EdLevelGraduatedegree      0.24      0.01     0.23     0.26 1.00     2940
-## OpenSourcerSometimes       0.06      0.01     0.04     0.07 1.00     3477
-## OpenSourcerOften           0.10      0.01     0.09     0.12 1.00     3603
-## YearsCodePro               0.02      0.00     0.02     0.02 1.00     4241
-## DependentsYes              0.00      0.01    -0.01     0.01 1.00     4400
-## GenderWoman               -0.03      0.01    -0.04    -0.01 1.00     3693
+## Intercept                 11.12      0.02    11.07    11.16 1.01      646
+## EdLevelBachelorsdegree     0.13      0.01     0.12     0.14 1.00     3197
+## EdLevelGraduatedegree      0.24      0.01     0.23     0.26 1.00     3201
+## OpenSourcerSometimes       0.06      0.01     0.05     0.07 1.00     3341
+## OpenSourcerOften           0.10      0.01     0.09     0.12 1.00     3616
+## YearsCodePro               0.02      0.00     0.02     0.02 1.00     3986
+## DependentsYes              0.00      0.01    -0.01     0.01 1.00     4262
+## GenderWoman               -0.03      0.01    -0.04    -0.01 1.00     3660
 ##                        Tail_ESS
-## Intercept                  1030
-## EdLevelBachelorsdegree     2858
-## EdLevelGraduatedegree      2838
-## OpenSourcerSometimes       2646
-## OpenSourcerOften           2840
-## YearsCodePro               3082
-## DependentsYes              3127
-## GenderWoman                2312
+## Intercept                  1010
+## EdLevelBachelorsdegree     3091
+## EdLevelGraduatedegree      2622
+## OpenSourcerSometimes       2901
+## OpenSourcerOften           2907
+## YearsCodePro               2990
+## DependentsYes              2414
+## GenderWoman                2826
 ## 
 ## Family Specific Parameters: 
 ##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## sigma     0.34      0.00     0.34     0.35 1.00     3920     2485
+## sigma     0.34      0.00     0.34     0.35 1.00     4099     2875
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
 ## is a crude measure of effective sample size, and Rhat is the potential 
 ## scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 <p>Second, let’s train a model with an interaction between years of experience and gender and an interaction between dependents and gender.</p>
-<pre class="r"><code>fit_bayes2 &lt;- brm(ConvertedComp ~ (1 | DevType) + EdLevel + OpenSourcer +
-  YearsCodePro * Gender + Dependents * Gender,
-data = modeling_df
+<pre class="r"><code>fit_bayes2 &lt;- brm(
+  ConvertedComp ~ (1 | DevType) + EdLevel + OpenSourcer +
+    YearsCodePro * Gender + Dependents * Gender,
+  data = modeling_df
 )
 
 summary(fit_bayes2)</code></pre>
@@ -649,35 +653,35 @@ summary(fit_bayes2)</code></pre>
 ## Group-Level Effects: 
 ## ~DevType (Number of levels: 15) 
 ##               Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## sd(Intercept)     0.08      0.02     0.06     0.13 1.01      649     1131
+## sd(Intercept)     0.08      0.02     0.06     0.13 1.00      761     1505
 ## 
 ## Population-Level Effects: 
 ##                           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS
-## Intercept                    11.11      0.02    11.06    11.15 1.00      748
-## EdLevelBachelorsdegree        0.13      0.01     0.12     0.14 1.00     4039
-## EdLevelGraduatedegree         0.24      0.01     0.23     0.26 1.00     3625
-## OpenSourcerSometimes          0.06      0.01     0.04     0.07 1.00     3998
-## OpenSourcerOften              0.10      0.01     0.09     0.11 1.00     3744
-## YearsCodePro                  0.02      0.00     0.02     0.03 1.00     4125
-## GenderWoman                   0.05      0.01     0.02     0.07 1.00     3410
-## DependentsYes                 0.00      0.01    -0.01     0.01 1.00     3982
-## YearsCodePro:GenderWoman     -0.01      0.00    -0.01    -0.01 1.00     3877
-## GenderWoman:DependentsYes    -0.06      0.02    -0.10    -0.02 1.00     3364
+## Intercept                    11.11      0.02    11.06    11.15 1.00      668
+## EdLevelBachelorsdegree        0.13      0.01     0.12     0.14 1.00     3815
+## EdLevelGraduatedegree         0.24      0.01     0.23     0.26 1.00     3670
+## OpenSourcerSometimes          0.06      0.01     0.04     0.07 1.00     3678
+## OpenSourcerOften              0.10      0.01     0.09     0.12 1.00     3678
+## YearsCodePro                  0.02      0.00     0.02     0.03 1.00     4133
+## GenderWoman                   0.05      0.01     0.02     0.07 1.00     3383
+## DependentsYes                 0.00      0.01    -0.01     0.01 1.00     4335
+## YearsCodePro:GenderWoman     -0.01      0.00    -0.01    -0.01 1.00     3897
+## GenderWoman:DependentsYes    -0.06      0.02    -0.10    -0.02 1.00     3560
 ##                           Tail_ESS
-## Intercept                     1111
-## EdLevelBachelorsdegree        3167
-## EdLevelGraduatedegree         3187
-## OpenSourcerSometimes          3056
-## OpenSourcerOften              2847
-## YearsCodePro                  2909
-## GenderWoman                   2901
-## DependentsYes                 2918
-## YearsCodePro:GenderWoman      3118
-## GenderWoman:DependentsYes     2790
+## Intercept                     1138
+## EdLevelBachelorsdegree        3080
+## EdLevelGraduatedegree         3141
+## OpenSourcerSometimes          3219
+## OpenSourcerOften              2971
+## YearsCodePro                  2957
+## GenderWoman                   2691
+## DependentsYes                 2722
+## YearsCodePro:GenderWoman      3242
+## GenderWoman:DependentsYes     2794
 ## 
 ## Family Specific Parameters: 
 ##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## sigma     0.34      0.00     0.34     0.35 1.00     4976     2526
+## sigma     0.34      0.00     0.34     0.35 1.00     4884     3304
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
 ## is a crude measure of effective sample size, and Rhat is the potential 
@@ -716,10 +720,11 @@ fit_bayes1 %&gt;%
     title = &quot;Modeling salary on the 2019 Stack Overflow Developer Survey&quot;,
     subtitle = &quot;For developers in the United States&quot;
   )</code></pre>
-<p><img src="/blog/2019/2019-12-31-salary-gender_files/figure-html/bayes_plot-1.png" width="2400" /></p>
+<p><img src="/blog/2019/2019-12-31-salary-gender_files/figure-html/bayes_plot-1.png" width="2550" /></p>
 <p>I find this style of visualization very informative and helpful. I am a big fan of the <a href="http://mjskay.github.io/tidybayes/">tidybayes</a> package!</p>
 <p>Without interaction terms, being a woman is associated with lower salary; the size of the effect is about the same as one year’s worth of salary increase. Also, having dependents does not affect salary. With an interaction term, women earn more at zero experience, but the interaction term between gender and experience is such that women earn about 2/3 as much for each additional year of experience compared to similar men. Women (but not men) earn less when they have dependents, to the tune of about two years’ worth of salary increases. We can understand this more quantitatively if we create confidence intervals for the model result.</p>
-<pre class="r"><code>tidyMCMC(fit_bayes2,
+<pre class="r"><code>tidyMCMC(
+  fit_bayes2,
   conf.int = TRUE, conf.level = 0.95,
   estimate.method = &quot;median&quot;, conf.method = &quot;HPDinterval&quot;
 ) %&gt;%
