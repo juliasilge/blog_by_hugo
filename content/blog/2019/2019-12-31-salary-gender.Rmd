@@ -238,7 +238,7 @@ simple2 <- lm(ConvertedComp ~ 0 + DevType +
 summary(simple2)
 ```
 
-If we try modeling an interaction term between gender and years of experience, we *no longer* see a decrease in salary for women overall (in fact, at zero years of experience women earn more) but instead, being a woman reduces the amount that each year of experience is worth. From this model, we would estimate that each additional year of experience is worth about 50% to 60% for a woman what it is for a man. I tried out similar interaction terms for gender plus education, etc, and they were clearly important like the gender/experience interaction.
+If we try modeling an interaction term between gender and years of experience, we *no longer* see a decrease in salary for women overall (in fact, at zero years of experience women earn more) but instead, being a woman reduces the amount that each year of experience is worth. From this model, we would estimate that each additional year of experience is worth about 50% to 60% for a woman what it is for a man. I tried out similar interaction terms for gender plus education, etc, and they were not clearly important like the gender/experience interaction.
 
 Is the gender/experience interaction really just measuring the impact of having children? Let's check out what happens with a gender/dependents interaction.
 
