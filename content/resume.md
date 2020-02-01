@@ -2,36 +2,26 @@
 title: "resume"
 ---
 
-## Core Competencies
-
-#### Communication
-Articulate, insightful, and able to communicate technical procedures and results to expert and non-expert collaborators. Capable of turning a complex analysis into a compelling story so that decision makers can move forward with appropriate strategy. Flexible, creative, resourceful, and effective in both independent and collaborative environments.
-
-#### Analytical Thinking
-Focused on gaining interpretable insights from data. Experienced in working with large datasets and using advanced data analysis to answer complex questions with accuracy, applying sophisticated tools and techniques. Proficient in mastering new knowledge and techniques quickly. Able to understand and articulate what questions can and can’t be answered given certain data.
-
-#### Modeling
-Experienced in using statistical techniques and modeling with real-world, messy data. Able to apply sophisticated mathematics to understanding data. Proficient in the modern machine learning toolkit, including supervised and unsupervised learning techniques, and practically how to build predictive models.
-
 ## Skills and Tools
 
-* R, SQL (also rusty bits of Python and C)
-* GitHub, Markdown, shell scripting, Linux
-* writing and speaking for technical and general audiences
+Machine learning, statistical modeling, natural language processing, data analysis, text mining, R, SQL, GitHub, Markdown, shell scripting, Linux, writing and speaking for technical and general audiences
 
 ## Experience
 
-#### Data Scientist, Stack Overflow
-2016-present
-
-* Analyze large datasets and build models to understand developers and the software industry, from tech ecosystems to how programmers search for jobs
-* Collaborate with data engineers, web developers, and product managers to implement models in production
-* Communicate the results of analyses, modeling, and tests through data visualization, interactive apps, and writing
+#### Data Scientist & Software Engineer, RStudio
+2020-present
 
 #### Technical Advisory Committee Member, Bureau of Labor Statistics
 2019-present
 
 * Advise the Commissioner of Labor Statistics on statistical methodology and other technical matters related to the collection and analysis of BLS data
+
+#### Data Scientist, Stack Overflow
+2016-2019
+
+* Analyze large datasets and build models to understand developers and the software industry, from tech ecosystems to how programmers search for jobs
+* Collaborate with data engineers, web developers, and product managers to implement models in production
+* Communicate the results of analyses, modeling, and tests through data visualization, interactive apps, and writing
 
 #### Data Scientist, Datassist
 2016
@@ -84,3 +74,20 @@ Experienced in using statistical techniques and modeling with real-world, messy 
 * University of Texas at Austin - PhD in astronomy, 2005
 * University of Texas at Austin - MA in astronomy, 2002
 * Texas A&M University - BS in physics, 2000 (magna cum laude)
+
+## Other Projects
+
+#### Open Source Software
+
+Develop R packages for the data science ecosystem, including the [tidytext](https://github.com/juliasilge/tidytext) package which is downloaded from CRAN about 40,000 times per month.
+
+#### Author
+
+Wrote the book [*Text Mining in R: A Tidy Approach*](https://www.tidytextmining.com/) with my collaborator David Robinson, published in 2017 by O’Reilly.
+
+#### Speaker
+
+Speak regularly at conferences in the United States and around the world about data analysis and machine learning practice.
+
+
+
