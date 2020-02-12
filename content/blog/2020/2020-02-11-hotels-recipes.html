@@ -5,13 +5,6 @@ slug: "hotels-recipes"
 tags: [rstats]
 ---
 
----
-title: "#TidyTuesday hotel bookings and recipes"
-date: 2020-02-11
-slug: "hotels-recipes"
-tags: [rstats]
----
-
 
 
 <p>Last week I published <a href="https://juliasilge.com/blog/intro-tidymodels/">my first screencast</a> showing how to use the tidymodels framework for machine learning and modeling in R. Today, I’m using this week’s <a href="https://github.com/rfordatascience/tidytuesday"><code>#TidyTuesday</code> dataset</a> on hotel bookings to show how to use one of the tidymodels packages <a href="https://tidymodels.github.io/recipes/"><strong>recipes</strong></a> with some simple models!</p>
@@ -264,14 +257,12 @@ hotel_rec</code></pre>
   set_mode(&quot;classification&quot;)
 
 knn_fit &lt;- knn_spec %&gt;%
-  fit(children ~ .,
-    data = juice(hotel_rec)
-  )
+  fit(children ~ ., data = juice(hotel_rec))
 
 knn_fit</code></pre>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  1.4s 
+## Fit time:  1.3s 
 ## 
 ## Call:
 ## kknn::train.kknn(formula = formula, data = data, ks = 5)
@@ -285,9 +276,7 @@ knn_fit</code></pre>
   set_mode(&quot;classification&quot;)
 
 tree_fit &lt;- tree_spec %&gt;%
-  fit(children ~ .,
-    data = juice(hotel_rec)
-  )
+  fit(children ~ ., data = juice(hotel_rec))
 
 tree_fit</code></pre>
 <pre><code>## parsnip model object
