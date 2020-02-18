@@ -2,7 +2,7 @@
 title: "#TidyTuesday hotel bookings and recipes"
 date: 2020-02-11
 slug: "hotels-recipes"
-tags: [rstats]
+tags: [rstats,tidymodels]
 ---
 
 ```{r setup, include=FALSE}
