@@ -1,0 +1,367 @@
+---
+title: "Preprocessing and resampling using #TidyTuesday college data"
+date: 2020-03-10
+slug: "food-tuition-resampling"
+tags: [rstats,tidymodels]
+---
+
+
+
+<p>I’ve been publishing <a href="https://juliasilge.com/tags/tidymodels/">screencasts</a> demonstrating how to use the tidymodels framework, from first getting started to how to tune machine learning models. Today, I’m using this week’s <a href="https://github.com/rfordatascience/tidytuesday"><code>#TidyTuesday</code> dataset</a> on college tuition and diversity at US colleges to show some data preprocessing steps and how to use resampling!</p>
+{{% youtube "s3TkvZM60iU" %}}
+<p></br></p>
+<p>Here is the code I used in the video, for those who prefer reading instead of or in addition to video.</p>
+<div id="explore-the-data" class="section level2">
+<h2>Explore the data</h2>
+<p>Our modeling goal here is to predict which US colleges have higher proportions of minority students based on college data such as tuition from the <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-03-10/readme.md">#TidyTuesday dataset</a>. There are several related datasets this week, and this modeling analysis uses two of them.</p>
+<pre class="r"><code>library(tidyverse)
+
+tuition_cost &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-10/tuition_cost.csv&quot;)
+
+diversity_raw &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-10/diversity_school.csv&quot;) %&gt;%
+  filter(category == &quot;Total Minority&quot;) %&gt;%
+  mutate(TotalMinority = enrollment / total_enrollment)</code></pre>
+<p>What is the distribution of total minority student population?</p>
+<pre class="r"><code>diversity_school &lt;- diversity_raw %&gt;%
+  filter(category == &quot;Total Minority&quot;) %&gt;%
+  mutate(TotalMinority = enrollment / total_enrollment)
+
+diversity_school %&gt;%
+  ggplot(aes(TotalMinority)) +
+  geom_histogram(alpha = 0.7, fill = &quot;midnightblue&quot;) +
+  scale_x_continuous(labels = scales::percent_format()) +
+  labs(x = &quot;% of student population who identifies as any minority&quot;)</code></pre>
+<p><img src="/blog/2020/2020-03-10-tuition-resampling_files/figure-html/unnamed-chunk-3-1.png" width="2400" /></p>
+<p>The median proportion of minority students for this dataset is 30%.</p>
+<p>Let’s build a dataset for modeling, joining the two dataframes we have. Let’s also move from individual states in the US to US regions, as found in <code>state.region</code>.</p>
+<pre class="r"><code>university_df &lt;- diversity_school %&gt;%
+  filter(category == &quot;Total Minority&quot;) %&gt;%
+  mutate(TotalMinority = enrollment / total_enrollment) %&gt;%
+  transmute(
+    diversity = case_when(
+      TotalMinority &gt; 0.3 ~ &quot;high&quot;,
+      TRUE ~ &quot;low&quot;
+    ),
+    name, state,
+    total_enrollment
+  ) %&gt;%
+  inner_join(tuition_cost %&gt;%
+    select(
+      name, type, degree_length,
+      in_state_tuition:out_of_state_total
+    )) %&gt;%
+  left_join(tibble(state = state.name, region = state.region)) %&gt;%
+  select(-state, -name) %&gt;%
+  mutate_if(is.character, factor)
+
+skimr::skim(university_df)</code></pre>
+<pre><code>## ── Data Summary ────────────────────────
+##                            Values       
+## Name                       university_df
+## Number of rows             2159         
+## Number of columns          9            
+## _______________________                 
+## Column type frequency:                  
+##   factor                   4            
+##   numeric                  5            
+## ________________________                
+## Group variables            None         
+## 
+## ── Variable type: factor ───────────────────────────────────────────────────────
+##   skim_variable n_missing complete_rate ordered n_unique
+## 1 diversity             0             1 FALSE          2
+## 2 type                  0             1 FALSE          3
+## 3 degree_length         0             1 FALSE          2
+## 4 region                0             1 FALSE          4
+##   top_counts                            
+## 1 low: 1241, hig: 918                   
+## 2 Pub: 1145, Pri: 955, For: 59          
+## 3 4 Y: 1296, 2 Y: 863                   
+## 4 Sou: 774, Nor: 543, Nor: 443, Wes: 399
+## 
+## ── Variable type: numeric ──────────────────────────────────────────────────────
+##   skim_variable        n_missing complete_rate   mean     sd    p0   p25   p50
+## 1 total_enrollment             0             1  6184.  8264.    15  1352  3133
+## 2 in_state_tuition             0             1 17044. 15461.   480  4695 10161
+## 3 in_state_total               0             1 23545. 19782.   962  5552 17749
+## 4 out_of_state_tuition         0             1 20798. 13725.   480  9298 17045
+## 5 out_of_state_total           0             1 27299. 18221.  1376 11018 23036
+##      p75  p100 hist 
+## 1  7644. 81459 ▇▁▁▁▁
+## 2 28780  59985 ▇▂▂▁▁
+## 3 38519  75003 ▇▅▂▂▁
+## 4 29865  59985 ▇▆▅▂▁
+## 5 40154  75003 ▇▅▅▂▁</code></pre>
+<p>How are some of these quantities related to the proportion of minority students at a college?</p>
+<pre class="r"><code>university_df %&gt;%
+  ggplot(aes(type, in_state_tuition, fill = diversity)) +
+  geom_boxplot(alpha = 0.8) +
+  scale_y_continuous(labels = scales::dollar_format()) +
+  labs(x = NULL, y = &quot;In-State Tuition&quot;, fill = &quot;Diversity&quot;)</code></pre>
+<p><img src="/blog/2020/2020-03-10-tuition-resampling_files/figure-html/unnamed-chunk-5-1.png" width="2400" /></p>
+</div>
+<div id="build-models-with-recipes" class="section level2">
+<h2>Build models with recipes</h2>
+<p>Now it is time for modeling! First, we split our data into training and testing sets. Then, we build a recipe for data preprocessing.</p>
+<ul>
+<li>First, we must tell the <code>recipe()</code> what our model is going to be (using a formula here) and what our training data is.</li>
+<li>We then filter out variables that are too correlated with each other. We had several different ways of measuring the tuition in our dataset that are correlated with each other, and this step shows how to handle a situation like that.</li>
+<li>We then convert the factor columns into (one or more) numeric binary (0 and 1) variables for the levels of the training data.</li>
+<li>Next, we remove any numeric variables that have zero variance.</li>
+<li>As a last step, we normalize (center and scale) the numeric variables. We need to do this because some of them are on very different scales from each other and a model we want to train is sensitive to this.</li>
+<li>Finally, we <code>prep()</code> the <code>recipe()</code>. This means we actually do something with the steps and our training data; we estimate the required parameters from <code>uni_train</code> to implement these steps so this whole sequence can be applied later to another dataset.</li>
+</ul>
+<pre class="r"><code>library(tidymodels)
+
+set.seed(1234)
+uni_split &lt;- initial_split(university_df, strata = diversity)
+uni_train &lt;- training(uni_split)
+uni_test &lt;- testing(uni_split)
+
+uni_rec &lt;- recipe(diversity ~ ., data = uni_train) %&gt;%
+  step_corr(all_numeric()) %&gt;%
+  step_dummy(all_nominal(), -all_outcomes()) %&gt;%
+  step_zv(all_numeric()) %&gt;%
+  step_normalize(all_numeric()) %&gt;%
+  prep()
+
+uni_rec</code></pre>
+<pre><code>## Data Recipe
+## 
+## Inputs:
+## 
+##       role #variables
+##    outcome          1
+##  predictor          8
+## 
+## Training data contained 1620 data points and no missing data.
+## 
+## Operations:
+## 
+## Correlation filter removed in_state_tuition, ... [trained]
+## Dummy variables from type, degree_length, region [trained]
+## Zero variance filter removed no terms [trained]
+## Centering and scaling for total_enrollment, ... [trained]</code></pre>
+<p>Now it’s time to <strong>specify</strong> and then <strong>fit</strong> our models. Here, we specify and fit three models:</p>
+<ul>
+<li>logistic regression</li>
+<li>k-nearest neighbor</li>
+<li>decision tree</li>
+</ul>
+<p>Check out what data we are training these models on: <code>juice(uni_rec)</code>. The recipe <code>uni_rec</code> contains all our transformations for data preprocessing and feature engineering, <em>as well as</em> the data these transformations were estimated from. When we <code>juice()</code> the recipe, we squeeze that training data back out, transformed in all the ways we specified.</p>
+<pre class="r"><code>uni_juiced &lt;- juice(uni_rec)
+
+glm_spec &lt;- logistic_reg() %&gt;%
+  set_engine(&quot;glm&quot;)
+
+glm_fit &lt;- glm_spec %&gt;%
+  fit(diversity ~ ., data = uni_juiced)
+
+glm_fit</code></pre>
+<pre><code>## parsnip model object
+## 
+## Fit time:  23ms 
+## 
+## Call:  stats::glm(formula = formula, family = stats::binomial, data = data)
+## 
+## Coefficients:
+##           (Intercept)       total_enrollment     out_of_state_total  
+##                0.3704                -0.4581                 0.5074  
+##          type_Private            type_Public  degree_length_X4.Year  
+##               -0.1656                 0.2058                 0.2082  
+##          region_South   region_North.Central            region_West  
+##               -0.5175                 0.3004                -0.5363  
+## 
+## Degrees of Freedom: 1619 Total (i.e. Null);  1611 Residual
+## Null Deviance:       2210 
+## Residual Deviance: 1859  AIC: 1877</code></pre>
+<pre class="r"><code>knn_spec &lt;- nearest_neighbor() %&gt;%
+  set_engine(&quot;kknn&quot;) %&gt;%
+  set_mode(&quot;classification&quot;)
+
+knn_fit &lt;- knn_spec %&gt;%
+  fit(diversity ~ ., data = uni_juiced)
+
+knn_fit</code></pre>
+<pre><code>## parsnip model object
+## 
+## Fit time:  65ms 
+## 
+## Call:
+## kknn::train.kknn(formula = formula, data = data, ks = 5)
+## 
+## Type of response variable: nominal
+## Minimal misclassification: 0.3277778
+## Best kernel: optimal
+## Best k: 5</code></pre>
+<pre class="r"><code>tree_spec &lt;- decision_tree() %&gt;%
+  set_engine(&quot;rpart&quot;) %&gt;%
+  set_mode(&quot;classification&quot;)
+
+tree_fit &lt;- tree_spec %&gt;%
+  fit(diversity ~ ., data = uni_juiced)
+
+tree_fit</code></pre>
+<pre><code>## parsnip model object
+## 
+## Fit time:  21ms 
+## n= 1620 
+## 
+## node), split, n, loss, yval, (yprob)
+##       * denotes terminal node
+## 
+##  1) root 1620 689 low (0.4253086 0.5746914)  
+##    2) region_North.Central&lt; 0.5346496 1192 586 high (0.5083893 0.4916107)  
+##      4) out_of_state_total&lt; -0.7087237 418 130 high (0.6889952 0.3110048) *
+##      5) out_of_state_total&gt;=-0.7087237 774 318 low (0.4108527 0.5891473)  
+##       10) out_of_state_total&lt; 0.35164 362 180 low (0.4972376 0.5027624)  
+##         20) region_South&gt;=0.3002561 212  86 high (0.5943396 0.4056604)  
+##           40) degree_length_X4.Year&gt;=-0.2001293 172  62 high (0.6395349 0.3604651) *
+##           41) degree_length_X4.Year&lt; -0.2001293 40  16 low (0.4000000 0.6000000) *
+##         21) region_South&lt; 0.3002561 150  54 low (0.3600000 0.6400000)  
+##           42) region_West&gt;=0.8128302 64  28 high (0.5625000 0.4375000) *
+##           43) region_West&lt; 0.8128302 86  18 low (0.2093023 0.7906977) *
+##       11) out_of_state_total&gt;=0.35164 412 138 low (0.3349515 0.6650485)  
+##         22) region_West&gt;=0.8128302 88  38 high (0.5681818 0.4318182)  
+##           44) out_of_state_total&gt;=1.547681 30   5 high (0.8333333 0.1666667) *
+##           45) out_of_state_total&lt; 1.547681 58  25 low (0.4310345 0.5689655) *
+##         23) region_West&lt; 0.8128302 324  88 low (0.2716049 0.7283951) *
+##    3) region_North.Central&gt;=0.5346496 428  83 low (0.1939252 0.8060748)  
+##      6) out_of_state_total&lt; -1.19287 17   5 high (0.7058824 0.2941176) *
+##      7) out_of_state_total&gt;=-1.19287 411  71 low (0.1727494 0.8272506) *</code></pre>
+<p>Models! 🎉</p>
+</div>
+<div id="evaluate-models-with-resampling" class="section level2">
+<h2>Evaluate models with resampling</h2>
+<p>Well, we fit models, but how do we evaluate them? We can use resampling to compute performance metrics across some set of resamples, like the cross-validation splits we create here. The function <code>fit_resamples()</code> fits a model such as <code>glm_spec</code> to the analysis subset of each resample and evaluates on the heldout bit (the assessment subset) from each resample. We can use <code>metrics = metric_set()</code> to specify which metrics we want to compute if we don’t want to only use the default ones; here let’s check out sensitivity and specificity.</p>
+<pre class="r"><code>set.seed(123)
+folds &lt;- vfold_cv(uni_juiced, strata = diversity)
+
+set.seed(234)
+glm_rs &lt;- glm_spec %&gt;%
+  fit_resamples(diversity ~ .,
+    folds,
+    metrics = metric_set(roc_auc, sens, spec),
+    control = control_resamples(save_pred = TRUE)
+  )
+
+set.seed(234)
+knn_rs &lt;- knn_spec %&gt;%
+  fit_resamples(diversity ~ .,
+    folds,
+    metrics = metric_set(roc_auc, sens, spec),
+    control = control_resamples(save_pred = TRUE)
+  )
+
+set.seed(234)
+tree_rs &lt;- tree_spec %&gt;%
+  fit_resamples(diversity ~ .,
+    folds,
+    metrics = metric_set(roc_auc, sens, spec),
+    control = control_resamples(save_pred = TRUE)
+  )</code></pre>
+<p>What do these results look like?</p>
+<pre class="r"><code>tree_rs</code></pre>
+<pre><code>## #  10-fold cross-validation using stratification 
+## # A tibble: 10 x 5
+##    splits             id     .metrics         .notes           .predictions     
+##  * &lt;list&gt;             &lt;chr&gt;  &lt;list&gt;           &lt;list&gt;           &lt;list&gt;           
+##  1 &lt;split [1.5K/163]&gt; Fold01 &lt;tibble [3 × 3]&gt; &lt;tibble [0 × 1]&gt; &lt;tibble [163 × 5…
+##  2 &lt;split [1.5K/162]&gt; Fold02 &lt;tibble [3 × 3]&gt; &lt;tibble [0 × 1]&gt; &lt;tibble [162 × 5…
+##  3 &lt;split [1.5K/162]&gt; Fold03 &lt;tibble [3 × 3]&gt; &lt;tibble [0 × 1]&gt; &lt;tibble [162 × 5…
+##  4 &lt;split [1.5K/162]&gt; Fold04 &lt;tibble [3 × 3]&gt; &lt;tibble [0 × 1]&gt; &lt;tibble [162 × 5…
+##  5 &lt;split [1.5K/162]&gt; Fold05 &lt;tibble [3 × 3]&gt; &lt;tibble [0 × 1]&gt; &lt;tibble [162 × 5…
+##  6 &lt;split [1.5K/162]&gt; Fold06 &lt;tibble [3 × 3]&gt; &lt;tibble [0 × 1]&gt; &lt;tibble [162 × 5…
+##  7 &lt;split [1.5K/162]&gt; Fold07 &lt;tibble [3 × 3]&gt; &lt;tibble [0 × 1]&gt; &lt;tibble [162 × 5…
+##  8 &lt;split [1.5K/162]&gt; Fold08 &lt;tibble [3 × 3]&gt; &lt;tibble [0 × 1]&gt; &lt;tibble [162 × 5…
+##  9 &lt;split [1.5K/162]&gt; Fold09 &lt;tibble [3 × 3]&gt; &lt;tibble [0 × 1]&gt; &lt;tibble [162 × 5…
+## 10 &lt;split [1.5K/161]&gt; Fold10 &lt;tibble [3 × 3]&gt; &lt;tibble [0 × 1]&gt; &lt;tibble [161 × 5…</code></pre>
+<p>We can use <code>collect_metrics()</code> to see the summarized performance metrics for each set of resamples.</p>
+<pre class="r"><code>glm_rs %&gt;%
+  collect_metrics()</code></pre>
+<pre><code>## # A tibble: 3 x 5
+##   .metric .estimator  mean     n std_err
+##   &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
+## 1 roc_auc binary     0.758    10 0.00916
+## 2 sens    binary     0.607    10 0.0209 
+## 3 spec    binary     0.737    10 0.00638</code></pre>
+<pre class="r"><code>knn_rs %&gt;%
+  collect_metrics()</code></pre>
+<pre><code>## # A tibble: 3 x 5
+##   .metric .estimator  mean     n std_err
+##   &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
+## 1 roc_auc binary     0.732    10 0.00639
+## 2 sens    binary     0.599    10 0.0115 
+## 3 spec    binary     0.730    10 0.0100</code></pre>
+<pre class="r"><code>tree_rs %&gt;%
+  collect_metrics()</code></pre>
+<pre><code>## # A tibble: 3 x 5
+##   .metric .estimator  mean     n std_err
+##   &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
+## 1 roc_auc binary     0.722    10 0.00599
+## 2 sens    binary     0.636    10 0.0175 
+## 3 spec    binary     0.730    10 0.00901</code></pre>
+<p>In realistic situations, we often care more about one of sensitivity or specificity than overall accuracy.</p>
+<p>What does the ROC curve look like for these models?</p>
+<pre class="r"><code>glm_rs %&gt;%
+  unnest(.predictions) %&gt;%
+  mutate(model = &quot;glm&quot;) %&gt;%
+  bind_rows(knn_rs %&gt;%
+    unnest(.predictions) %&gt;%
+    mutate(model = &quot;knn&quot;)) %&gt;%
+  bind_rows(tree_rs %&gt;%
+    unnest(.predictions) %&gt;%
+    mutate(model = &quot;rpart&quot;)) %&gt;%
+  group_by(model) %&gt;%
+  roc_curve(diversity, .pred_high) %&gt;%
+  ggplot(aes(x = 1 - specificity, y = sensitivity, color = model)) +
+  geom_line(size = 1.5) +
+  geom_abline(
+    lty = 2, alpha = 0.5,
+    color = &quot;gray50&quot;,
+    size = 1.2
+  )</code></pre>
+<p><img src="/blog/2020/2020-03-10-tuition-resampling_files/figure-html/unnamed-chunk-11-1.png" width="2400" /></p>
+<p>If we decide the logistic regression model is the best fit for our purposes, we can look at the parameters in detail.</p>
+<pre class="r"><code>glm_fit %&gt;%
+  tidy() %&gt;%
+  arrange(-estimate)</code></pre>
+<pre><code>## # A tibble: 9 x 5
+##   term                  estimate std.error statistic  p.value
+##   &lt;chr&gt;                    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 out_of_state_total       0.507    0.0934     5.43  5.58e- 8
+## 2 (Intercept)              0.370    0.0572     6.47  9.72e-11
+## 3 region_North.Central     0.300    0.0825     3.64  2.72e- 4
+## 4 degree_length_X4.Year    0.208    0.0863     2.41  1.58e- 2
+## 5 type_Public              0.206    0.193      1.07  2.86e- 1
+## 6 type_Private            -0.166    0.197     -0.838 4.02e- 1
+## 7 total_enrollment        -0.458    0.0737    -6.22  5.07e-10
+## 8 region_South            -0.517    0.0782    -6.62  3.64e-11
+## 9 region_West             -0.536    0.0724    -7.41  1.27e-13</code></pre>
+<p>Larger, less expensive schools in the South and West are more likely to have higher proportions of minority students.</p>
+<p>Finally, we can return to our test data as a last, unbiased check on how we can expect this model to perform on new data. We <code>bake()</code> our recipe using the testing set to apply the same preprocessing steps that we used on the training data.</p>
+<pre class="r"><code>glm_fit %&gt;%
+  predict(
+    new_data = bake(uni_rec, uni_test),
+    type = &quot;prob&quot;
+  ) %&gt;%
+  mutate(truth = uni_test$diversity) %&gt;%
+  roc_auc(truth, .pred_high)</code></pre>
+<pre><code>## # A tibble: 1 x 3
+##   .metric .estimator .estimate
+##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+## 1 roc_auc binary         0.756</code></pre>
+<p>We can also explore other metrics with the test set, such as specificity.</p>
+<pre class="r"><code>glm_fit %&gt;%
+  predict(
+    new_data = bake(uni_rec, new_data = uni_test),
+    type = &quot;class&quot;
+  ) %&gt;%
+  mutate(truth = uni_test$diversity) %&gt;%
+  spec(truth, .pred_class)</code></pre>
+<pre><code>## # A tibble: 1 x 3
+##   .metric .estimator .estimate
+##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+## 1 spec    binary         0.719</code></pre>
+<p>Our metrics for the test set agree pretty well with what we found from resampling, indicating we had a good estimate of how the model will perform on new data.</p>
+</div>
