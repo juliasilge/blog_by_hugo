@@ -122,10 +122,12 @@ uni_rec &lt;- recipe(diversity ~ ., data = uni_train) %&gt;%
   step_corr(all_numeric()) %&gt;%
   step_dummy(all_nominal(), -all_outcomes()) %&gt;%
   step_zv(all_numeric()) %&gt;%
-  step_normalize(all_numeric()) %&gt;%
+  step_normalize(all_numeric())
+
+uni_prep &lt;- uni_rec %&gt;%
   prep()
 
-uni_rec</code></pre>
+uni_prep</code></pre>
 <pre><code>## Data Recipe
 ## 
 ## Inputs:
@@ -149,7 +151,7 @@ uni_rec</code></pre>
 <li>decision tree</li>
 </ul>
 <p>Check out what data we are training these models on: <code>juice(uni_rec)</code>. The recipe <code>uni_rec</code> contains all our transformations for data preprocessing and feature engineering, <em>as well as</em> the data these transformations were estimated from. When we <code>juice()</code> the recipe, we squeeze that training data back out, transformed in all the ways we specified.</p>
-<pre class="r"><code>uni_juiced &lt;- juice(uni_rec)
+<pre class="r"><code>uni_juiced &lt;- juice(uni_prep)
 
 glm_spec &lt;- logistic_reg() %&gt;%
   set_engine(&quot;glm&quot;)
@@ -160,7 +162,7 @@ glm_fit &lt;- glm_spec %&gt;%
 glm_fit</code></pre>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  23ms 
+## Fit time:  9ms 
 ## 
 ## Call:  stats::glm(formula = formula, family = stats::binomial, data = data)
 ## 
@@ -185,7 +187,7 @@ knn_fit &lt;- knn_spec %&gt;%
 knn_fit</code></pre>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  65ms 
+## Fit time:  66ms 
 ## 
 ## Call:
 ## kknn::train.kknn(formula = formula, data = data, ks = 5)
@@ -204,7 +206,7 @@ tree_fit &lt;- tree_spec %&gt;%
 tree_fit</code></pre>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  21ms 
+## Fit time:  24ms 
 ## n= 1620 
 ## 
 ## node), split, n, loss, yval, (yprob)
@@ -234,12 +236,17 @@ tree_fit</code></pre>
 <div id="evaluate-models-with-resampling" class="section level2">
 <h2>Evaluate models with resampling</h2>
 <p>Well, we fit models, but how do we evaluate them? We can use resampling to compute performance metrics across some set of resamples, like the cross-validation splits we create here. The function <code>fit_resamples()</code> fits a model such as <code>glm_spec</code> to the analysis subset of each resample and evaluates on the heldout bit (the assessment subset) from each resample. We can use <code>metrics = metric_set()</code> to specify which metrics we want to compute if we don’t want to only use the default ones; here let’s check out sensitivity and specificity.</p>
+<p>Originally in the video, I set up the resampled folds like this:</p>
 <pre class="r"><code>set.seed(123)
-folds &lt;- vfold_cv(uni_juiced, strata = diversity)
-
-set.seed(234)
+folds &lt;- vfold_cv(uni_juiced, strata = diversity)</code></pre>
+<p>But some helpful folks pointed out that this can result in overly optimistic results from resampling (i.e. data leakage) because of some of the recipe steps. It’s better to resample the original training data.</p>
+<pre class="r"><code>set.seed(123)
+folds &lt;- vfold_cv(uni_train, strata = diversity)</code></pre>
+<p>After we have these folds, we can use <code>fit_resamples()</code> with the recipe to estimate model metrics.</p>
+<pre class="r"><code>set.seed(234)
 glm_rs &lt;- glm_spec %&gt;%
-  fit_resamples(diversity ~ .,
+  fit_resamples(
+    uni_rec,
     folds,
     metrics = metric_set(roc_auc, sens, spec),
     control = control_resamples(save_pred = TRUE)
@@ -247,7 +254,8 @@ glm_rs &lt;- glm_spec %&gt;%
 
 set.seed(234)
 knn_rs &lt;- knn_spec %&gt;%
-  fit_resamples(diversity ~ .,
+  fit_resamples(
+    uni_rec,
     folds,
     metrics = metric_set(roc_auc, sens, spec),
     control = control_resamples(save_pred = TRUE)
@@ -255,7 +263,8 @@ knn_rs &lt;- knn_spec %&gt;%
 
 set.seed(234)
 tree_rs &lt;- tree_spec %&gt;%
-  fit_resamples(diversity ~ .,
+  fit_resamples(
+    uni_rec,
     folds,
     metrics = metric_set(roc_auc, sens, spec),
     control = control_resamples(save_pred = TRUE)
@@ -282,25 +291,25 @@ tree_rs &lt;- tree_spec %&gt;%
 <pre><code>## # A tibble: 3 x 5
 ##   .metric .estimator  mean     n std_err
 ##   &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
-## 1 roc_auc binary     0.758    10 0.00916
-## 2 sens    binary     0.607    10 0.0209 
-## 3 spec    binary     0.737    10 0.00638</code></pre>
+## 1 roc_auc binary     0.758    10 0.00891
+## 2 sens    binary     0.617    10 0.0179 
+## 3 spec    binary     0.737    10 0.00677</code></pre>
 <pre class="r"><code>knn_rs %&gt;%
   collect_metrics()</code></pre>
 <pre><code>## # A tibble: 3 x 5
 ##   .metric .estimator  mean     n std_err
 ##   &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
-## 1 roc_auc binary     0.732    10 0.00639
-## 2 sens    binary     0.599    10 0.0115 
-## 3 spec    binary     0.730    10 0.0100</code></pre>
+## 1 roc_auc binary     0.728    10 0.00652
+## 2 sens    binary     0.595    10 0.00978
+## 3 spec    binary     0.733    10 0.0121</code></pre>
 <pre class="r"><code>tree_rs %&gt;%
   collect_metrics()</code></pre>
 <pre><code>## # A tibble: 3 x 5
 ##   .metric .estimator  mean     n std_err
 ##   &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
-## 1 roc_auc binary     0.722    10 0.00599
-## 2 sens    binary     0.636    10 0.0175 
-## 3 spec    binary     0.730    10 0.00901</code></pre>
+## 1 roc_auc binary     0.723    10 0.00578
+## 2 sens    binary     0.642    10 0.0182 
+## 3 spec    binary     0.745    10 0.00941</code></pre>
 <p>In realistic situations, we often care more about one of sensitivity or specificity than overall accuracy.</p>
 <p>What does the ROC curve look like for these models?</p>
 <pre class="r"><code>glm_rs %&gt;%
@@ -321,7 +330,7 @@ tree_rs &lt;- tree_spec %&gt;%
     color = &quot;gray50&quot;,
     size = 1.2
   )</code></pre>
-<p><img src="/blog/2020/2020-03-10-tuition-resampling_files/figure-html/unnamed-chunk-11-1.png" width="2400" /></p>
+<p><img src="/blog/2020/2020-03-10-tuition-resampling_files/figure-html/unnamed-chunk-13-1.png" width="2400" /></p>
 <p>If we decide the logistic regression model is the best fit for our purposes, we can look at the parameters in detail.</p>
 <pre class="r"><code>glm_fit %&gt;%
   tidy() %&gt;%
@@ -342,7 +351,7 @@ tree_rs &lt;- tree_spec %&gt;%
 <p>Finally, we can return to our test data as a last, unbiased check on how we can expect this model to perform on new data. We <code>bake()</code> our recipe using the testing set to apply the same preprocessing steps that we used on the training data.</p>
 <pre class="r"><code>glm_fit %&gt;%
   predict(
-    new_data = bake(uni_rec, uni_test),
+    new_data = bake(uni_prep, uni_test),
     type = &quot;prob&quot;
   ) %&gt;%
   mutate(truth = uni_test$diversity) %&gt;%
@@ -354,7 +363,7 @@ tree_rs &lt;- tree_spec %&gt;%
 <p>We can also explore other metrics with the test set, such as specificity.</p>
 <pre class="r"><code>glm_fit %&gt;%
   predict(
-    new_data = bake(uni_rec, new_data = uni_test),
+    new_data = bake(uni_prep, new_data = uni_test),
     type = &quot;class&quot;
   ) %&gt;%
   mutate(truth = uni_test$diversity) %&gt;%
