@@ -1,0 +1,309 @@
+---
+title: "LASSO regression using tidymodels and #TidyTuesday data for The Office"
+date: 2020-03-17
+slug: "lasso-the-office"
+tags: [rstats,tidymodels]
+---
+
+
+
+<p>I’ve been publishing <a href="https://juliasilge.com/tags/tidymodels/">screencasts</a> demonstrating how to use the tidymodels framework, from first steps in modeling to how to tune more complex models. Today, I’m using this week’s <a href="https://github.com/rfordatascience/tidytuesday"><code>#TidyTuesday</code> dataset</a> on <em>The Office</em> to show how to build a LASSO regression model and choose regularization parameters!</p>
+{{% youtube "R32AsuKICAY" %}}
+<p></br></p>
+<p>Here is the code I used in the video, for those who prefer reading instead of or in addition to video.</p>
+<div id="explore-the-data" class="section level2">
+<h2>Explore the data</h2>
+<p>Our modeling goal here is to predict the IMDB ratings for episodes of <em>The Office</em> based on the other characteristics of the episodes in the <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-03-17/readme.md">#TidyTuesday dataset</a>. There are two datasets, one with the ratings and one with information like director, writer, and which character spoke which line. The episode numbers and titles are not consistent between them, so we can use regular expressions to do a better job of matching the datasets up for joining.</p>
+<pre class="r"><code>library(tidyverse)
+
+ratings_raw &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-17/office_ratings.csv&quot;)
+
+remove_regex &lt;- &quot;[:punct:]|[:digit:]|parts |part |the |and&quot;
+
+office_ratings &lt;- ratings_raw %&gt;%
+  transmute(season, episode,
+    episode_name = str_to_lower(title),
+    episode_name = str_remove_all(episode_name, remove_regex),
+    episode_name = str_trim(episode_name),
+    imdb_rating
+  )
+
+office_info &lt;- schrute::theoffice %&gt;%
+  mutate(
+    season = as.numeric(season),
+    episode = as.numeric(episode),
+    episode_name = str_to_lower(episode_name),
+    episode_name = str_remove_all(episode_name, remove_regex),
+    episode_name = str_trim(episode_name)
+  ) %&gt;%
+  select(season, episode, episode_name, director, writer, character)
+
+office_info</code></pre>
+<pre><code>## # A tibble: 55,130 x 6
+##    season episode episode_name director   writer                       character
+##     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;                        &lt;chr&gt;    
+##  1      1       1 pilot        Ken Kwapis Ricky Gervais;Stephen Merch… Michael  
+##  2      1       1 pilot        Ken Kwapis Ricky Gervais;Stephen Merch… Jim      
+##  3      1       1 pilot        Ken Kwapis Ricky Gervais;Stephen Merch… Michael  
+##  4      1       1 pilot        Ken Kwapis Ricky Gervais;Stephen Merch… Jim      
+##  5      1       1 pilot        Ken Kwapis Ricky Gervais;Stephen Merch… Michael  
+##  6      1       1 pilot        Ken Kwapis Ricky Gervais;Stephen Merch… Michael  
+##  7      1       1 pilot        Ken Kwapis Ricky Gervais;Stephen Merch… Michael  
+##  8      1       1 pilot        Ken Kwapis Ricky Gervais;Stephen Merch… Pam      
+##  9      1       1 pilot        Ken Kwapis Ricky Gervais;Stephen Merch… Michael  
+## 10      1       1 pilot        Ken Kwapis Ricky Gervais;Stephen Merch… Pam      
+## # … with 55,120 more rows</code></pre>
+<p>We are going to use several different kinds of features for modeling. First, let’s find out how many times characters speak per episode.</p>
+<pre class="r"><code>characters &lt;- office_info %&gt;%
+  count(episode_name, character) %&gt;%
+  add_count(character, wt = n, name = &quot;character_count&quot;) %&gt;%
+  filter(character_count &gt; 800) %&gt;%
+  select(-character_count) %&gt;%
+  pivot_wider(
+    names_from = character,
+    values_from = n,
+    values_fill = list(n = 0)
+  )
+
+characters</code></pre>
+<pre><code>## # A tibble: 185 x 16
+##    episode_name  Andy Angela Darryl Dwight   Jim Kelly Kevin Michael Oscar   Pam
+##    &lt;chr&gt;        &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt;
+##  1 a benihana …    28     37      3     61    44     5    14     108     1    57
+##  2 aarm            44     39     30     87    89     0    30       0    28    34
+##  3 after hours     20     11     14     60    55     8     4       0    10    15
+##  4 alliance         0      7      0     47    49     0     3      68    14    22
+##  5 angry y         53      7      5     16    19    13     9       0     7    29
+##  6 baby shower     13     13      9     35    27     2     4      79     3    25
+##  7 back from v…     3      4      6     22    25     0     5      70     0    33
+##  8 banker           1      2      0     17     0     0     2      44     0     5
+##  9 basketball       0      3     15     25    21     0     1     104     2    14
+## 10 beach games     18      8      0     38    22     9     5     105     5    23
+## # … with 175 more rows, and 5 more variables: Phyllis &lt;int&gt;, Ryan &lt;int&gt;,
+## #   Toby &lt;int&gt;, Erin &lt;int&gt;, Jan &lt;int&gt;</code></pre>
+<p>Next, let’s find which directors and writers are involved in each episode. I’m choosing here to combine this into one category in modeling, for a simpler model, since these are often the same individuals.</p>
+<pre class="r"><code>creators &lt;- office_info %&gt;%
+  distinct(episode_name, director, writer) %&gt;%
+  pivot_longer(director:writer, names_to = &quot;role&quot;, values_to = &quot;person&quot;) %&gt;%
+  separate_rows(person, sep = &quot;;&quot;) %&gt;%
+  add_count(person) %&gt;%
+  filter(n &gt; 10) %&gt;%
+  distinct(episode_name, person) %&gt;%
+  mutate(person_value = 1) %&gt;%
+  pivot_wider(
+    names_from = person,
+    values_from = person_value,
+    values_fill = list(person_value = 0)
+  )
+
+creators</code></pre>
+<pre><code>## # A tibble: 135 x 14
+##    episode_name `Ken Kwapis` `Greg Daniels` `B.J. Novak` `Paul Lieberste…
+##    &lt;chr&gt;               &lt;dbl&gt;          &lt;dbl&gt;        &lt;dbl&gt;            &lt;dbl&gt;
+##  1 pilot                   1              1            0                0
+##  2 diversity d…            1              0            1                0
+##  3 health care             0              0            0                1
+##  4 basketball              0              1            0                0
+##  5 hot girl                0              0            0                0
+##  6 dundies                 0              1            0                0
+##  7 sexual hara…            1              0            1                0
+##  8 office olym…            0              0            0                0
+##  9 fire                    1              0            1                0
+## 10 halloween               0              1            0                0
+## # … with 125 more rows, and 9 more variables: `Mindy Kaling` &lt;dbl&gt;, `Paul
+## #   Feig` &lt;dbl&gt;, `Gene Stupnitsky` &lt;dbl&gt;, `Lee Eisenberg` &lt;dbl&gt;, `Jennifer
+## #   Celotta` &lt;dbl&gt;, `Randall Einhorn` &lt;dbl&gt;, `Brent Forrester` &lt;dbl&gt;, `Jeffrey
+## #   Blitz` &lt;dbl&gt;, `Justin Spitzer` &lt;dbl&gt;</code></pre>
+<p>Next, let’s find the season and episode number for each episode, and then finally let’s put it all together into one dataset for modeling.</p>
+<pre class="r"><code>office &lt;- office_info %&gt;%
+  distinct(season, episode, episode_name) %&gt;%
+  inner_join(characters) %&gt;%
+  inner_join(creators) %&gt;%
+  inner_join(office_ratings %&gt;%
+    select(episode_name, imdb_rating)) %&gt;%
+  janitor::clean_names()
+
+office</code></pre>
+<pre><code>## # A tibble: 136 x 32
+##    season episode episode_name  andy angela darryl dwight   jim kelly kevin
+##     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;        &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+##  1      1       1 pilot            0      1      0     29    36     0     1
+##  2      1       2 diversity d…     0      4      0     17    25     2     8
+##  3      1       3 health care      0      5      0     62    42     0     6
+##  4      1       5 basketball       0      3     15     25    21     0     1
+##  5      1       6 hot girl         0      3      0     28    55     0     5
+##  6      2       1 dundies          0      1      1     32    32     7     1
+##  7      2       2 sexual hara…     0      2      9     11    16     0     6
+##  8      2       3 office olym…     0      6      0     55    55     0     9
+##  9      2       4 fire             0     17      0     65    51     4     5
+## 10      2       5 halloween        0     13      0     33    30     3     2
+## # … with 126 more rows, and 22 more variables: michael &lt;int&gt;, oscar &lt;int&gt;,
+## #   pam &lt;int&gt;, phyllis &lt;int&gt;, ryan &lt;int&gt;, toby &lt;int&gt;, erin &lt;int&gt;, jan &lt;int&gt;,
+## #   ken_kwapis &lt;dbl&gt;, greg_daniels &lt;dbl&gt;, b_j_novak &lt;dbl&gt;,
+## #   paul_lieberstein &lt;dbl&gt;, mindy_kaling &lt;dbl&gt;, paul_feig &lt;dbl&gt;,
+## #   gene_stupnitsky &lt;dbl&gt;, lee_eisenberg &lt;dbl&gt;, jennifer_celotta &lt;dbl&gt;,
+## #   randall_einhorn &lt;dbl&gt;, brent_forrester &lt;dbl&gt;, jeffrey_blitz &lt;dbl&gt;,
+## #   justin_spitzer &lt;dbl&gt;, imdb_rating &lt;dbl&gt;</code></pre>
+<p>There are lots of <a href="https://twitter.com/search?q=%23TidyTuesday">great examples of EDA on Twitter</a>; I especially encourage you to check out <a href="https://youtu.be/_IvAubTDQME">the screencast of my coauthor Dave</a>, which is similar in spirit to the modeling I am showing here and includes more EDA. Just for kicks, let’s show one graph.</p>
+<pre class="r"><code>office %&gt;%
+  ggplot(aes(episode, imdb_rating, fill = as.factor(episode))) +
+  geom_boxplot(show.legend = FALSE)</code></pre>
+<p><img src="/blog/2020/2020-03-17-lasso-office_files/figure-html/unnamed-chunk-6-1.png" width="2400" /></p>
+<p>Ratings are higher for episodes later in the season. What else is associated with higher ratings? Let’s use LASSO regression to find out! 🚀</p>
+</div>
+<div id="train-a-model" class="section level2">
+<h2>Train a model</h2>
+<p>We can start by loading the tidymodels metapackage, and splitting our data into training and testing sets.</p>
+<pre class="r"><code>library(tidymodels)
+office_split &lt;- initial_split(office, strata = season)
+office_train &lt;- training(office_split)
+office_test &lt;- testing(office_split)</code></pre>
+<p>Then, we build a recipe for data preprocessing.</p>
+<ul>
+<li>First, we must tell the <code>recipe()</code> what our model is going to be (using a formula here) and what our training data is.</li>
+<li>Next, we update the role for <code>episode_name</code>, since this is a variable we might like to keep around for convenience as an identifier for rows but is not a predictor or outcome.</li>
+<li>Next, we remove any numeric variables that have zero variance.</li>
+<li>As a last step, we normalize (center and scale) the numeric variables. We need to do this because it’s important for LASSO regularization.</li>
+</ul>
+<p>The object <code>office_rec</code> is a recipe that has <strong>not</strong> been trained on data yet (for example, the centered and scaling has not been calculated) and <code>office_prep</code> is an object that <strong>has</strong> been trained on data. The reason I use <code>strings_as_factors = FALSE</code> here is that my ID column <code>episode_name</code> is of type character (as opposed to, say, integers).</p>
+<pre class="r"><code>office_rec &lt;- recipe(imdb_rating ~ ., data = office_train) %&gt;%
+  update_role(episode_name, new_role = &quot;ID&quot;) %&gt;%
+  step_zv(all_numeric(), -all_outcomes()) %&gt;%
+  step_normalize(all_numeric(), -all_outcomes())
+
+office_prep &lt;- office_rec %&gt;%
+  prep(strings_as_factors = FALSE)</code></pre>
+<p>Now it’s time to <strong>specify</strong> and then <strong>fit</strong> our models. Here I set up one model specification for LASSO regression; I picked a value for <code>penalty</code> (sort of randomly) and I set <code>mixture = 1</code> for LASSO. I am using a <a href="https://tidymodels.github.io/workflows/"><code>workflow()</code></a> in this example for convenience; these are objects that can help you manage modeling pipelines more easily, with pieces that fit together like Lego blocks. You can <code>fit()</code> a workflow, much like you can fit a model, and then you can pull out the fit object and <code>tidy()</code> it!</p>
+<pre class="r"><code>lasso_spec &lt;- linear_reg(penalty = 0.1, mixture = 1) %&gt;%
+  set_engine(&quot;glmnet&quot;)
+
+wf &lt;- workflow() %&gt;%
+  add_recipe(office_rec)
+
+lasso_fit &lt;- wf %&gt;%
+  add_model(lasso_spec) %&gt;%
+  fit(data = office_train)
+
+lasso_fit %&gt;%
+  pull_workflow_fit() %&gt;%
+  tidy()</code></pre>
+<pre><code>## # A tibble: 1,639 x 5
+##    term         step estimate lambda dev.ratio
+##    &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;
+##  1 (Intercept)     1  8.39     0.183    0     
+##  2 (Intercept)     2  8.39     0.167    0.0332
+##  3 jim             2  0.0113   0.167    0.0332
+##  4 michael         2  0.0150   0.167    0.0332
+##  5 (Intercept)     3  8.39     0.152    0.0640
+##  6 jim             3  0.0247   0.152    0.0640
+##  7 michael         3  0.0283   0.152    0.0640
+##  8 (Intercept)     4  8.39     0.139    0.0986
+##  9 dwight          4  0.00236  0.139    0.0986
+## 10 jim             4  0.0361   0.139    0.0986
+## # … with 1,629 more rows</code></pre>
+<p>If you have used glmnet before, this is the familiar output where we can see (here, for the most regularized examples) what contributes to higher IMDB ratings.</p>
+</div>
+<div id="tune-lasso-parameters" class="section level2">
+<h2>Tune LASSO parameters</h2>
+<p>So we fit one LASSO model, but how do we know the right regularization parameter <code>penalty</code>? We can figure that out using resampling and tuning the model. Let’s build a set of bootstrap resamples, and set <code>penalty = tune()</code> instead of to a single value. We can use a function <code>penalty()</code> to set up an appropriate grid for this kind of regularization model.</p>
+<pre class="r"><code>set.seed(1234)
+office_boot &lt;- bootstraps(office_train, strata = season)
+
+tune_spec &lt;- linear_reg(penalty = tune(), mixture = 1) %&gt;%
+  set_engine(&quot;glmnet&quot;)
+
+lambda_grid &lt;- grid_regular(penalty(), levels = 50)</code></pre>
+<p>Now it’s time to tune the grid, using our workflow object.</p>
+<pre class="r"><code>doParallel::registerDoParallel()
+
+set.seed(2020)
+lasso_grid &lt;- tune_grid(
+  wf %&gt;% add_model(tune_spec),
+  resamples = office_boot,
+  grid = lambda_grid
+)
+
+lasso_grid</code></pre>
+<pre><code>## # Bootstrap sampling using stratification 
+## # A tibble: 25 x 4
+##    splits           id          .metrics           .notes          
+##    &lt;list&gt;           &lt;chr&gt;       &lt;list&gt;             &lt;list&gt;          
+##  1 &lt;split [103/38]&gt; Bootstrap01 &lt;tibble [100 × 4]&gt; &lt;tibble [1 × 1]&gt;
+##  2 &lt;split [103/36]&gt; Bootstrap02 &lt;tibble [100 × 4]&gt; &lt;tibble [1 × 1]&gt;
+##  3 &lt;split [103/41]&gt; Bootstrap03 &lt;tibble [100 × 4]&gt; &lt;tibble [1 × 1]&gt;
+##  4 &lt;split [103/37]&gt; Bootstrap04 &lt;tibble [100 × 4]&gt; &lt;tibble [1 × 1]&gt;
+##  5 &lt;split [103/35]&gt; Bootstrap05 &lt;tibble [100 × 4]&gt; &lt;tibble [1 × 1]&gt;
+##  6 &lt;split [103/40]&gt; Bootstrap06 &lt;tibble [100 × 4]&gt; &lt;tibble [1 × 1]&gt;
+##  7 &lt;split [103/37]&gt; Bootstrap07 &lt;tibble [100 × 4]&gt; &lt;tibble [1 × 1]&gt;
+##  8 &lt;split [103/41]&gt; Bootstrap08 &lt;tibble [100 × 4]&gt; &lt;tibble [1 × 1]&gt;
+##  9 &lt;split [103/34]&gt; Bootstrap09 &lt;tibble [100 × 4]&gt; &lt;tibble [1 × 1]&gt;
+## 10 &lt;split [103/45]&gt; Bootstrap10 &lt;tibble [100 × 4]&gt; &lt;tibble [1 × 1]&gt;
+## # … with 15 more rows</code></pre>
+<p>What results did we get?</p>
+<pre class="r"><code>lasso_grid %&gt;%
+  collect_metrics()</code></pre>
+<pre><code>## # A tibble: 100 x 6
+##     penalty .metric .estimator   mean     n std_err
+##       &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
+##  1 1.00e-10 rmse    standard   0.638     25  0.0177
+##  2 1.00e-10 rsq     standard   0.0911    25  0.0132
+##  3 1.60e-10 rmse    standard   0.638     25  0.0177
+##  4 1.60e-10 rsq     standard   0.0911    25  0.0132
+##  5 2.56e-10 rmse    standard   0.638     25  0.0177
+##  6 2.56e-10 rsq     standard   0.0911    25  0.0132
+##  7 4.09e-10 rmse    standard   0.638     25  0.0177
+##  8 4.09e-10 rsq     standard   0.0911    25  0.0132
+##  9 6.55e-10 rmse    standard   0.638     25  0.0177
+## 10 6.55e-10 rsq     standard   0.0911    25  0.0132
+## # … with 90 more rows</code></pre>
+<p>That’s nice, but I would rather see a visualization of performance with the regularization parameter.</p>
+<pre class="r"><code>lasso_grid %&gt;%
+  collect_metrics() %&gt;%
+  ggplot(aes(penalty, mean, color = .metric)) +
+  geom_errorbar(aes(
+    ymin = mean - std_err,
+    ymax = mean + std_err
+  ),
+  alpha = 0.5
+  ) +
+  geom_line(size = 1.5) +
+  facet_wrap(~.metric, scales = &quot;free&quot;, nrow = 2) +
+  scale_x_log10() +
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="/blog/2020/2020-03-17-lasso-office_files/figure-html/unnamed-chunk-13-1.png" width="2400" /></p>
+<p>This is a great way to see that regularization helps this modeling a lot. We have a couple of options for choosing our final parameter, such as <code>select_by_pct_loss()</code> or <code>select_by_one_std_err()</code>, but for now let’s stick with just picking the lowest RMSE. After we have that parameter, we can finalize our workflow, i.e. update it with this value.</p>
+<pre class="r"><code>lowest_rmse &lt;- lasso_grid %&gt;%
+  select_best(&quot;rmse&quot;, maximize = FALSE)
+
+final_lasso &lt;- finalize_workflow(
+  wf %&gt;% add_model(tune_spec),
+  lowest_rmse
+)</code></pre>
+<p>We can then fit this finalized workflow on our training data. While we’re at it, let’s see what the most important variables are using the <a href="https://koalaverse.github.io/vip/">vip</a> package.</p>
+<pre class="r"><code>library(vip)
+
+final_lasso %&gt;%
+  fit(office_train) %&gt;%
+  pull_workflow_fit() %&gt;%
+  vi(lambda = lowest_rmse$penalty) %&gt;%
+  mutate(
+    Importance = abs(Importance),
+    Variable = fct_reorder(Variable, Importance)
+  ) %&gt;%
+  ggplot(aes(x = Importance, y = Variable, fill = Sign)) +
+  geom_col() +
+  scale_x_continuous(expand = c(0, 0)) +
+  labs(y = NULL)</code></pre>
+<p><img src="/blog/2020/2020-03-17-lasso-office_files/figure-html/unnamed-chunk-15-1.png" width="2400" /></p>
+<p>And then, finally, let’s return to our test data. The tune package has a function <code>last_fit()</code> which is nice for situations when you have tuned and finalized a model or workflow and want to fit it one last time on your training data and evaluate it on your testing data. You only have to pass this function your finalized model/workflow and your split.</p>
+<pre class="r"><code>last_fit(
+  final_lasso,
+  office_split
+) %&gt;%
+  collect_metrics()</code></pre>
+<pre><code>## # A tibble: 2 x 3
+##   .metric .estimator .estimate
+##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+## 1 rmse    standard       0.381
+## 2 rsq     standard       0.234</code></pre>
+</div>
