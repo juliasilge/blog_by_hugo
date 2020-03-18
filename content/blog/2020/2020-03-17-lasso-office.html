@@ -21,7 +21,7 @@ ratings_raw &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rforda
 remove_regex &lt;- &quot;[:punct:]|[:digit:]|parts |part |the |and&quot;
 
 office_ratings &lt;- ratings_raw %&gt;%
-  transmute(season, episode,
+  transmute(
     episode_name = str_to_lower(title),
     episode_name = str_remove_all(episode_name, remove_regex),
     episode_name = str_trim(episode_name),
@@ -221,24 +221,7 @@ lasso_grid &lt;- tune_grid(
   wf %&gt;% add_model(tune_spec),
   resamples = office_boot,
   grid = lambda_grid
-)
-
-lasso_grid</code></pre>
-<pre><code>## # Bootstrap sampling using stratification 
-## # A tibble: 25 x 4
-##    splits           id          .metrics           .notes          
-##    &lt;list&gt;           &lt;chr&gt;       &lt;list&gt;             &lt;list&gt;          
-##  1 &lt;split [103/38]&gt; Bootstrap01 &lt;tibble [100 × 4]&gt; &lt;tibble [1 × 1]&gt;
-##  2 &lt;split [103/36]&gt; Bootstrap02 &lt;tibble [100 × 4]&gt; &lt;tibble [1 × 1]&gt;
-##  3 &lt;split [103/41]&gt; Bootstrap03 &lt;tibble [100 × 4]&gt; &lt;tibble [1 × 1]&gt;
-##  4 &lt;split [103/37]&gt; Bootstrap04 &lt;tibble [100 × 4]&gt; &lt;tibble [1 × 1]&gt;
-##  5 &lt;split [103/35]&gt; Bootstrap05 &lt;tibble [100 × 4]&gt; &lt;tibble [1 × 1]&gt;
-##  6 &lt;split [103/40]&gt; Bootstrap06 &lt;tibble [100 × 4]&gt; &lt;tibble [1 × 1]&gt;
-##  7 &lt;split [103/37]&gt; Bootstrap07 &lt;tibble [100 × 4]&gt; &lt;tibble [1 × 1]&gt;
-##  8 &lt;split [103/41]&gt; Bootstrap08 &lt;tibble [100 × 4]&gt; &lt;tibble [1 × 1]&gt;
-##  9 &lt;split [103/34]&gt; Bootstrap09 &lt;tibble [100 × 4]&gt; &lt;tibble [1 × 1]&gt;
-## 10 &lt;split [103/45]&gt; Bootstrap10 &lt;tibble [100 × 4]&gt; &lt;tibble [1 × 1]&gt;
-## # … with 15 more rows</code></pre>
+)</code></pre>
 <p>What results did we get?</p>
 <pre class="r"><code>lasso_grid %&gt;%
   collect_metrics()</code></pre>

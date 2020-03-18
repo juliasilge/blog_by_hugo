@@ -38,11 +38,12 @@ ratings_raw <- readr::read_csv('https://raw.githubusercontent.com/rfordatascienc
 remove_regex <- "[:punct:]|[:digit:]|parts |part |the |and"
 
 office_ratings <- ratings_raw %>%
-  transmute(season, episode,
-            episode_name = str_to_lower(title),
-            episode_name = str_remove_all(episode_name, remove_regex),
-            episode_name = str_trim(episode_name),
-            imdb_rating)
+  transmute(
+    episode_name = str_to_lower(title),
+    episode_name = str_remove_all(episode_name, remove_regex),
+    episode_name = str_trim(episode_name),
+    imdb_rating
+  )
 
 office_info <- schrute::theoffice %>%
   mutate(season = as.numeric(season),
@@ -134,30 +135,30 @@ The object `office_rec` is a recipe that has **not** been trained on data yet (f
 
 ```{r}
 office_rec <- recipe(imdb_rating ~ ., data = office_train) %>%
-    update_role(episode_name, new_role = "ID") %>%
-    step_zv(all_numeric(), -all_outcomes()) %>%
-    step_normalize(all_numeric(), -all_outcomes())
+  update_role(episode_name, new_role = "ID") %>%
+  step_zv(all_numeric(), -all_outcomes()) %>%
+  step_normalize(all_numeric(), -all_outcomes())
 
 office_prep <- office_rec %>%
-    prep(strings_as_factors = FALSE)
+  prep(strings_as_factors = FALSE)
 ```
 
 Now it's time to **specify** and then **fit** our models. Here I set up one model specification for LASSO regression; I picked a value for `penalty` (sort of randomly) and I set `mixture = 1` for LASSO. I am using a [`workflow()`](https://tidymodels.github.io/workflows/) in this example for convenience; these are objects that can help you manage modeling pipelines more easily, with pieces that fit together like Lego blocks. You can `fit()` a workflow, much like you can fit a model, and then you can pull out the fit object and `tidy()` it!
 
 ```{r}
 lasso_spec <- linear_reg(penalty = 0.1, mixture = 1) %>%
-    set_engine("glmnet")
+  set_engine("glmnet")
 
 wf <- workflow() %>%
-    add_recipe(office_rec)
+  add_recipe(office_rec)
 
 lasso_fit <- wf %>%
-    add_model(lasso_spec) %>%
-    fit(data = office_train)
+  add_model(lasso_spec) %>%
+  fit(data = office_train)
 
 lasso_fit %>%
-    pull_workflow_fit() %>%
-    tidy()
+  pull_workflow_fit() %>%
+  tidy()
 ```
 
 If you have used glmnet before, this is the familiar output where we can see (here, for the most regularized examples) what contributes to higher IMDB ratings.
@@ -171,7 +172,7 @@ set.seed(1234)
 office_boot <- bootstraps(office_train, strata = season)
 
 tune_spec <- linear_reg(penalty = tune(), mixture = 1) %>%
-    set_engine("glmnet")
+  set_engine("glmnet")
 
 lambda_grid <- grid_regular(penalty(), levels = 50)
 ```
@@ -183,41 +184,39 @@ doParallel::registerDoParallel()
 
 set.seed(2020)
 lasso_grid <- tune_grid(
-    wf %>% add_model(tune_spec),
-    resamples = office_boot,
-    grid = lambda_grid
+  wf %>% add_model(tune_spec),
+  resamples = office_boot,
+  grid = lambda_grid
 )
-
-lasso_grid
 ```
 
 What results did we get?
 
 ```{r}
 lasso_grid %>%
-    collect_metrics()
+  collect_metrics()
 ```
 
 That's nice, but I would rather see a visualization of performance with the regularization parameter.
 
 ```{r fig.width = 8, fig.height = 7}
 lasso_grid %>%
-    collect_metrics() %>%
-    ggplot(aes(penalty, mean, color = .metric)) +
-    geom_errorbar(aes(ymin = mean - std_err,
-                      ymax = mean + std_err),
-                  alpha = 0.5) +
-    geom_line(size = 1.5) +
-    facet_wrap(~.metric, scales = "free", nrow = 2) +
-    scale_x_log10() +
-    theme(legend.position = "none")
+  collect_metrics() %>%
+  ggplot(aes(penalty, mean, color = .metric)) +
+  geom_errorbar(aes(ymin = mean - std_err,
+                    ymax = mean + std_err),
+                alpha = 0.5) +
+  geom_line(size = 1.5) +
+  facet_wrap(~.metric, scales = "free", nrow = 2) +
+  scale_x_log10() +
+  theme(legend.position = "none")
 ```
 
 This is a great way to see that regularization helps this modeling a lot. We have a couple of options for choosing our final parameter, such as `select_by_pct_loss()` or `select_by_one_std_err()`, but for now let's stick with just picking the lowest RMSE. After we have that parameter, we can finalize our workflow, i.e. update it with this value.
 
 ```{r}
 lowest_rmse <- lasso_grid %>%
-    select_best("rmse", maximize = FALSE)
+  select_best("rmse", maximize = FALSE)
 
 final_lasso <- finalize_workflow(wf %>% add_model(tune_spec),
                                  lowest_rmse)
@@ -229,15 +228,15 @@ We can then fit this finalized workflow on our training data. While we're at it,
 library(vip)
 
 final_lasso %>%
-    fit(office_train) %>%
-    pull_workflow_fit() %>%
-    vi(lambda = lowest_rmse$penalty) %>%
-    mutate(Importance = abs(Importance),
-           Variable = fct_reorder(Variable, Importance)) %>%
-    ggplot(aes(x = Importance, y = Variable, fill = Sign)) +
-    geom_col() +
-    scale_x_continuous(expand = c(0,0)) +
-    labs(y = NULL)
+  fit(office_train) %>%
+  pull_workflow_fit() %>%
+  vi(lambda = lowest_rmse$penalty) %>%
+  mutate(Importance = abs(Importance),
+         Variable = fct_reorder(Variable, Importance)) %>%
+  ggplot(aes(x = Importance, y = Variable, fill = Sign)) +
+  geom_col() +
+  scale_x_continuous(expand = c(0,0)) +
+  labs(y = NULL)
 
 ```
 
@@ -246,7 +245,7 @@ And then, finally, let's return to our test data. The tune package has a functio
 ```{r}
 last_fit(final_lasso,
          office_split) %>%
-    collect_metrics()
+  collect_metrics()
 ```
 
 
