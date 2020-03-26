@@ -1,0 +1,257 @@
+---
+title: "Tuning random forest hyperparameters with #TidyTuesday trees data"
+date: 2020-03-26
+slug: "sf-trees-random-tuning"
+tags: [rstats,tidymodels]
+---
+
+
+
+<p>I’ve been publishing <a href="https://juliasilge.com/tags/tidymodels/">screencasts</a> demonstrating how to use the tidymodels framework, from first steps in modeling to how to tune more complex models. Today, I’m using a <a href="https://github.com/rfordatascience/tidytuesday"><code>#TidyTuesday</code> dataset</a> from earlier this year on trees around San Francisco to show how to tune the hyperparameters of a random forest model and then use the final best model.</p>
+{{% youtube "ts5bRZ7pRKQ" %}}
+<p></br></p>
+<p>Here is the code I used in the video, for those who prefer reading instead of or in addition to video.</p>
+<div id="explore-the-data" class="section level2">
+<h2>Explore the data</h2>
+<p>Our modeling goal here is to predict the legal status of the trees in San Francisco in the <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-01-28/readme.md">#TidyTuesday dataset</a>. This isn’t this week’s dataset, but it’s one I have been wanting to return to. Because it seems almost wrong not to, we’ll be using a random forest model! 🌳</p>
+<p>Let’s build a model to predict which trees are maintained by the <a href="https://www.sfpublicworks.org/">San Francisco Department of Public Works</a> and which are not. We can use <code>parse_number()</code> to get a rough estimate of the size of the plot from the <code>plot_size</code> column. Instead of trying any imputation, we will just keep observations with no <code>NA</code> values.</p>
+<pre class="r"><code>library(tidyverse)
+
+sf_trees &lt;- read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-28/sf_trees.csv&quot;)
+
+trees_df &lt;- sf_trees %&gt;%
+  mutate(
+    legal_status = case_when(
+      legal_status == &quot;DPW Maintained&quot; ~ legal_status,
+      TRUE ~ &quot;Other&quot;
+    ),
+    plot_size = parse_number(plot_size)
+  ) %&gt;%
+  select(-address) %&gt;%
+  na.omit() %&gt;%
+  mutate_if(is.character, factor)</code></pre>
+<p>Let’s do a little exploratory data analysis before we fit models. How are these trees distributed across San Francisco?</p>
+<pre class="r"><code>trees_df %&gt;%
+  ggplot(aes(longitude, latitude, color = legal_status)) +
+  geom_point(size = 0.5, alpha = 0.4) +
+  labs(color = NULL)</code></pre>
+<p><img src="/blog/2020/2020-03-26-sf-trees-tuning_files/figure-html/unnamed-chunk-3-1.png" width="2400" /></p>
+<p>You can see streets! And there are definitely spatial differences by category.</p>
+<p>What relationships do we see with the caretaker of each tree?</p>
+<pre class="r"><code>trees_df %&gt;%
+  count(legal_status, caretaker) %&gt;%
+  add_count(caretaker, wt = n, name = &quot;caretaker_count&quot;) %&gt;%
+  filter(caretaker_count &gt; 50) %&gt;%
+  group_by(legal_status) %&gt;%
+  mutate(percent_legal = n / sum(n)) %&gt;%
+  ggplot(aes(percent_legal, caretaker, fill = legal_status)) +
+  geom_col(position = &quot;dodge&quot;) +
+  labs(
+    fill = NULL,
+    x = &quot;% of trees in each category&quot;
+  )</code></pre>
+<p><img src="/blog/2020/2020-03-26-sf-trees-tuning_files/figure-html/unnamed-chunk-4-1.png" width="2400" /></p>
+</div>
+<div id="build-model" class="section level2">
+<h2>Build model</h2>
+<p>We can start by loading the tidymodels metapackage, and splitting our data into training and testing sets.</p>
+<pre class="r"><code>library(tidymodels)
+
+set.seed(123)
+trees_split &lt;- initial_split(trees_df, strata = legal_status)
+trees_train &lt;- training(trees_split)
+trees_test &lt;- testing(trees_split)</code></pre>
+<p>Next we build a recipe for data preprocessing.</p>
+<ul>
+<li>First, we must tell the <code>recipe()</code> what our model is going to be (using a formula here) and what our training data is.</li>
+<li>Next, we update the role for <code>tree_id</code>, since this is a variable we might like to keep around for convenience as an identifier for rows but is not a predictor or outcome.</li>
+<li>Next, we use <code>step_other()</code> to collapse categorical levels for species, caretaker, and the site info. Before this step, there were 300+ species!</li>
+<li>The <code>date</code> column with when each tree was planted may be useful for fitting this model, but probably not the exact date, given how slowly trees grow. Let’s create a year feature from the date, and then remove the original <code>date</code> variable.</li>
+<li>There are many more DPW maintained trees than not, so let’s downsample the data for training.</li>
+</ul>
+<p>The object <code>tree_rec</code> is a recipe that has <strong>not</strong> been trained on data yet (for example, which categorical levels should be collapsed has not been calculated) and <code>tree_prep</code> is an object that <strong>has</strong> been trained on data.</p>
+<pre class="r"><code>tree_rec &lt;- recipe(legal_status ~ ., data = trees_train) %&gt;%
+  update_role(tree_id, new_role = &quot;ID&quot;) %&gt;%
+  step_other(species, caretaker, threshold = 0.01) %&gt;%
+  step_other(site_info, threshold = 0.005) %&gt;%
+  step_dummy(all_nominal(), -all_outcomes()) %&gt;%
+  step_date(date, features = c(&quot;year&quot;)) %&gt;%
+  step_rm(date) %&gt;%
+  step_downsample(legal_status)
+
+tree_prep &lt;- prep(tree_rec)
+juiced &lt;- juice(tree_prep)</code></pre>
+<p>Now it’s time to create a model specification for a random forest where we will tune <code>mtry</code> (the number of predictors to sample at each split) and <code>min_n</code> (the number of observations needed to keep splitting nodes). These are <strong>hyperparameters</strong> that can’t be learned from data when training the model.</p>
+<pre class="r"><code>tune_spec &lt;- rand_forest(
+  mtry = tune(),
+  trees = 1000,
+  min_n = tune()
+) %&gt;%
+  set_mode(&quot;classification&quot;) %&gt;%
+  set_engine(&quot;ranger&quot;)</code></pre>
+<p>Finally, let’s put these together in a <a href="https://tidymodels.github.io/workflows/"><code>workflow()</code></a>, which is a convenience container object for carrying around bits of models.</p>
+<pre class="r"><code>tune_wf &lt;- workflow() %&gt;%
+  add_recipe(tree_rec) %&gt;%
+  add_model(tune_spec)</code></pre>
+<p>This workflow is ready to go. 🚀</p>
+</div>
+<div id="train-hyperparameters" class="section level2">
+<h2>Train hyperparameters</h2>
+<p>Now it’s time to tune the hyperparameters for a random forest model. First, let’s create a set of cross-validation resamples to use for tuning.</p>
+<pre class="r"><code>set.seed(234)
+trees_folds &lt;- vfold_cv(trees_train)</code></pre>
+<p>We can’t learn the right values when training a single model, but we can train a whole bunch of models and see which ones turn out best. We can use parallel processing to make this go faster, since the different parts of the grid are independent. Let’s use <code>grid = 20</code> to choose 20 grid points automatically.</p>
+<pre class="r"><code>doParallel::registerDoParallel()
+
+set.seed(345)
+tune_res &lt;- tune_grid(
+  tune_wf,
+  resamples = trees_folds,
+  grid = 20
+)
+
+tune_res</code></pre>
+<pre><code>## #  10-fold cross-validation 
+## # A tibble: 10 x 4
+##    splits               id     .metrics          .notes          
+##    &lt;list&gt;               &lt;chr&gt;  &lt;list&gt;            &lt;list&gt;          
+##  1 &lt;split [16.1K/1.8K]&gt; Fold01 &lt;tibble [40 × 5]&gt; &lt;tibble [0 × 1]&gt;
+##  2 &lt;split [16.1K/1.8K]&gt; Fold02 &lt;tibble [40 × 5]&gt; &lt;tibble [0 × 1]&gt;
+##  3 &lt;split [16.1K/1.8K]&gt; Fold03 &lt;tibble [40 × 5]&gt; &lt;tibble [0 × 1]&gt;
+##  4 &lt;split [16.1K/1.8K]&gt; Fold04 &lt;tibble [40 × 5]&gt; &lt;tibble [0 × 1]&gt;
+##  5 &lt;split [16.1K/1.8K]&gt; Fold05 &lt;tibble [40 × 5]&gt; &lt;tibble [0 × 1]&gt;
+##  6 &lt;split [16.1K/1.8K]&gt; Fold06 &lt;tibble [40 × 5]&gt; &lt;tibble [0 × 1]&gt;
+##  7 &lt;split [16.1K/1.8K]&gt; Fold07 &lt;tibble [40 × 5]&gt; &lt;tibble [0 × 1]&gt;
+##  8 &lt;split [16.1K/1.8K]&gt; Fold08 &lt;tibble [40 × 5]&gt; &lt;tibble [0 × 1]&gt;
+##  9 &lt;split [16.1K/1.8K]&gt; Fold09 &lt;tibble [40 × 5]&gt; &lt;tibble [0 × 1]&gt;
+## 10 &lt;split [16.1K/1.8K]&gt; Fold10 &lt;tibble [40 × 5]&gt; &lt;tibble [0 × 1]&gt;</code></pre>
+<p>How did this turn out? Let’s look at AUC.</p>
+<pre class="r"><code>tune_res %&gt;%
+  collect_metrics() %&gt;%
+  filter(.metric == &quot;roc_auc&quot;) %&gt;%
+  select(mean, min_n, mtry) %&gt;%
+  pivot_longer(min_n:mtry,
+    values_to = &quot;value&quot;,
+    names_to = &quot;parameter&quot;
+  ) %&gt;%
+  ggplot(aes(value, mean, color = parameter)) +
+  geom_point(show.legend = FALSE) +
+  facet_wrap(~parameter, scales = &quot;free_x&quot;) +
+  labs(x = NULL, y = &quot;AUC&quot;)</code></pre>
+<p><img src="/blog/2020/2020-03-26-sf-trees-tuning_files/figure-html/unnamed-chunk-11-1.png" width="2400" /></p>
+<p>This grid did not involve every combination of <code>min_n</code> and <code>mtry</code> but we can get an idea of what is going on. It looks like higher values of <code>mtry</code> are good (above about 10) and lower values of <code>min_n</code> are good (below about 10). We can get a better handle on the hyperparameters by tuning one more time, this time using <code>regular_grid()</code>. Let’s set ranges of hyperparameters we want to try, based on the results from our initial tune.</p>
+<pre class="r"><code>rf_grid &lt;- grid_regular(
+  mtry(range = c(10, 30)),
+  min_n(range = c(2, 8)),
+  levels = 5
+)
+
+rf_grid</code></pre>
+<pre><code>## # A tibble: 25 x 2
+##     mtry min_n
+##    &lt;int&gt; &lt;int&gt;
+##  1    10     2
+##  2    15     2
+##  3    20     2
+##  4    25     2
+##  5    30     2
+##  6    10     3
+##  7    15     3
+##  8    20     3
+##  9    25     3
+## 10    30     3
+## # … with 15 more rows</code></pre>
+<p>We can tune one more time, but this time in a more targeted way with this <code>rf_grid</code>.</p>
+<pre class="r"><code>set.seed(456)
+regular_res &lt;- tune_grid(
+  tune_wf,
+  resamples = trees_folds,
+  grid = rf_grid
+)
+
+regular_res</code></pre>
+<pre><code>## #  10-fold cross-validation 
+## # A tibble: 10 x 4
+##    splits               id     .metrics          .notes          
+##    &lt;list&gt;               &lt;chr&gt;  &lt;list&gt;            &lt;list&gt;          
+##  1 &lt;split [16.1K/1.8K]&gt; Fold01 &lt;tibble [50 × 5]&gt; &lt;tibble [0 × 1]&gt;
+##  2 &lt;split [16.1K/1.8K]&gt; Fold02 &lt;tibble [50 × 5]&gt; &lt;tibble [0 × 1]&gt;
+##  3 &lt;split [16.1K/1.8K]&gt; Fold03 &lt;tibble [50 × 5]&gt; &lt;tibble [0 × 1]&gt;
+##  4 &lt;split [16.1K/1.8K]&gt; Fold04 &lt;tibble [50 × 5]&gt; &lt;tibble [0 × 1]&gt;
+##  5 &lt;split [16.1K/1.8K]&gt; Fold05 &lt;tibble [50 × 5]&gt; &lt;tibble [0 × 1]&gt;
+##  6 &lt;split [16.1K/1.8K]&gt; Fold06 &lt;tibble [50 × 5]&gt; &lt;tibble [0 × 1]&gt;
+##  7 &lt;split [16.1K/1.8K]&gt; Fold07 &lt;tibble [50 × 5]&gt; &lt;tibble [0 × 1]&gt;
+##  8 &lt;split [16.1K/1.8K]&gt; Fold08 &lt;tibble [50 × 5]&gt; &lt;tibble [0 × 1]&gt;
+##  9 &lt;split [16.1K/1.8K]&gt; Fold09 &lt;tibble [50 × 5]&gt; &lt;tibble [0 × 1]&gt;
+## 10 &lt;split [16.1K/1.8K]&gt; Fold10 &lt;tibble [50 × 5]&gt; &lt;tibble [0 × 1]&gt;</code></pre>
+<p>What the results look like <em>now</em>?</p>
+<pre class="r"><code>regular_res %&gt;%
+  collect_metrics() %&gt;%
+  filter(.metric == &quot;roc_auc&quot;) %&gt;%
+  mutate(min_n = factor(min_n)) %&gt;%
+  ggplot(aes(mtry, mean, color = min_n)) +
+  geom_line(alpha = 0.5, size = 1.5) +
+  geom_point() +
+  labs(y = &quot;AUC&quot;)</code></pre>
+<p><img src="/blog/2020/2020-03-26-sf-trees-tuning_files/figure-html/unnamed-chunk-14-1.png" width="2400" /></p>
+</div>
+<div id="choosing-the-best-model" class="section level2">
+<h2>Choosing the best model</h2>
+<p>It’s much more clear what the best model is now. We can identify it using the function <code>select_best()</code>, and then update our original model specification <code>tune_spec</code> to create our final model specification.</p>
+<pre class="r"><code>best_auc &lt;- select_best(regular_res, &quot;roc_auc&quot;)
+
+final_rf &lt;- finalize_model(
+  tune_spec,
+  best_auc
+)
+
+final_rf</code></pre>
+<pre><code>## Random Forest Model Specification (classification)
+## 
+## Main Arguments:
+##   mtry = 20
+##   trees = 1000
+##   min_n = 2
+## 
+## Computational engine: ranger</code></pre>
+<p>Let’s explore our final model a bit. What can we learn about variable importance, using the <a href="https://koalaverse.github.io/vip/">vip</a> package?</p>
+<pre class="r"><code>library(vip)
+
+final_rf %&gt;%
+  set_engine(&quot;ranger&quot;, importance = &quot;permutation&quot;) %&gt;%
+  fit(legal_status ~ .,
+    data = juice(tree_prep) %&gt;% select(-tree_id)
+  ) %&gt;%
+  vip(geom = &quot;point&quot;)</code></pre>
+<p><img src="/blog/2020/2020-03-26-sf-trees-tuning_files/figure-html/unnamed-chunk-16-1.png" width="2400" /></p>
+<p>The private caretaker characteristic important in categorization, as is latitude and longitude. Interesting that year (i.e. age of the tree) is so important!</p>
+<p>Let’s make a final workflow, and then fit one last time, using the convenience function <a href="https://tidymodels.github.io/tune/reference/last_fit.html"><code>last_fit()</code></a>. This function fits a final model on the entire training set and evaluates on the testing set. We just need to give this funtion our original train/test split.</p>
+<pre class="r"><code>final_wf &lt;- workflow() %&gt;%
+  add_recipe(tree_rec) %&gt;%
+  add_model(final_rf)
+
+final_res &lt;- final_wf %&gt;%
+  last_fit(trees_split)
+
+final_res %&gt;%
+  collect_metrics()</code></pre>
+<pre><code>## # A tibble: 2 x 3
+##   .metric  .estimator .estimate
+##   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
+## 1 accuracy binary         0.852
+## 2 roc_auc  binary         0.950</code></pre>
+<p>The metrics for the test set look good and indicate we did not overfit during tuning.</p>
+<p>Let’s bind our testing results back to the original test set, and make one more map. Where in San Francisco are there more or less incorrectly predicted trees?</p>
+<pre class="r"><code>final_res %&gt;%
+  collect_predictions() %&gt;%
+  mutate(correct = case_when(
+    legal_status == .pred_class ~ &quot;Correct&quot;,
+    TRUE ~ &quot;Incorrect&quot;
+  )) %&gt;%
+  bind_cols(trees_test) %&gt;%
+  ggplot(aes(longitude, latitude, color = correct)) +
+  geom_point(size = 0.5, alpha = 0.5) +
+  labs(color = NULL) +
+  scale_color_manual(values = c(&quot;gray80&quot;, &quot;darkred&quot;))</code></pre>
+<p><img src="/blog/2020/2020-03-26-sf-trees-tuning_files/figure-html/unnamed-chunk-18-1.png" width="2400" /></p>
+</div>
