@@ -16,7 +16,7 @@ library(silgelib)
 theme_set(theme_plex())
 ```
 
-I've been publishing [screencasts](https://juliasilge.com/tags/tidymodels/) demonstrating how to use the tidymodels framework, from first steps in modeling to how to tune more complex models. Today, I'm using this week's [`#TidyTuesday` dataset](https://github.com/rfordatascience/tidytuesday) on *The Office* to show how to build a LASSO regression model and choose regularization parameters!
+I've been publishing [screencasts](https://juliasilge.com/tags/tidymodels/) demonstrating how to use the tidymodels framework, from first steps in modeling to how to tune more complex models. Today, I'm using this week's [`#TidyTuesday` dataset](https://github.com/rfordatascience/tidytuesday) on *The Office* to show how to build a lasso regression model and choose regularization parameters!
 
 ```{r, echo=FALSE}
 blogdown::shortcode("youtube", "R32AsuKICAY")
@@ -111,7 +111,7 @@ office %>%
   geom_boxplot(show.legend = FALSE)
 ```
 
-Ratings are higher for episodes later in the season. What else is associated with higher ratings? Let's use LASSO regression to find out! `r emo::ji("rocket")`
+Ratings are higher for episodes later in the season. What else is associated with higher ratings? Let's use lasso regression to find out! `r emo::ji("rocket")`
 
 ## Train a model
 
@@ -129,7 +129,7 @@ Then, we build a recipe for data preprocessing.
 - First, we must tell the `recipe()` what our model is going to be (using a formula here) and what our training data is.
 - Next, we update the role for `episode_name`, since this is a variable we might like to keep around for convenience as an identifier for rows but is not a predictor or outcome.
 - Next, we remove any numeric variables that have zero variance.
-- As a last step, we normalize (center and scale) the numeric variables. We need to do this because it's important for LASSO regularization.
+- As a last step, we normalize (center and scale) the numeric variables. We need to do this because it's important for lasso regularization.
 
 The object `office_rec` is a recipe that has **not** been trained on data yet (for example, the centered and scaling has not been calculated) and `office_prep` is an object that **has** been trained on data. The reason I use `strings_as_factors = FALSE` here is that my ID column `episode_name` is of type character (as opposed to, say, integers).
 
@@ -143,7 +143,7 @@ office_prep <- office_rec %>%
   prep(strings_as_factors = FALSE)
 ```
 
-Now it's time to **specify** and then **fit** our models. Here I set up one model specification for LASSO regression; I picked a value for `penalty` (sort of randomly) and I set `mixture = 1` for LASSO. I am using a [`workflow()`](https://tidymodels.github.io/workflows/) in this example for convenience; these are objects that can help you manage modeling pipelines more easily, with pieces that fit together like Lego blocks. You can `fit()` a workflow, much like you can fit a model, and then you can pull out the fit object and `tidy()` it!
+Now it's time to **specify** and then **fit** our models. Here I set up one model specification for lasso regression; I picked a value for `penalty` (sort of randomly) and I set `mixture = 1` for lasso. I am using a [`workflow()`](https://tidymodels.github.io/workflows/) in this example for convenience; these are objects that can help you manage modeling pipelines more easily, with pieces that fit together like Lego blocks. You can `fit()` a workflow, much like you can fit a model, and then you can pull out the fit object and `tidy()` it!
 
 ```{r}
 lasso_spec <- linear_reg(penalty = 0.1, mixture = 1) %>%
@@ -163,9 +163,9 @@ lasso_fit %>%
 
 If you have used glmnet before, this is the familiar output where we can see (here, for the most regularized examples) what contributes to higher IMDB ratings.
 
-## Tune LASSO parameters
+## Tune lasso parameters
 
-So we fit one LASSO model, but how do we know the right regularization parameter `penalty`? We can figure that out using resampling and tuning the model. Let's build a set of bootstrap resamples, and set `penalty = tune()` instead of to a single value. We can use a function `penalty()` to set up an appropriate grid for this kind of regularization model.
+So we fit one lasso model, but how do we know the right regularization parameter `penalty`? We can figure that out using resampling and tuning the model. Let's build a set of bootstrap resamples, and set `penalty = tune()` instead of to a single value. We can use a function `penalty()` to set up an appropriate grid for this kind of regularization model.
 
 ```{r}
 set.seed(1234)
